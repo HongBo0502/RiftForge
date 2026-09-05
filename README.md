@@ -12,12 +12,15 @@ Unofficial fan project. Not affiliated with or endorsed by Riot Games.
 | Phase | | |
 |---|---|---|
 | 1 | Card database | **done** |
-| 2 | Deck builder | not started |
-| 3 | Rules engine | not started |
-| 4 | Game board (hotseat) | not started |
-| 5 | PWA / offline | not started |
+| 2 | Deck builder | **done** |
+| 3 | Rules engine | **done** |
+| 4 | Game board (hotseat) | **done** |
+| 5 | PWA / offline | **done** |
 
 Online 2-player is deliberately out of scope for V1 — see *Multiplayer* below.
+
+53 tests pass (`npm test`), covering deck legality, decklist parsing, and the
+engine — including a full game played to 8 points.
 
 ---
 
@@ -29,7 +32,22 @@ npm run fetch-cards   # pulls the card dataset into public/data (needs network)
 npm run dev           # http://localhost:5273
 ```
 
-Other scripts: `npm run build`, `npm run preview`, `npm test`.
+Other scripts:
+
+| | |
+|---|---|
+| `npm run build` | typecheck + production build (PWA, ~95 KB gzipped JS) |
+| `npm run preview` | serve the build — needed to exercise the service worker |
+| `npm test` | Vitest suite |
+| `python scripts/extract-rules.py` | refresh `docs/*.txt` from Riot's rules PDFs |
+| `python scripts/make-icons.py` | regenerate the PWA icon set |
+
+### Offline
+
+The build is an installable PWA. The service worker precaches the app shell
+*and the whole card dataset*, so the database works with no network at all;
+card art is cached as you browse (cache-first — the CDN URLs carry a content
+hash, so they never go stale).
 
 ---
 
