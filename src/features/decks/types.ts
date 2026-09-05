@@ -20,12 +20,19 @@ export interface Deck {
   legendId: string | null;
   /** Card id of the Champion unit placed in the champion zone at game start. */
   championId: string | null;
-  /** Main deck — 40 cards. */
+  /** Main deck — at least 40 cards, including the Chosen Champion. */
   main: DeckEntry[];
   /** Rune deck — 12 runes. */
   runes: DeckEntry[];
   /** Card ids of the 3 battlefields brought to the game. */
   battlefields: string[];
+  /**
+   * Cards held outside the starting configuration, swapped 1-for-1 between
+   * games of a match (Tournament Rules 403). Its size is set by the
+   * competition format rather than the rules, so it isn't validated — but
+   * copy limits do apply across main deck and sideboard together (403.3).
+   */
+  sideboard: DeckEntry[];
   createdAt: string;
   updatedAt: string;
 }
@@ -40,6 +47,7 @@ export function emptyDeck(name = 'New deck'): Deck {
     main: [],
     runes: [],
     battlefields: [],
+    sideboard: [],
     createdAt: now,
     updatedAt: now,
   };

@@ -29,6 +29,9 @@ export function loadDecks(): Deck[] {
     if (!Array.isArray(parsed)) return [];
     return parsed
       .filter(isDeck)
+      // Decks saved before sideboards existed have no such field; fill it in
+      // rather than letting undefined reach the validator.
+      .map((deck) => ({ ...deck, sideboard: deck.sideboard ?? [] }))
       .sort((a, b) => (b.updatedAt ?? '').localeCompare(a.updatedAt ?? ''));
   } catch {
     // Corrupt or unavailable storage (private mode, quota) — start empty

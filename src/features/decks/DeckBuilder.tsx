@@ -18,7 +18,7 @@ import {
   validateDeck,
 } from './validate';
 
-type Tab = 'legend' | 'main' | 'runes' | 'battlefields';
+type Tab = 'legend' | 'main' | 'runes' | 'battlefields' | 'sideboard';
 
 interface Props {
   deck: Deck;
@@ -78,9 +78,15 @@ export default function DeckBuilder({ deck, dataset, onChange, onBack, onDelete 
 
   const signatureCount = validation.signatureCount;
 
-  /** Explains why a main-deck card can't be added, or null if it can. */
+  /** Copies across main deck and sideboard together — the limit spans both. */
+  const copiesAcross = (card: Card): number =>
+    copiesOf(deck.main, card) + copiesOf(deck.sideboard ?? [], card);
+
+  /** Explains why a card can't be added to the deck, or null if it can. */
   const mainDisabled = (card: Card): string | null => {
-    if (copiesOf(deck.main, card) >= MAX_COPIES) return `Already ${MAX_COPIES} copies (103.2.b)`;
+    if (copiesAcross(card) >= MAX_COPIES) {
+      return `Already ${MAX_COPIES} copies across deck and sideboard (403.3)`;
+    }
     const isSignature = card.signature || card.supertype === 'Signature';
     if (isSignature && signatureCount >= MAX_SIGNATURE) {
       return `Already ${MAX_SIGNATURE} signature cards (103.2.d.1)`;
@@ -119,6 +125,13 @@ export default function DeckBuilder({ deck, dataset, onChange, onBack, onDelete 
       label: 'Runes',
       count: `${validation.runeCount}/${RUNE_DECK_SIZE}`,
       ok: validation.runeCount === RUNE_DECK_SIZE,
+    },
+    {
+      key: 'sideboard',
+      label: 'Side',
+      // No required size — the competition format sets it (403.2).
+      count: `${validation.sideboardCount}`,
+      ok: validation.sideboardCount > 0,
     },
     {
       key: 'battlefields',
@@ -275,6 +288,17 @@ export default function DeckBuilder({ deck, dataset, onChange, onBack, onDelete 
             />
           )}
 
+          {tab === 'sideboard' && (
+            <EntryList
+              entries={deck.sideboard ?? []}
+              byId={dataset.byId}
+              emptyText="Cards swapped in between games of a match (403.4)."
+              onAdd={(c) => update({ sideboard: bump(deck.sideboard ?? [], c, 1) })}
+              onRemove={(c) => update({ sideboard: bump(deck.sideboard ?? [], c, -1) })}
+              canAdd={(c) => mainDisabled(c) === null}
+            />
+          )}
+
           {tab === 'battlefields' && (
             <div className="space-y-1">
               {deck.battlefields.length === 0 && (
@@ -301,7 +325,7 @@ export default function DeckBuilder({ deck, dataset, onChange, onBack, onDelete 
 
         <section className="flex max-h-[70dvh] min-h-[22rem] flex-col rounded-lg border border-line bg-surface/50 p-3">
           <h2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted">
-            {tab === 'legend' ? 'Choose legend & champion' : `Add ${tab}`}
+            {tab === 'legend' ? 'Choose legend & champion' : `Add to ${tab === 'sideboard' ? 'sideboard' : tab}`}
           </h2>
 
           {tab === 'legend' && !legend && (
@@ -349,6 +373,17 @@ export default function DeckBuilder({ deck, dataset, onChange, onBack, onDelete 
                 validation.runeCount >= RUNE_DECK_SIZE ? `Rune deck is full (${RUNE_DECK_SIZE})` : null
               }
               placeholder="Search runes…"
+            />
+          )}
+
+          {tab === 'sideboard' && (
+            <CardPicker
+              cards={pools.main}
+              onPick={(c) => update({ sideboard: bump(deck.sideboard ?? [], c, 1) })}
+              countFor={(c) => copiesAcross(c)}
+              disabledReason={mainDisabled}
+              placeholder="Search units, spells, gear…"
+              emptyHint={legend ? 'Nothing matches inside your identity.' : 'Pick a Legend first.'}
             />
           )}
 

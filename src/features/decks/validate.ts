@@ -28,7 +28,7 @@ export type IssueLevel = 'error' | 'warning';
 export interface Issue {
   level: IssueLevel;
   /** Which part of the deck the issue belongs to, for grouping in the UI. */
-  section: 'legend' | 'champion' | 'main' | 'runes' | 'battlefields';
+  section: 'legend' | 'champion' | 'main' | 'runes' | 'battlefields' | 'sideboard';
   message: string;
   /** Core Rules reference, so a disputed call can be looked up. */
   rule?: string;
@@ -40,6 +40,7 @@ export interface Validation {
   identity: Domain[];
   mainCount: number;
   runeCount: number;
+  sideboardCount: number;
   signatureCount: number;
 }
 
@@ -85,10 +86,20 @@ export function validateDeck(deck: Deck, byId: Map<string, Card>): Validation {
     add('error', 'main', `Main deck has ${mainCount} cards; needs at least ${MAIN_DECK_MIN}.`, '103.2');
   }
 
+  // --- Sideboard ----------------------------------------------------------
+  // Held outside the starting configuration and swapped 1-for-1 between games
+  // (Tournament Rules 403). Its size is set by the competition format, not the
+  // rules, so it isn't checked — but it counts for copy limits.
+  const sideboardCards = (deck.sideboard ?? [])
+    .map((e) => ({ card: byId.get(e.cardId), qty: e.qty }))
+    .filter((e): e is { card: Card; qty: number } => Boolean(e.card));
+  const sideboardCount = countCards(deck.sideboard ?? []);
+
   // Copies are counted by name (132.4), so every printing and both subtitle
-  // spellings of one card share the limit.
+  // spellings of one card share the limit — and the limit applies to the main
+  // deck and sideboard *combined* (Tournament Rules 403.3).
   const copies = new Map<string, { count: number; label: string }>();
-  for (const { card, qty } of mainCards) {
+  for (const { card, qty } of [...mainCards, ...sideboardCards]) {
     const key = nameKey(card.baseName);
     const seen = copies.get(key);
     if (seen) seen.count += qty;
@@ -96,7 +107,28 @@ export function validateDeck(deck: Deck, byId: Map<string, Card>): Validation {
   }
   for (const { count, label } of copies.values()) {
     if (count > MAX_COPIES) {
-      add('error', 'main', `${count} copies of ${label}; the limit is ${MAX_COPIES}.`, '103.2.b');
+      add(
+        'error',
+        'main',
+        `${count} copies of ${label} across deck and sideboard; the limit is ${MAX_COPIES}.`,
+        '403.3',
+      );
+    }
+  }
+
+  for (const { card } of sideboardCards) {
+    // 403.4.b — runes, legend and battlefields can't be changed after
+    // registration, so they have no business in a sideboard.
+    if (card.type === 'Rune' || card.type === 'Battlefield' || card.type === 'Legend') {
+      add('error', 'sideboard', `${card.name} is a ${card.type} and cannot be sideboarded.`, '403.4.b');
+    }
+    if (legend && !inIdentity(card, identity)) {
+      add(
+        'error',
+        'sideboard',
+        `${card.name} (${card.domains.join('/')}) is outside your ${[...identity].join('/')} identity.`,
+        '103.1.b',
+      );
     }
   }
 
@@ -116,7 +148,7 @@ export function validateDeck(deck: Deck, byId: Map<string, Card>): Validation {
 
   // --- Signature cards ----------------------------------------------------
   // 3 in total across the whole deck, all matching the legend's champion tag.
-  const signatureCount = mainCards
+  const signatureCount = [...mainCards, ...sideboardCards]
     .filter(({ card }) => card.signature || card.supertype === 'Signature')
     .reduce((sum, { qty }) => sum + qty, 0);
 
@@ -200,6 +232,7 @@ export function validateDeck(deck: Deck, byId: Map<string, Card>): Validation {
     identity: [...identity],
     mainCount,
     runeCount,
+    sideboardCount,
     signatureCount,
   };
 }

@@ -1,27 +1,37 @@
 import type { Card } from '@/types';
+import { nameKey } from '@/types';
 import type { Deck, DeckEntry } from './types';
 import { emptyDeck } from './types';
 
 /**
  * Decklist import/export in the plain `qty CardName` format people already
- * paste around, with optional section headers:
+ * paste around. Both header styles are accepted — the name on the same line:
  *
  *   Legend: Teemo - Swift Scout
  *   Champion: Teemo - Strategist
  *
- *   Main
- *   3 Nocturne - Horrifying
- *   2 Abandon
+ * or the header alone with the card underneath, which is how lists are usually
+ * shared:
  *
- *   Runes
- *   6 Mind Rune
+ *   Legend:
+ *   1 Master Yi, Wuju Bladesman
  *
- *   Battlefields
- *   Abandoned Hall
+ *   MainDeck:
+ *   3 Pit Rookie
  *
- * Parsing is deliberately forgiving: headers are optional, "x" separators and
- * set codes in brackets are tolerated, and anything unmatched is reported
- * rather than silently dropped.
+ *   Runes:
+ *   7 Body Rune
+ *
+ *   Battlefields:
+ *   1 Seat of Power
+ *
+ *   Sideboard:
+ *   2 Alpha Strike
+ *
+ * Parsing is deliberately forgiving: headers are optional, "x" separators, set
+ * codes in brackets and either subtitle punctuation ("Rengar, Trophy Hunter"
+ * or "Rengar - Trophy Hunter") are tolerated, and anything unmatched is
+ * reported rather than silently dropped.
  */
 
 export interface ParseResult {
@@ -30,9 +40,18 @@ export interface ParseResult {
   problems: string[];
 }
 
-type Section = 'main' | 'runes' | 'battlefields';
+type Section = 'main' | 'runes' | 'battlefields' | 'sideboard' | 'legend' | 'champion';
 
+/**
+ * Section headers, matched after punctuation and spaces are stripped. Lists in
+ * the wild put the legend and champion on the line *after* their header
+ * ("Legend:\n1 Master Yi, Wuju Bladesman"), so those are sections too, not just
+ * the inline "Legend: X" form.
+ */
 const SECTION_HEADERS: Record<string, Section> = {
+  legend: 'legend',
+  champion: 'champion',
+  chosenchampion: 'champion',
   main: 'main',
   maindeck: 'main',
   deck: 'main',
@@ -43,6 +62,8 @@ const SECTION_HEADERS: Record<string, Section> = {
   runedeck: 'runes',
   battlefield: 'battlefields',
   battlefields: 'battlefields',
+  sideboard: 'sideboard',
+  side: 'sideboard',
 };
 
 const normalise = (s: string) =>
@@ -107,7 +128,7 @@ export function parseDecklist(text: string, cards: Card[], name = 'Imported deck
     const line = raw.trim();
     if (!line || line.startsWith('//') || line.startsWith('#')) continue;
 
-    // "Legend: X" / "Champion: X" assignments.
+    // Inline "Legend: X" / "Champion: X" on one line.
     const labelled = /^(legend|champion)\s*[:\-]\s*(.+)$/i.exec(line);
     if (labelled) {
       const card = index.get(normalise(labelled[2]));
@@ -133,15 +154,48 @@ export function parseDecklist(text: string, cards: Card[], name = 'Imported deck
       continue;
     }
 
-    // Route by the card's own type where it's unambiguous, so an unlabelled
-    // list still lands runes and battlefields in the right place.
-    if (card.type === 'Legend') deck.legendId = card.id;
-    else if (card.type === 'Rune') addEntry(deck.runes, card.id, parsed.qty);
+    // A section naming a single slot wins over type-based routing, and the
+    // sideboard has to stay out of the deck proper — routing its cards by type
+    // would quietly fold them into the main or rune deck.
+    if (section === 'legend' || card.type === 'Legend') {
+      deck.legendId = card.id;
+      continue;
+    }
+    if (section === 'champion') {
+      deck.championId = card.id;
+      continue;
+    }
+    if (section === 'sideboard') {
+      addEntry(deck.sideboard, card.id, parsed.qty);
+      continue;
+    }
+
+    // Otherwise route by the card's own type where it's unambiguous, so an
+    // unlabelled list still lands runes and battlefields in the right place.
+    if (card.type === 'Rune') addEntry(deck.runes, card.id, parsed.qty);
     else if (card.type === 'Battlefield') {
       for (let i = 0; i < parsed.qty; i++) deck.battlefields.push(card.id);
     } else if (section === 'runes') addEntry(deck.runes, card.id, parsed.qty);
     else if (section === 'battlefields') deck.battlefields.push(card.id);
     else addEntry(deck.main, card.id, parsed.qty);
+  }
+
+  /*
+   * The Chosen Champion is a main-deck card that merely starts in its own zone
+   * (103.2), but lists conventionally break it out under its own header and
+   * leave it out of the main-deck section. Add it back unless it's already
+   * listed, so the 40 comes out right either way.
+   */
+  if (deck.championId) {
+    const champion = cards.find((c) => c.id === deck.championId);
+    const key = champion ? nameKey(champion.baseName) : null;
+    const present = key
+      ? deck.main.some((e) => {
+          const c = cards.find((x) => x.id === e.cardId);
+          return c && nameKey(c.baseName) === key;
+        })
+      : false;
+    if (!present) addEntry(deck.main, deck.championId, 1);
   }
 
   return { deck, problems };
@@ -170,6 +224,8 @@ export function formatDecklist(deck: Deck, byId: Map<string, Card>): string {
     lines.push('', 'Battlefields');
     for (const id of deck.battlefields) lines.push(nameOf(id));
   }
+
+  section('Sideboard', deck.sideboard);
 
   return lines.join('\n');
 }
