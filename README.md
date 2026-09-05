@@ -19,8 +19,11 @@ Unofficial fan project. Not affiliated with or endorsed by Riot Games.
 
 Online 2-player is deliberately out of scope for V1 — see *Multiplayer* below.
 
-53 tests pass (`npm test`), covering deck legality, decklist parsing, and the
+56 tests pass (`npm test`), covering deck legality, decklist parsing, and the
 engine — including a full game played to 8 points.
+
+**Picking this up fresh? Read [HANDOFF.md](HANDOFF.md)** — it records the
+current state, the known gaps, and what to do next.
 
 ---
 
