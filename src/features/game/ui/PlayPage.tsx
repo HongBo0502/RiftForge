@@ -1,0 +1,244 @@
+import { useEffect, useMemo, useRef, useState } from 'react';
+import type { Card } from '@/types';
+import { type Dataset, cardImage, loadDataset } from '@/data/cards';
+import { DOMAIN_COLOR } from '@/data/symbols';
+import { loadDecks } from '@/features/decks/storage';
+import type { Deck } from '@/features/decks/types';
+import { validateDeck } from '@/features/decks/validate';
+import { reduce, startGame } from '../engine/reducer';
+import { redact } from '../engine/redact';
+import { setupGame } from '../engine/setup';
+import type { GameAction, GameState, PlayerId } from '../engine/types';
+import GameBoard from './GameBoard';
+
+/**
+ * Hotseat play: both players share one device, so between turns the screen is
+ * covered until the next player confirms they're looking. The board is only
+ * ever handed a `redact`ed state, so nothing private can leak through the UI
+ * even by accident.
+ */
+export default function PlayPage() {
+  const [dataset, setDataset] = useState<Dataset | null>(null);
+  const [decks, setDecks] = useState<Deck[]>([]);
+  const [game, setGame] = useState<GameState | null>(null);
+  const [rejection, setRejection] = useState<{ reason: string; rule?: string } | null>(null);
+  const [handoffPending, setHandoffPending] = useState(false);
+  const lastTurnPlayer = useRef<PlayerId | null>(null);
+
+  useEffect(() => {
+    loadDataset().then(setDataset);
+    setDecks(loadDecks());
+  }, []);
+
+  const lookup = useMemo(
+    () => (cardId: string): Card | undefined => dataset?.byId.get(cardId),
+    [dataset],
+  );
+
+  function dispatch(action: GameAction) {
+    if (!game) return;
+    const result = reduce(game, action, lookup);
+    if (!result.ok) {
+      setRejection({ reason: result.reason, rule: result.rule });
+      return;
+    }
+    setRejection(null);
+    // Hand over the device whenever the turn changes.
+    if (result.state.turnPlayer !== game.turnPlayer && !result.state.winner) {
+      setHandoffPending(true);
+    }
+    setGame(result.state);
+  }
+
+  useEffect(() => {
+    if (game) lastTurnPlayer.current = game.turnPlayer;
+  }, [game]);
+
+  if (!dataset) {
+    return (
+      <div className="flex justify-center py-20">
+        <div className="size-8 animate-spin rounded-full border-2 border-line border-t-accent" />
+      </div>
+    );
+  }
+
+  if (!game) {
+    return (
+      <DeckSelect
+        dataset={dataset}
+        decks={decks}
+        onStart={(p1, p2, seed) => {
+          setGame(
+            startGame(setupGame({ decks: { p1, p2 }, byId: dataset.byId, seed })),
+          );
+          setRejection(null);
+        }}
+      />
+    );
+  }
+
+  if (game.winner) {
+    return (
+      <div className="mx-auto max-w-md px-4 py-20 text-center">
+        <h1 className="text-3xl font-bold text-accent">
+          {game.winner === 'p1' ? 'Player 1' : 'Player 2'} wins
+        </h1>
+        <p className="mt-2 text-muted">
+          {game.players.p1.points} – {game.players.p2.points} after {game.turn} turns.
+        </p>
+        <button
+          type="button"
+          onClick={() => setGame(null)}
+          className="mt-6 rounded-lg bg-accent px-4 py-2 font-semibold text-ink"
+        >
+          New game
+        </button>
+      </div>
+    );
+  }
+
+  if (handoffPending) {
+    return (
+      <div className="mx-auto max-w-md px-4 py-20 text-center">
+        <h1 className="text-2xl font-semibold">
+          Pass to {game.turnPlayer === 'p1' ? 'Player 1' : 'Player 2'}
+        </h1>
+        <p className="mt-2 text-sm text-muted">
+          Their hand is hidden until they tap below.
+        </p>
+        <button
+          type="button"
+          onClick={() => setHandoffPending(false)}
+          className="mt-6 rounded-lg bg-accent px-6 py-3 font-semibold text-ink"
+        >
+          I'm {game.turnPlayer === 'p1' ? 'Player 1' : 'Player 2'}
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <GameBoard
+      // The board never sees the other player's private information.
+      state={redact(game, game.turnPlayer)}
+      lookup={lookup}
+      onAction={dispatch}
+      rejection={rejection}
+      onExit={() => setGame(null)}
+    />
+  );
+}
+
+function DeckSelect({
+  dataset,
+  decks,
+  onStart,
+}: {
+  dataset: Dataset;
+  decks: Deck[];
+  onStart: (p1: Deck, p2: Deck, seed: number) => void;
+}) {
+  const [p1, setP1] = useState<string | null>(null);
+  const [p2, setP2] = useState<string | null>(null);
+
+  const legal = decks.filter((d) => validateDeck(d, dataset.byId).legal);
+  const deckOf = (id: string | null) => decks.find((d) => d.id === id);
+
+  if (decks.length === 0) {
+    return (
+      <div className="mx-auto max-w-md px-4 py-20 text-center">
+        <h1 className="text-xl font-semibold">No decks yet</h1>
+        <p className="mt-2 text-sm text-muted">
+          Build or import a deck first — the simulator needs two legal decks.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mx-auto max-w-3xl px-4 py-6">
+      <h1 className="text-xl font-semibold">Start a match</h1>
+      <p className="mt-1 text-sm text-muted">
+        Two players, one device. 8 points wins; the deck that goes second channels an extra rune.
+      </p>
+
+      {legal.length === 0 && (
+        <p className="mt-3 rounded-lg border border-order/40 bg-order/10 px-3 py-2 text-sm text-order">
+          None of your decks are legal yet. You can still start — the engine won't stop you — but
+          expect odd behaviour.
+        </p>
+      )}
+
+      <div className="mt-4 grid gap-4 sm:grid-cols-2">
+        <DeckColumn label="Player 1" decks={decks} dataset={dataset} value={p1} onChange={setP1} />
+        <DeckColumn label="Player 2" decks={decks} dataset={dataset} value={p2} onChange={setP2} />
+      </div>
+
+      <button
+        type="button"
+        disabled={!p1 || !p2}
+        onClick={() => {
+          const a = deckOf(p1);
+          const b = deckOf(p2);
+          if (a && b) onStart(a, b, Math.floor(Math.random() * 1e9));
+        }}
+        className="mt-5 w-full rounded-lg bg-accent py-3 font-semibold text-ink disabled:opacity-40"
+      >
+        Start match
+      </button>
+    </div>
+  );
+}
+
+function DeckColumn({
+  label,
+  decks,
+  dataset,
+  value,
+  onChange,
+}: {
+  label: string;
+  decks: Deck[];
+  dataset: Dataset;
+  value: string | null;
+  onChange: (id: string) => void;
+}) {
+  return (
+    <div>
+      <h2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted">{label}</h2>
+      <div className="space-y-2">
+        {decks.map((deck) => {
+          const legend = deck.legendId ? dataset.byId.get(deck.legendId) : undefined;
+          const v = validateDeck(deck, dataset.byId);
+          const src = legend ? cardImage(legend, 'thumb') : null;
+          return (
+            <button
+              key={deck.id}
+              type="button"
+              onClick={() => onChange(deck.id)}
+              className={`flex w-full items-center gap-2 rounded-lg border p-2 text-left transition-colors ${
+                value === deck.id ? 'border-accent bg-accent/10' : 'border-line bg-surface'
+              }`}
+            >
+              {src && <img src={src} alt="" className="h-12 w-9 rounded object-cover" loading="lazy" />}
+              <span className="min-w-0 flex-1">
+                <span className="block truncate text-sm font-medium">{deck.name}</span>
+                <span className="block truncate text-xs text-muted">{legend?.baseName ?? '—'}</span>
+              </span>
+              <span className="flex items-center gap-1">
+                {v.identity.map((d) => (
+                  <span
+                    key={d}
+                    className="size-2.5 rounded-full"
+                    style={{ background: DOMAIN_COLOR[d] }}
+                  />
+                ))}
+                {!v.legal && <span className="text-[10px] text-order">!</span>}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}

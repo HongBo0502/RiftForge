@@ -1,6 +1,7 @@
 import { NavLink, Navigate, Route, Routes } from 'react-router-dom';
 import CardsPage from '@/features/cards/CardsPage';
 import DecksPage from '@/features/decks/DecksPage';
+import PlayPage from '@/features/game/ui/PlayPage';
 
 const NAV = [
   { to: '/cards', label: 'Cards', icon: CardsIcon },
@@ -19,7 +20,7 @@ export default function App() {
           <Route path="/" element={<Navigate to="/cards" replace />} />
           <Route path="/cards" element={<CardsPage />} />
           <Route path="/decks" element={<DecksPage />} />
-          <Route path="/play" element={<ComingSoon title="Simulator" />} />
+          <Route path="/play" element={<PlayPage />} />
           <Route path="*" element={<Navigate to="/cards" replace />} />
         </Routes>
       </main>
@@ -82,15 +83,6 @@ function MobileNav() {
       {/* Home-indicator inset on iOS. */}
       <div className="h-[env(safe-area-inset-bottom)]" />
     </nav>
-  );
-}
-
-function ComingSoon({ title }: { title: string }) {
-  return (
-    <div className="mx-auto max-w-7xl px-4 py-16 text-center">
-      <h1 className="text-2xl font-semibold">{title}</h1>
-      <p className="mt-2 text-muted">Not built yet — the card database came first.</p>
-    </div>
   );
 }
 
