@@ -1,5 +1,6 @@
 import { NavLink, Navigate, Route, Routes } from 'react-router-dom';
 import CardsPage from '@/features/cards/CardsPage';
+import DecksPage from '@/features/decks/DecksPage';
 
 const NAV = [
   { to: '/cards', label: 'Cards', icon: CardsIcon },
@@ -17,7 +18,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/cards" replace />} />
           <Route path="/cards" element={<CardsPage />} />
-          <Route path="/decks" element={<ComingSoon title="Deck builder" />} />
+          <Route path="/decks" element={<DecksPage />} />
           <Route path="/play" element={<ComingSoon title="Simulator" />} />
           <Route path="*" element={<Navigate to="/cards" replace />} />
         </Routes>

@@ -1,5 +1,5 @@
 import type { Card, CardType, Domain, Rarity } from '@/types';
-import { RARITIES } from '@/types';
+import { RARITIES, nameKey } from '@/types';
 import { preferredPrinting } from './cards';
 
 export type SortKey = 'relevance' | 'name' | 'energy' | 'might' | 'rarity' | 'set';
@@ -161,9 +161,10 @@ export function searchCards(cards: Card[], q: CardQuery): Card[] {
   if (q.collapseVariants) {
     const groups = new Map<string, Card[]>();
     for (const card of results) {
-      const group = groups.get(card.baseName);
+      const key = nameKey(card.baseName);
+      const group = groups.get(key);
       if (group) group.push(card);
-      else groups.set(card.baseName, [card]);
+      else groups.set(key, [card]);
     }
     results = [...groups.values()].map((group) => {
       const pick = preferredPrinting(group);

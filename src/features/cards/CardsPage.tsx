@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Card } from '@/types';
+import { nameKey } from '@/types';
 import { type Dataset, loadDataset } from '@/data/cards';
 import { EMPTY_QUERY, searchCards } from '@/data/search';
 import type { CardQuery } from '@/data/search';
@@ -117,7 +118,7 @@ export default function CardsPage() {
       {selected && (
         <CardDetail
           card={selected}
-          printings={dataset.byBaseName.get(selected.baseName) ?? [selected]}
+          printings={dataset.byBaseName.get(nameKey(selected.baseName)) ?? [selected]}
           onSelect={setSelected}
           onClose={() => setSelected(null)}
         />

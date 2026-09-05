@@ -1,4 +1,5 @@
 import type { Card, DatasetMeta, SetInfo } from '@/types';
+import { nameKey } from '@/types';
 
 /**
  * Riot serves card art from a Sanity-backed CDN, which resizes and re-encodes
@@ -39,7 +40,11 @@ export interface Dataset {
   meta: DatasetMeta;
   /** Every card, keyed by id. */
   byId: Map<string, Card>;
-  /** Printings grouped by base name — variants of one card collapse together. */
+  /**
+   * Printings grouped by canonical name, so every variant of a card — including
+   * ones whose subtitle is punctuated differently between sets — collapses into
+   * a single entry. Key with `nameKey(card.baseName)`.
+   */
   byBaseName: Map<string, Card[]>;
 }
 
@@ -69,9 +74,10 @@ export function loadDataset(): Promise<Dataset> {
     const byBaseName = new Map<string, Card[]>();
     for (const card of cards) {
       byId.set(card.id, card);
-      const group = byBaseName.get(card.baseName);
+      const key = nameKey(card.baseName);
+      const group = byBaseName.get(key);
       if (group) group.push(card);
-      else byBaseName.set(card.baseName, [card]);
+      else byBaseName.set(key, [card]);
     }
 
     return { cards, sets, keywords, meta, byId, byBaseName };

@@ -58,6 +58,27 @@ export interface Card {
   tcgplayerId: string | null;
 }
 
+/**
+ * Canonical identity for a card name, used wherever "the same card" matters —
+ * deck copy limits, grouping reprints, decklist import.
+ *
+ * Two things make raw names unreliable. Printings carry variant suffixes
+ * ("(Signature)", "(Alternate Art)"), and the source data punctuates the
+ * subtitle inconsistently: Origins prints "Ahri - Inquisitive" while Vendetta
+ * prints "Ahri, Inquisitive" for the identical card. Core Rules 132.4 defines
+ * a card's name as "[Short Name], [Subtitle]", so both are one name and share
+ * the 3-copy limit.
+ */
+export function nameKey(name: string): string {
+  return name
+    .replace(/\s*\([^)]*\)\s*$/, '') // variant suffix
+    .replace(/\s*[-,]\s+/, ' ') // first subtitle separator, either spelling
+    .toLowerCase()
+    .replace(/[‘’`]/g, "'")
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 export interface SetInfo {
   setId: string;
   name: string;
