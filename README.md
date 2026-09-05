@@ -97,9 +97,10 @@ src/
     symbols.tsx           :rb_*: and [Keyword] text rendering
   features/
     cards/                card browser — grid, filters, detail
-    decks/                (phase 2)
-    game/engine/          (phase 3) pure rules engine
-    game/ui/              (phase 4) board
+    decks/                builder, legality, decklist import/export
+    game/engine/          pure rules engine (no React, no I/O)
+    game/ui/              hotseat board
+docs/                     rules text extracted from Riot's PDFs
 ```
 
 ### Symbols
@@ -122,9 +123,9 @@ Parenthesised runs are reminder text and are dimmed, as printed.
 
 ## Design decisions
 
-**The rules engine will be a pure `(state, action) => state` reducer** — no
-React, no I/O, no unseeded randomness. That makes it unit-testable, gives undo
-and replay for free from the action log, and means online multiplayer can later
+**The rules engine is a pure `(state, action) => state` reducer** — no React,
+no I/O, no unseeded randomness. That makes it unit-testable, gives undo and
+replay for free from the action log, and means online multiplayer can later
 relay *actions* between two clients running the same reducer, rather than
 syncing state.
 
@@ -137,13 +138,40 @@ online. A hidden card's identity only ever lives in its owner's private state.
 accounts, works offline. The engine design above is what keeps that from being
 a dead end.
 
-**Rules coverage** — the engine enforces the framework (phases, energy and
-power, play costs, movement, showdown resolution, conquer/hold scoring, deck
-legality) completely. Automating the individual rules text of all 1451 cards is
-not achievable in one pass, so the 28 keywords are automated generically, and
-card-specific text goes into an effects registry keyed by `riftboundId`, filled
-in incrementally. A card whose text isn't automated yet still plays with correct
-stats and costs and is visibly flagged, so nobody assumes it resolved.
+### Rules coverage — read this before trusting a game
+
+The **framework** is enforced completely: the six turn phases, the Energy and
+Power economy, play costs, Standard Moves, showdowns, the full combat sequence
+(465–466), Conquer/Hold scoring with the Final Point restriction, burn out, and
+the win check.
+
+**Individual card text is mostly not automated.** Five keywords are handled
+generically, because they are the ones that change the core loop:
+
+| keyword | |
+|---|---|
+| `Assault N` | +N Might while attacking |
+| `Shield N` | +N Might while defending |
+| `Tank` | must be assigned combat damage first |
+| `Backline` | must be assigned combat damage last |
+| `Ganking` | may move battlefield to battlefield |
+
+Everything else a card says — the other ~23 keywords and all card-specific
+abilities — is **not** applied by the engine. Such cards still play with correct
+stats and costs, and their unhandled text is listed in the board's "to apply by
+hand" panel, so nobody is left assuming an ability resolved when it didn't.
+Growing this is the main axis of future work: an effects registry keyed by
+`riftboundId`, filled in card by card.
+
+Damage assignment is automated. The rules let the assigning player choose the
+order (465.2.c); the engine enforces every hard constraint — lethal in full
+before another unit is started, no over-assignment while targets remain,
+Tank first and Backline last — and within those picks the assignment that kills
+the most units.
+
+Also not implemented: the mulligan (117), the chain and priority windows beyond
+pass/pass, and playing cards during a showdown other than by Action/Reaction
+timing.
 
 ---
 
