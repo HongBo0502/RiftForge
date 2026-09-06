@@ -17,6 +17,28 @@ npm run dev           # http://localhost:5273
 npm test              # 56 tests
 ```
 
+### Starting a session on this
+
+Open Claude Code with the **parent** folder as the project root (that is where
+`.claude/skills` and `.claude/launch.json` live), then paste:
+
+```
+/caveman
+
+Read riftforge/HANDOFF.md. Work in riftforge/.
+
+Task: item A — make Hidden work end to end.
+
+Stop when `npm test` passes with new tests covering: hiding costs 1 Power of
+any domain, a hidden card cannot be played on the turn it was hidden, it can
+from its owner's next turn, and redact() never leaks its identity.
+Do not start item B.
+```
+
+`/caveman` is a compression mode, not a scope change — it makes replies terse
+without dropping technical substance. Levels: `/caveman lite`, `/caveman`
+(full, default), `/caveman ultra`. Say "stop caveman" to leave it.
+
 ---
 
 ## Where it stands
