@@ -1,0 +1,4 @@
+# Client-side routing: /cards, /decks and /play are React Router paths, not
+# files. Without this rewrite a direct hit or refresh on them returns 404.
+# Read by Netlify and Cloudflare Pages.
+/*  /index.html  200

@@ -1,0 +1,23 @@
+# Netlify build config.
+#
+# VITE_* variables are baked into the bundle at build time, so they must be set
+# in the site's environment (Site settings -> Environment variables), not at
+# runtime. Without them the app still works offline; only online play is
+# disabled, and the lobby says so.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# The service worker must never be served stale, or clients pin an old build.
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+[[headers]]
+  for = "/data/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
