@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm run build:deploy",
+  "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "rewrites": [
     {

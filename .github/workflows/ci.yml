@@ -22,11 +22,14 @@ jobs:
 
       - run: npm ci
 
-      # Card data is not committed — this repository redistributes none of
-      # Riot's content. The fetch script verifies what it downloads (card and
-      # set counts, image and type completeness, spot-checks on known cards)
-      # and exits non-zero rather than writing a truncated dataset.
-      - name: Fetch card data
+      # Card data is committed, so the build needs no network. This step only
+      # checks whether the vendored dataset has drifted from the live API.
+      #
+      # It is advisory: Riftcodex sits behind Cloudflare, which blocks
+      # datacenter IPs, so this reliably fails from a runner. It must never
+      # fail the build — run `npm run fetch-cards` locally to refresh.
+      - name: Check card data freshness (advisory)
+        continue-on-error: true
         run: npm run fetch-cards
 
       - name: Typecheck

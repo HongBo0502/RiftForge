@@ -5,7 +5,7 @@
 # runtime. Without them the app still works offline; only online play is
 # disabled, and the lobby says so.
 [build]
-  command = "npm run build:deploy"
+  command = "npm run build"
   publish = "dist"
 
 [build.environment]
