@@ -1,4 +1,5 @@
 import type { Domain } from '@/types';
+import type { PaymentPlan } from './payment';
 
 /**
  * Game state and actions for the Riftbound engine.
@@ -165,7 +166,16 @@ export type GameAction =
   /** Recycle a rune for 1 Power of its domain. 164.2.b */
   | { type: 'RECYCLE_RUNE'; uid: string }
   /** Play a card from hand, optionally to a battlefield. 349-359 */
-  | { type: 'PLAY_CARD'; uid: string; to?: Location }
+  | {
+      type: 'PLAY_CARD';
+      uid: string;
+      to?: Location;
+      /**
+       * Which runes to spend. Omit to let the engine choose (auto-pay); supply
+       * one to override, e.g. to keep a particular domain rune on the board.
+       */
+      payment?: PaymentPlan;
+    }
   /** Standard move of a ready unit. 447 */
   | { type: 'MOVE_UNIT'; uid: string; to: Location }
   /** Pass focus during a showdown. 347.2 */

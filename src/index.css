@@ -23,6 +23,96 @@
   --color-colorless: #8a93a6;
 
   --font-display: 'Beaufort', 'Trajan Pro', Georgia, serif;
+
+  /*
+   * Playmat surfaces. Three depths and no more (see DESIGN.md §1): the table
+   * behind everything, the felt mat, and the pieces that lift off it. Only
+   * pieces cast shadow.
+   */
+  --color-table: #070a0f;
+  --color-mat: #12161f;
+  --color-mat-raised: #1a2130;
+  --color-mat-line: #2b3347;
+  --color-mat-line-hot: #3f4d68;
+
+  /* Ownership is shown on the mat edge, never on a card — a card's colour is
+     already its domain. */
+  --color-seat-you: #4ea3ff;
+  --color-seat-them: #e0483f;
+}
+
+/*
+ * The felt. A fine noise texture plus a radial lift toward the centre, both
+ * kept subtle enough to survive an OLED phone and a cheap laptop panel.
+ */
+.mat-felt {
+  background-color: var(--color-mat);
+  background-image:
+    radial-gradient(ellipse 120% 80% at 50% 50%, rgba(78, 163, 255, 0.05), transparent 70%),
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.012) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.03) 0 1px, transparent 1px 3px);
+}
+
+/* Zone outlines are printed onto the felt, not borders on a floating panel. */
+.mat-zone {
+  border: 1px solid var(--color-mat-line);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.018), transparent 60%);
+  border-radius: 10px;
+}
+
+.mat-zone-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.4;
+}
+
+/* Pieces lift off the felt. */
+.piece {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.6),
+    0 4px 10px rgba(0, 0, 0, 0.45);
+  transition:
+    transform 120ms ease-out,
+    box-shadow 120ms ease-out;
+}
+
+.piece-exhausted {
+  transform: rotate(90deg);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes mat-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(217, 176, 44, 0);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(217, 176, 44, 0.35);
+  }
+}
+
+.mat-contested {
+  animation: mat-pulse 800ms ease-in-out 2;
+  border-color: var(--color-order);
+}
+
+@keyframes mat-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-3px);
+  }
+  75% {
+    transform: translateX(3px);
+  }
+}
+
+.mat-hit {
+  animation: mat-shake 180ms ease-in-out;
 }
 
 html {

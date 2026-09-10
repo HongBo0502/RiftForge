@@ -1,6 +1,7 @@
 import type { Card, Domain } from '@/types';
 import { closeShowdown, openShowdown, type CardLookup } from './combat';
 import { hasKeyword, unautomatedText } from './keywords';
+import { type PaymentPlan, planPayment } from './payment';
 import { checkVictory, drawCard, score } from './scoring';
 import type {
   ActionResult,
@@ -49,46 +50,32 @@ function unitsAt(state: GameState, index: number, player?: PlayerId) {
 // ---------------------------------------------------------------------------
 
 /**
- * Checks and pays a card's Energy and Power cost. 201, 163
+ * Spends a payment plan: takes what it can from the Rune Pool, exhausts runes
+ * for Energy, and recycles runes for Power. 163, 201
  *
- * Power is domain-associated: a card's Power cost is paid with Power of one of
- * its own domains. Colourless cards accept Power of any domain.
+ * A recycled rune leaves the board and returns to the Rune Deck (161.2.b), so
+ * this is not reversible by simply readying it again.
  */
-function payCost(
-  state: GameState,
-  player: PlayerId,
-  card: Card,
-  apply: boolean,
-): Rejection | null {
+function spendPlan(state: GameState, player: PlayerId, plan: PaymentPlan, lookup: CardLookup): void {
   const p = state.players[player];
-  const energyCost = card.energy ?? 0;
-  const powerCost = card.power ?? 0;
 
-  if (p.energy < energyCost) {
-    return reject(`Not enough Energy (${p.energy} of ${energyCost}).`, '201');
+  p.energy -= plan.energyFromPool;
+  for (const [domain, amount] of Object.entries(plan.powerFromPool) as [Domain, number][]) {
+    p.power[domain] = (p.power[domain] ?? 0) - amount;
   }
 
-  const domains = card.domains.filter((d) => d !== 'Colorless');
-  const usable: Domain[] = domains.length > 0 ? domains : (Object.keys(p.power) as Domain[]);
-  const available = usable.reduce((sum, d) => sum + (p.power[d] ?? 0), 0);
-
-  if (available < powerCost) {
-    const label = domains.length > 0 ? domains.join('/') : 'any';
-    return reject(`Not enough ${label} Power (${available} of ${powerCost}).`, '163.2');
+  for (const uid of plan.exhaust) {
+    const rune = state.runes[uid];
+    if (rune) rune.ready = false;
   }
 
-  if (apply) {
-    p.energy -= energyCost;
-    let owed = powerCost;
-    for (const domain of usable) {
-      if (owed <= 0) break;
-      const held = p.power[domain] ?? 0;
-      const spend = Math.min(held, owed);
-      p.power[domain] = held - spend;
-      owed -= spend;
-    }
+  for (const uid of plan.recycle) {
+    const domain = (cardOf(state, uid, lookup)?.domains.find((d) => d !== 'Colorless') ??
+      'Colorless') as Domain;
+    delete state.runes[uid];
+    p.runeDeck.push(uid);
+    void domain;
   }
-  return null;
 }
 
 // ---------------------------------------------------------------------------
@@ -320,9 +307,13 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
         return reject('Only Action or Reaction cards can be played in a showdown.', '343.1.a');
       }
 
-      const unpaid = payCost(draft, player, card, false);
-      if (unpaid) return unpaid;
-      payCost(draft, player, card, true);
+      // Auto-pay: work out which runes cover the cost, then spend them.
+      // action.payment lets the UI override the choice of runes.
+      const planned = action.payment
+        ? ({ ok: true, plan: action.payment } as const)
+        : planPayment(draft, player, card, lookup);
+      if (!planned.ok) return reject(planned.reason, planned.rule);
+      spendPlan(draft, player, planned.plan, lookup);
 
       // Remove from its origin zone.
       if (inHand) p.hand = p.hand.filter((u) => u !== action.uid);
