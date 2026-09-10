@@ -9,7 +9,9 @@ import { reduce, startGame } from '../engine/reducer';
 import { redact } from '../engine/redact';
 import { setupGame } from '../engine/setup';
 import type { GameAction, GameState, PlayerId } from '../engine/types';
+import { useOnlineMatch } from '../online/useOnlineMatch';
 import GameBoard from './GameBoard';
+import OnlinePanel from './OnlinePanel';
 
 /**
  * Hotseat play: both players share one device, so between turns the screen is
@@ -17,7 +19,10 @@ import GameBoard from './GameBoard';
  * ever handed a `redact`ed state, so nothing private can leak through the UI
  * even by accident.
  */
+type Mode = 'choose' | 'hotseat' | 'online';
+
 export default function PlayPage() {
+  const [mode, setMode] = useState<Mode>('choose');
   const [dataset, setDataset] = useState<Dataset | null>(null);
   const [decks, setDecks] = useState<Deck[]>([]);
   const [game, setGame] = useState<GameState | null>(null);
@@ -34,6 +39,9 @@ export default function PlayPage() {
     () => (cardId: string): Card | undefined => dataset?.byId.get(cardId),
     [dataset],
   );
+
+  const emptyCards = useMemo(() => new Map<string, Card>(), []);
+  const online = useOnlineMatch(dataset?.byId ?? emptyCards);
 
   function dispatch(action: GameAction) {
     if (!game) return;
@@ -60,6 +68,40 @@ export default function PlayPage() {
         <div className="size-8 animate-spin rounded-full border-2 border-line border-t-accent" />
       </div>
     );
+  }
+
+  if (mode === 'online') {
+    if (online.status === 'playing' && online.state) {
+      return (
+        <GameBoard
+          // Online: the board is fixed to this client's seat, and every action
+          // is relayed rather than applied to a shared device.
+          state={redact(online.state, online.seat!)}
+          viewer={online.seat!}
+          canAct={online.myTurn}
+          waitingLabel={online.myTurn ? null : 'Waiting for the other player…'}
+          lookup={lookup}
+          onAction={online.act}
+          rejection={online.error ? { reason: online.error } : null}
+          onExit={() => {
+            void online.leave();
+            setMode('choose');
+          }}
+        />
+      );
+    }
+    return (
+      <OnlinePanel
+        dataset={dataset}
+        decks={decks}
+        match={online}
+        onBack={() => setMode('choose')}
+      />
+    );
+  }
+
+  if (mode === 'choose') {
+    return <ModeChooser onPick={setMode} />;
   }
 
   if (!game) {
@@ -126,6 +168,37 @@ export default function PlayPage() {
       rejection={rejection}
       onExit={() => setGame(null)}
     />
+  );
+}
+
+function ModeChooser({ onPick }: { onPick: (mode: Mode) => void }) {
+  return (
+    <div className="mx-auto max-w-3xl px-4 py-8">
+      <h1 className="text-xl font-semibold">Play</h1>
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        <button
+          type="button"
+          onClick={() => onPick('hotseat')}
+          className="rounded-lg border border-line bg-surface p-4 text-left transition-colors hover:border-accent"
+        >
+          <h2 className="font-semibold">Same device</h2>
+          <p className="mt-1 text-sm text-muted">
+            Two players, one screen. The board covers itself between turns so neither sees the
+            other's hand.
+          </p>
+        </button>
+        <button
+          type="button"
+          onClick={() => onPick('online')}
+          className="rounded-lg border border-line bg-surface p-4 text-left transition-colors hover:border-accent"
+        >
+          <h2 className="font-semibold">Online</h2>
+          <p className="mt-1 text-sm text-muted">
+            Two devices. One hosts and shares a room code. Your hand never leaves your browser.
+          </p>
+        </button>
+      </div>
+    </div>
   );
 }
 

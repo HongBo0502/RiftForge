@@ -52,6 +52,7 @@ All five originally planned phases are done and committed.
 | 5 | PWA / offline | done |
 | 6 | Playmat board, hover detail, auto-pay | done |
 | 7 | Hidden cards, Gear as permanents | done |
+| 8 | Online play over Supabase Realtime | done |
 
 ```
 c9c39fd  Import: standalone section headers and sideboards
@@ -68,7 +69,7 @@ ee0cb84  Rules engine: pure reducer over the official Core Rules
 Two decisions the user made. Don't re-litigate them:
 
 - The simulator **enforces** rules; it is not a manual sandbox.
-- V1 is **local only** (pass-and-play on one device). Online is V2.
+- V1 was local only; online play now exists alongside it, not instead of it.
 
 ---
 
@@ -103,6 +104,7 @@ src/
       keywords.ts          keyword parsing + "what isn't automated"
       redact.ts            hidden-information enforcement
       rng.ts               seeded RNG
+    game/online/         transport, Supabase adapter, match hook
     game/ui/             playmat board, card preview, deck select, handoff
 DESIGN.md                board design contract — read before UI work
 ```
@@ -231,11 +233,24 @@ frame it as a sparring partner.
 Worth doing partly as a **test harness**: hundreds of bot-vs-bot games will
 shake out engine bugs the 56 unit tests can't reach.
 
-### C. Online play (V2)
+### C. Online play — done, but thin
 
-Only after the above. The engine was designed for it: run the same reducer on
-both clients and relay **actions**, not state, with `redact()` deciding what
-each client receives. Needs the user to create a Firebase (or similar) project.
+Working: room codes, host/join, action relay over Supabase Realtime broadcast
+channels, per-client `redact()`, read-only board while the opponent acts.
+
+**Credentials live in `.env`, which is gitignored.** Copy `.env.example` and
+fill in the Supabase project URL and publishable key, or online play shows a
+configuration message instead of a lobby. Restart the dev server after — Vite
+reads env at startup.
+
+No database tables, no auth, no rows. A match is an ephemeral channel and the
+game lives in the two browsers.
+
+What it still needs:
+- **Reconnect.** A dropped connection ends the match. There is no resync.
+- **Sequence gaps end the match** rather than requesting a replay. Deliberate:
+  playing on after a gap would silently diverge.
+- **No spectators, no rematch, no lobby list.**
 
 ---
 
@@ -257,6 +272,11 @@ each client receives. Needs the user to create a Firebase (or similar) project.
 - **PDF extraction gives one word per line.** `extract-rules.py` reflows it and
   caches the raw text in `docs/pdf/*.rawtxt`, so re-running is fast. Don't
   re-parse the 43 MB PDF unnecessarily.
+- **Never put a side effect inside a `setState` updater.** React double-invokes
+  updaters in StrictMode. Broadcasting the relay message from inside one sent
+  every online action twice, with two sequence numbers, and desynced the two
+  clients by a whole turn. Handlers read state from a ref, act, then set state
+  once.
 - **Windows console mangles UTF-8 on print.** An em-dash showing as `?` in
   terminal output does not mean the file is corrupt — check the codepoint before
   "fixing" it.

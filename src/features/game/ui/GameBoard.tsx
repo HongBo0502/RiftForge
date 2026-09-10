@@ -15,6 +15,16 @@ interface Props {
   onAction: (action: GameAction) => void;
   rejection: { reason: string; rule?: string } | null;
   onExit: () => void;
+  /**
+   * Whose side of the mat this is. In hotseat it follows the turn player;
+   * online it is fixed to this client's seat, so the board never flips when
+   * the opponent takes their turn.
+   */
+  viewer?: PlayerId;
+  /** False while the opponent is acting — the board goes read-only. */
+  canAct?: boolean;
+  /** Shown in place of the end-turn button while waiting. */
+  waitingLabel?: string | null;
 }
 
 /**
@@ -25,17 +35,29 @@ interface Props {
  * rather than re-implementing rules here — the engine is the single authority
  * on what is legal, and a refusal carries its own reason and rule number.
  */
-export default function GameBoard({ state, lookup, onAction, rejection, onExit }: Props) {
+export default function GameBoard({
+  state,
+  lookup,
+  onAction,
+  rejection,
+  onExit,
+  viewer,
+  canAct = true,
+  waitingLabel = null,
+}: Props) {
   const [selected, setSelected] = useState<string | null>(null);
   /** Hand card being considered — drives the rune payment highlight. */
   const [considering, setConsidering] = useState<string | null>(null);
   const { bind, clear, preview } = useCardPreview();
 
-  const me = state.turnPlayer;
+  const me = viewer ?? state.turnPlayer;
   const them = OPPONENT[me];
   const cardFor = (uid: string) => lookup(state.instances[uid]?.cardId ?? '');
 
-  const canDo = useMemo(() => (a: GameAction) => reduce(state, a, lookup).ok, [state, lookup]);
+  const canDo = useMemo(
+    () => (a: GameAction) => canAct && reduce(state, a, lookup).ok,
+    [state, lookup, canAct],
+  );
 
   const unitsAt = (test: (l: Location) => boolean, who: PlayerId) =>
     Object.values(state.units).filter((u) => u.controller === who && test(u.location));
@@ -79,7 +101,12 @@ export default function GameBoard({ state, lookup, onAction, rejection, onExit }
       )}
 
       {state.showdown && (
-        <ShowdownBar state={state} me={me} onPass={() => onAction({ type: 'SHOWDOWN_PASS' })} />
+        <ShowdownBar
+          state={state}
+          me={me}
+          canAct={canAct}
+          onPass={() => onAction({ type: 'SHOWDOWN_PASS' })}
+        />
       )}
 
       {/* ---- the mat ---- */}
@@ -200,17 +227,24 @@ export default function GameBoard({ state, lookup, onAction, rejection, onExit }
         onConsider={setConsidering}
         onPlay={play}
         onHide={(uid, battlefield) => onAction({ type: 'HIDE_CARD', uid, battlefield })}
+        canAct={canAct}
       />
 
       <div className="mx-auto mt-2 flex max-w-6xl gap-2">
-        <button
-          type="button"
-          disabled={Boolean(state.showdown)}
-          onClick={() => onAction({ type: 'END_TURN' })}
-          className="flex-1 rounded-lg bg-accent py-2.5 text-sm font-semibold text-ink disabled:opacity-40"
-        >
-          End turn
-        </button>
+        {waitingLabel ? (
+          <p className="flex-1 rounded-lg border border-line bg-surface/60 py-2.5 text-center text-sm text-muted">
+            {waitingLabel}
+          </p>
+        ) : (
+          <button
+            type="button"
+            disabled={Boolean(state.showdown) || !canAct}
+            onClick={() => onAction({ type: 'END_TURN' })}
+            className="flex-1 rounded-lg bg-accent py-2.5 text-sm font-semibold text-ink disabled:opacity-40"
+          >
+            End turn
+          </button>
+        )}
       </div>
 
       {state.unautomated.length > 0 && (
@@ -279,7 +313,17 @@ function Score({ label, value, colour }: { label: string; value: number; colour:
   );
 }
 
-function ShowdownBar({ state, me, onPass }: { state: GameState; me: PlayerId; onPass: () => void }) {
+function ShowdownBar({
+  state,
+  me,
+  canAct,
+  onPass,
+}: {
+  state: GameState;
+  me: PlayerId;
+  canAct: boolean;
+  onPass: () => void;
+}) {
   const s = state.showdown!;
   return (
     <div className="mx-auto mt-2 flex max-w-6xl flex-wrap items-center gap-3 rounded-lg border border-order/50 bg-order/10 px-3 py-2">
@@ -291,8 +335,9 @@ function ShowdownBar({ state, me, onPass }: { state: GameState; me: PlayerId; on
       </span>
       <button
         type="button"
+        disabled={!canAct}
         onClick={onPass}
-        className="ml-auto rounded-lg bg-order px-4 py-1.5 text-sm font-semibold text-ink"
+        className="ml-auto rounded-lg bg-order px-4 py-1.5 text-sm font-semibold text-ink disabled:opacity-40"
       >
         Pass
       </button>
@@ -774,6 +819,7 @@ function Hand({
   onConsider,
   onPlay,
   onHide,
+  canAct,
 }: {
   state: GameState;
   me: PlayerId;
@@ -783,6 +829,7 @@ function Hand({
   onConsider: (uid: string | null) => void;
   onPlay: (uid: string) => void;
   onHide: (uid: string, battlefield: number) => void;
+  canAct: boolean;
 }) {
   const p = state.players[me];
   const slots = [
@@ -797,7 +844,7 @@ function Hand({
         {slots.map(({ uid, champion }) => {
           const card = cardFor(uid);
           const result = reduce(state, { type: 'PLAY_CARD', uid }, lookup);
-          const playable = result.ok;
+          const playable = canAct && result.ok;
           const src = card ? cardImage(card, 'thumb') : null;
 
           return (
@@ -841,7 +888,7 @@ function Hand({
                * its own control. Only battlefields you control can take one, and
                * only one facedown card each.
                */}
-              {hideTargets(state, lookup, uid).map((index) => (
+              {(canAct ? hideTargets(state, lookup, uid) : []).map((index) => (
                 <button
                   key={index}
                   type="button"
