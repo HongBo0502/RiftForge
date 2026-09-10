@@ -185,6 +185,27 @@ readable without hovering.
 - The pool shows Energy and Power as discrete pips, not numbers, so cost can be
   compared by counting rather than reading.
 
+### Chain strip
+
+A live chain is the one state where the whole mat is unusable and the only
+question is whether you answer. It is treated as a HUD, not as furniture: the
+reader needs three facts with no hunting, and nothing else.
+
+- **Whose window it is**, in words — "Your window" or "Opponent is deciding" —
+  because a coloured border alone does not survive a glance.
+- **What is pending**, newest at the top, since the newest resolves first.
+  Each row carries a seat dot in the owner's colour and the card's own text
+  with its timing marker stripped: the engine enforces that now, so printing it
+  is noise.
+- **What resolves next**, labelled outright on the top row.
+
+The strip sits above the mat in Chaos, the one domain colour the mat itself
+never uses for board state, so it never reads as part of a battlefield. Pass is
+the only control, right-aligned and disabled when the window is not yours.
+While it is up, End turn, phase advance and movement are all disabled — the
+engine refuses them anyway, and offering a control that always fails teaches
+nothing.
+
 ---
 
 ## 7. Motion & interaction

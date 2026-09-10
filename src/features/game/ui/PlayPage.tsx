@@ -5,6 +5,7 @@ import { DOMAIN_COLOR } from '@/data/symbols';
 import { loadDecks } from '@/features/decks/storage';
 import type { Deck } from '@/features/decks/types';
 import { validateDeck } from '@/features/decks/validate';
+import { activePlayer } from '../engine/chain';
 import { reduce, startGame } from '../engine/reducer';
 import { redact } from '../engine/redact';
 import { setupGame } from '../engine/setup';
@@ -52,13 +53,17 @@ export default function PlayPage() {
       return;
     }
     setRejection(null);
-    // Hand over the device whenever control passes — a turn change, or the
-    // other player's turn to mulligan.
-    const turnChanged = result.state.turnPlayer !== game.turnPlayer;
+    /*
+     * Hand over the device whenever the player who may act changes. That is a
+     * turn change, the other player's turn to mulligan, and now also a priority
+     * or focus pass — a response window is worthless if the responder cannot
+     * see their own hand.
+     */
+    const actorChanged = activePlayer(result.state) !== activePlayer(game);
     const mulliganPassed =
       game.pendingMulligan[0] !== result.state.pendingMulligan[0] &&
       result.state.pendingMulligan.length > 0;
-    if ((turnChanged || mulliganPassed) && !result.state.winner) {
+    if ((actorChanged || mulliganPassed) && !result.state.winner) {
       setHandoffPending(true);
     }
     setGame(result.state);
@@ -181,7 +186,7 @@ export default function PlayPage() {
       <div className="mx-auto max-w-md px-4 py-20 text-center">
         <h1 className="text-2xl font-semibold">
           Pass to{' '}
-          {(game.pendingMulligan[0] ?? game.turnPlayer) === 'p1' ? 'Player 1' : 'Player 2'}
+          {(game.pendingMulligan[0] ?? activePlayer(game)) === 'p1' ? 'Player 1' : 'Player 2'}
         </h1>
         <p className="mt-2 text-sm text-muted">
           Their hand is hidden until they tap below.
@@ -191,16 +196,23 @@ export default function PlayPage() {
           onClick={() => setHandoffPending(false)}
           className="mt-6 rounded-lg bg-accent px-6 py-3 font-semibold text-ink"
         >
-          I'm {(game.pendingMulligan[0] ?? game.turnPlayer) === 'p1' ? 'Player 1' : 'Player 2'}
+          I'm {(game.pendingMulligan[0] ?? activePlayer(game)) === 'p1' ? 'Player 1' : 'Player 2'}
         </button>
       </div>
     );
   }
 
+  /*
+   * Whose hand the mat shows. Not always the turn player: with a chain up it is
+   * the priority holder, and in a showdown the player with focus. 335
+   */
+  const seat = activePlayer(game);
+
   return (
     <GameBoard
       // The board never sees the other player's private information.
-      state={redact(game, game.turnPlayer)}
+      state={redact(game, seat)}
+      viewer={seat}
       lookup={lookup}
       onAction={dispatch}
       rejection={rejection}

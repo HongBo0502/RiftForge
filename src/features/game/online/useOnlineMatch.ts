@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Card } from '@/types';
 import type { Deck } from '@/features/decks/types';
+import { activePlayer } from '../engine/chain';
 import { reduce, startGame } from '../engine/reducer';
 import { setupGame } from '../engine/setup';
 import type { GameAction, GameState, PlayerId } from '../engine/types';
@@ -237,13 +238,19 @@ export function useOnlineMatch(byId: Map<string, Card>): OnlineMatch {
     roomCode,
     seat,
     state,
+    /*
+     * Not simply "is it my turn" — with a chain up it is whoever holds
+     * priority, and in a showdown whoever holds focus, both of which can be the
+     * player whose turn it is not. That is the whole point of a response
+     * window. 335
+     */
     myTurn: Boolean(
       state &&
         seat &&
         !state.winner &&
         (state.phase === 'mulligan'
           ? state.pendingMulligan[0] === seat
-          : state.turnPlayer === seat),
+          : activePlayer(state) === seat),
     ),
     host: (code, deck) => open(code, deck, 'host'),
     join: (code, deck) => open(code, deck, 'guest'),

@@ -1,4 +1,11 @@
 import type { Card, Domain } from '@/types';
+import {
+  activePlayer,
+  checkTiming,
+  passPriority,
+  pushChainItem,
+  spellItem,
+} from './chain';
 import { cleanup, expireTemporary } from './cleanup';
 import { shuffle } from './rng';
 import { closeShowdown, openShowdown, type CardLookup } from './combat';
@@ -299,16 +306,38 @@ function moveIsLegal(
 // Reducer
 // ---------------------------------------------------------------------------
 
+/**
+ * What is still legal while a chain is up. 331.1
+ *
+ * Reactions can be played, and rune abilities are themselves Reactions
+ * (164.2.a), which is what lets a player fund the answer they are about to
+ * play. Everything else waits for the chain to resolve.
+ */
+const CHAIN_SAFE = new Set<GameAction['type']>([
+  'PLAY_CARD',
+  'PASS_PRIORITY',
+  'EXHAUST_RUNE',
+  'RECYCLE_RUNE',
+  'CONCEDE',
+]);
+
 export function reduce(state: GameState, action: GameAction, lookup: CardLookup): ActionResult {
   if (state.winner && action.type !== 'CONCEDE') {
     return reject('The game is over.');
   }
 
   const player = state.turnPlayer;
+  /** Whoever holds priority or focus. Only the same as `player` in an Open State. */
+  const actor = activePlayer(state);
   const draft = clone(state);
 
   if (state.phase === 'mulligan' && action.type !== 'MULLIGAN' && action.type !== 'CONCEDE') {
     return reject('Finish the mulligan first.', '117');
+  }
+
+  // 331.1.a — a chain closes the turn. Nothing touches the board until it goes.
+  if (state.chain.length > 0 && !CHAIN_SAFE.has(action.type)) {
+    return reject('Resolve the chain first.', '331.1');
   }
 
   switch (action.type) {
@@ -380,12 +409,24 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
     case 'EXHAUST_RUNE': {
       const rune = draft.runes[action.uid];
       if (!rune) return reject('No such rune.');
-      if (rune.controller !== player) return reject('That rune is not yours.');
+      // 164.2.a — a rune's ability has Reaction, so its controller can use it
+      // whenever they hold priority, not only on their own turn.
+      if (rune.controller !== actor) return reject('That rune is not yours.');
       if (!rune.ready) return reject('That rune is already exhausted.');
 
       rune.ready = false;
-      draft.players[player].energy += 1;
-      log(draft, player, 'Exhausted a rune for 1 Energy.', '164.2.a');
+      draft.players[actor].energy += 1;
+      log(draft, actor, 'Exhausted a rune for 1 Energy.', '164.2.a');
+      return { ok: true, state: draft };
+    }
+
+    // -----------------------------------------------------------------
+    case 'PASS_PRIORITY': {
+      // 339.1 — two passes in sequence and the newest item resolves.
+      if (draft.chain.length === 0) return reject('Nothing is on the chain.', '331.2');
+      passPriority(draft, lookup);
+      cleanup(draft);
+      checkVictory(draft);
       return { ok: true, state: draft };
     }
 
@@ -393,26 +434,26 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
     case 'RECYCLE_RUNE': {
       const rune = draft.runes[action.uid];
       if (!rune) return reject('No such rune.');
-      if (rune.controller !== player) return reject('That rune is not yours.');
+      if (rune.controller !== actor) return reject('That rune is not yours.');
 
       const card = cardOf(draft, action.uid, lookup);
       const domain = (card?.domains.find((d) => d !== 'Colorless') ?? 'Colorless') as Domain;
 
       // 161.2.b — a recycled rune returns to the Rune Deck, not the trash.
       delete draft.runes[action.uid];
-      draft.players[player].runeDeck.push(action.uid);
-      draft.players[player].power[domain] = (draft.players[player].power[domain] ?? 0) + 1;
-      log(draft, player, `Recycled a rune for 1 ${domain} Power.`, '164.2.b');
+      draft.players[actor].runeDeck.push(action.uid);
+      draft.players[actor].power[domain] = (draft.players[actor].power[domain] ?? 0) + 1;
+      log(draft, actor, `Recycled a rune for 1 ${domain} Power.`, '164.2.b');
       return { ok: true, state: draft };
     }
 
     // -----------------------------------------------------------------
     case 'PLAY_CARD': {
-      const p = draft.players[player];
+      const p = draft.players[actor];
       const fromChampionZone = p.championZone === action.uid;
       const inHand = p.hand.includes(action.uid);
       const facedown = draft.hidden[action.uid];
-      const fromHidden = Boolean(facedown && facedown.controller === player);
+      const fromHidden = Boolean(facedown && facedown.controller === actor);
       if (!inHand && !fromChampionZone && !fromHidden) {
         return reject('That card is not available to play.');
       }
@@ -426,15 +467,10 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
         return reject('A hidden card can only be played from your next turn.', '811.1.b');
       }
 
-      // 813 — Reaction lets a card be played in a showdown; a facedown card has
-      // it while facedown.
-      const reactive = fromHidden || hasKeyword(card, 'Reaction') || hasKeyword(card, 'Action');
-      if (draft.phase !== 'main' && !reactive) {
-        return reject('Cards are played in the Main Phase.', '316.5');
-      }
-      if (draft.showdown && !reactive) {
-        return reject('Only Action or Reaction cards can be played in a showdown.', '343.1.a');
-      }
+      // 358.4 — Main Phase in an Open State allows anything; a showdown allows
+      // Action and Reaction; a live chain allows Reaction alone.
+      const mistimed = checkTiming(draft, card, fromHidden);
+      if (mistimed) return mistimed;
 
       // 805.1 — Accelerate is an additional cost, and only means anything on a
       // unit that actually has the keyword.
@@ -450,9 +486,9 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
         // action.payment lets the UI override the choice of runes.
         const planned = action.payment
           ? ({ ok: true, plan: action.payment } as const)
-          : planPayment(draft, player, card, lookup, { accelerate: accelerated });
+          : planPayment(draft, actor, card, lookup, { accelerate: accelerated });
         if (!planned.ok) return reject(planned.reason, planned.rule);
-        spendPlan(draft, player, planned.plan, lookup);
+        spendPlan(draft, actor, planned.plan, lookup);
       }
 
       // Remove from its origin zone.
@@ -471,11 +507,11 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
       if (card.type === 'Unit') {
         // Units enter at their controller's base unless played to a
         // battlefield they already hold.
-        let destination: Location = forced ?? { kind: 'base', player };
+        let destination: Location = forced ?? { kind: 'base', player: actor };
         if (!forced && action.to?.kind === 'battlefield') {
           const bf = draft.battlefields[action.to.index];
           if (!bf) return reject('No such battlefield.');
-          if (bf.controller !== player) {
+          if (bf.controller !== actor) {
             return reject('Units can only be played to a battlefield you control.');
           }
           destination = action.to;
@@ -483,7 +519,7 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
 
         draft.units[action.uid] = {
           uid: action.uid,
-          controller: player,
+          controller: actor,
           location: destination,
           /*
            * 178.1.a.1 — a unit enters exhausted. It therefore cannot take a
@@ -498,29 +534,44 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
           enteredOnTurn: draft.turn,
           movesThisTurn: 0,
         };
-        log(draft, player, `Played ${card.baseName}${fromHidden ? ' from hidden' : ''}.`);
+        log(draft, actor, `Played ${card.baseName}${fromHidden ? ' from hidden' : ''}.`);
       } else if (card.type === 'Gear') {
         // 147-149 — Gear are permanents. They enter ready, at their
         // controller's Base unless an effect says otherwise (149.2).
         draft.gear[action.uid] = {
           uid: action.uid,
-          controller: player,
-          location: forced ?? { kind: 'base', player },
+          controller: actor,
+          location: forced ?? { kind: 'base', player: actor },
           ready: true,
           attachedTo: null,
         };
-        log(draft, player, `Played ${card.baseName}${fromHidden ? ' from hidden' : ''}.`);
+        log(draft, actor, `Played ${card.baseName}${fromHidden ? ' from hidden' : ''}.`);
       } else {
-        // Spells resolve and go to the trash. Their text is not automated, so
-        // surface it rather than pretending it resolved.
-        p.trash.push(action.uid);
-        log(draft, player, `Played ${card.baseName}${fromHidden ? ' from hidden' : ''}.`);
+        /*
+         * 359.3.a — a spell does not resolve on being played. It lingers on the
+         * chain as a Finalized Item, both players get a window to answer it,
+         * and only then does it resolve and go to the trash.
+         */
+        pushChainItem(draft, spellItem(action.uid, actor, card, action.targets ?? []));
+        log(
+          draft,
+          actor,
+          `Played ${card.baseName}${fromHidden ? ' from hidden' : ''} onto the chain.`,
+          '359.3.a',
+        );
       }
 
-      const manual = unautomatedText(card);
-      if (manual) {
-        draft.unautomated.push(`${card.baseName}: ${manual.replace(/\n/g, ' ')}`);
-        log(draft, player, `${card.baseName}'s text is not automated — apply it by hand.`);
+      /*
+       * A permanent executes its rules text as it is finalized (359.2.b), so
+       * anything the engine cannot do is surfaced now. A spell's text does not
+       * apply until it resolves, so that is flagged in resolveChain instead.
+       */
+      if (card.type === 'Unit' || card.type === 'Gear') {
+        const manual = unautomatedText(card);
+        if (manual) {
+          draft.unautomated.push(`${card.baseName}: ${manual.replace(/\n/g, ' ')}`);
+          log(draft, actor, `${card.baseName}'s text is not automated — apply it by hand.`);
+        }
       }
 
       checkVictory(draft);

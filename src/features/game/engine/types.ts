@@ -148,6 +148,30 @@ export interface ShowdownState {
   passes: number;
 }
 
+/**
+ * One line of a chain item's rules text, with whatever it chose.
+ *
+ * Instructions are tracked separately because losing a target skips only the
+ * instruction that named it — the rest of the card still resolves. 359.3.e.7
+ */
+export interface ChainInstruction {
+  text: string;
+  /** Chosen targets: unit/gear uids, `p1`/`p2`, or `bf:N`. Empty = untargeted. */
+  targets: string[];
+}
+
+/** A spell or ability waiting on the Chain. 327-330 */
+export interface ChainItem {
+  /** The card's instance uid, or a synthetic id for an ability with no card. */
+  uid: string;
+  controller: PlayerId;
+  /** Abilities do not go to a trash when they resolve; spells do. 359.3.d */
+  kind: 'spell' | 'ability';
+  instructions: ChainInstruction[];
+  /** Display name for an ability that has no card of its own. */
+  label?: string;
+}
+
 export interface LogEntry {
   turn: number;
   phase: Phase;
@@ -172,6 +196,15 @@ export interface GameState {
   hidden: Record<string, HiddenState>;
   battlefields: BattlefieldState[];
   showdown: ShowdownState | null;
+  /**
+   * Spells and abilities waiting to resolve, oldest first. A non-empty chain
+   * puts the turn in a Closed State, where only Reactions can be played. 331.1
+   */
+  chain: ChainItem[];
+  /** Who may act while the chain is up. Null in an Open State. 335 */
+  priority: PlayerId | null;
+  /** Passes in sequence; at two the newest chain item resolves. 339.1 */
+  chainPasses: number;
   /**
    * Players who still owe a mulligan, in turn order. Empty once the pre-game
    * is done, which is every state that did not opt into mulligans. 117
@@ -211,7 +244,18 @@ export type GameAction =
        * exhausted (805.1). Ignored on cards without the keyword.
        */
       accelerate?: boolean;
+      /**
+       * What the card chooses: unit/gear uids, `p1`/`p2`, or `bf:N`. A target
+       * that leaves the board before the spell resolves takes only its own
+       * instruction with it. 359.3.e
+       */
+      targets?: string[];
     }
+  /**
+   * Decline to add to the chain. Both players passing in sequence resolves the
+   * newest item. 338.1.b / 339.1
+   */
+  | { type: 'PASS_PRIORITY' }
   /**
    * Hide a card with [Hidden] facedown at a battlefield you control. 811.1.b
    * Costs 1 Power of any domain. Hiding is not playing and opens no chain.

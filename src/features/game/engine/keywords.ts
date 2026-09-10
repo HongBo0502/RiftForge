@@ -12,6 +12,8 @@ import type { Card } from '@/types';
 
 /** Keywords the engine actually acts on. */
 export const AUTOMATED_KEYWORDS = [
+  'Action', // playable in showdowns too. 806.1.b
+  'Reaction', // playable in a Closed State as well. 159.2.b.2
   'Assault', // +N Might while I'm an attacker
   'Shield', // +N Might while I'm a defender (a Might modifier, not prevention)
   'Tank', // I must be assigned combat damage first. 465.2.c.6

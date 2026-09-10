@@ -16,9 +16,10 @@ interface Props {
   rejection: { reason: string; rule?: string } | null;
   onExit: () => void;
   /**
-   * Whose side of the mat this is. In hotseat it follows the turn player;
-   * online it is fixed to this client's seat, so the board never flips when
-   * the opponent takes their turn.
+   * Whose side of the mat this is. In hotseat it follows whoever may act,
+   * which is the turn player in an Open State and the priority or focus holder
+   * otherwise; online it is fixed to this client's seat, so the board never
+   * flips when the opponent takes their turn.
    */
   viewer?: PlayerId;
   /** False while the opponent is acting — the board goes read-only. */
@@ -100,7 +101,17 @@ export default function GameBoard({
         </p>
       )}
 
-      {state.showdown && (
+      {state.chain.length > 0 && (
+        <ChainBar
+          state={state}
+          me={me}
+          cardFor={cardFor}
+          canAct={canAct}
+          onPass={() => onAction({ type: 'PASS_PRIORITY' })}
+        />
+      )}
+
+      {state.showdown && state.chain.length === 0 && (
         <ShowdownBar
           state={state}
           me={me}
@@ -206,7 +217,10 @@ export default function GameBoard({
             me={me}
             lookup={lookup}
             payment={payment}
-            disabled={Boolean(state.showdown)}
+            // 164.2.a — a rune's abilities have Reaction, so they stay usable
+            // in a showdown and while the chain is up. That is how a player
+            // funds the answer the window exists for.
+            disabled={!canAct}
             onExhaust={(uid) => onAction({ type: 'EXHAUST_RUNE', uid })}
             onRecycle={(uid) => onAction({ type: 'RECYCLE_RUNE', uid })}
           />
@@ -238,7 +252,7 @@ export default function GameBoard({
         ) : (
           <button
             type="button"
-            disabled={Boolean(state.showdown) || !canAct}
+            disabled={Boolean(state.showdown) || state.chain.length > 0 || !canAct}
             onClick={() => onAction({ type: 'END_TURN' })}
             className="flex-1 rounded-lg bg-accent py-2.5 text-sm font-semibold text-ink disabled:opacity-40"
           >
@@ -341,6 +355,86 @@ function ShowdownBar({
       >
         Pass
       </button>
+    </div>
+  );
+}
+
+/**
+ * The chain strip. 327-340
+ *
+ * A live chain is the one moment where the board is frozen and the only
+ * question is whether you answer. It is built to the HUD rule in DESIGN.md —
+ * whose window it is, what is pending, and what resolves next, all readable at
+ * a glance, because everything else on the mat is unusable until it clears.
+ */
+function ChainBar({
+  state,
+  me,
+  cardFor,
+  canAct,
+  onPass,
+}: {
+  state: GameState;
+  me: PlayerId;
+  cardFor: (uid: string) => Card | undefined;
+  canAct: boolean;
+  onPass: () => void;
+}) {
+  // 340.1 — the newest item resolves first, so it is shown at the top.
+  const items = [...state.chain].reverse();
+  const mine = state.priority === me;
+
+  return (
+    <div className="mx-auto mt-2 max-w-6xl rounded-lg border border-chaos/60 bg-chaos/10 px-3 py-2">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+        <span className="text-sm font-semibold text-chaos">
+          Chain · {items.length} pending
+        </span>
+        <span className="text-[11px] text-muted">
+          {mine ? 'Your window — answer or pass' : 'Opponent is deciding'} · both must pass to
+          resolve the top item
+        </span>
+        <button
+          type="button"
+          disabled={!canAct || !mine}
+          onClick={onPass}
+          className="ml-auto rounded-lg bg-chaos px-4 py-1.5 text-sm font-semibold text-ink disabled:opacity-40"
+        >
+          Pass
+        </button>
+      </div>
+
+      <ol className="mt-2 flex flex-col gap-1">
+        {items.map((item, i) => {
+          const card = cardFor(item.uid);
+          return (
+            <li
+              key={item.uid}
+              className={`flex items-center gap-2 rounded border px-2 py-1 text-xs ${
+                i === 0 ? 'border-chaos/70 bg-ink/40' : 'border-line/60 opacity-70'
+              }`}
+            >
+              <span
+                className="h-2 w-2 shrink-0 rounded-full"
+                style={{
+                  background:
+                    item.controller === me ? 'var(--color-seat-me)' : 'var(--color-seat-them)',
+                }}
+              />
+              <span className="shrink-0 font-semibold">{card?.baseName ?? item.label ?? 'Ability'}</span>
+              <CardText
+                text={item.instructions[0]?.text ?? ''}
+                className="min-w-0 truncate text-muted"
+              />
+              {i === 0 && (
+                <span className="ml-auto shrink-0 font-bold uppercase tracking-wider text-chaos">
+                  Resolves next
+                </span>
+              )}
+            </li>
+          );
+        })}
+      </ol>
     </div>
   );
 }

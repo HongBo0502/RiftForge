@@ -32,6 +32,12 @@ export function redact(state: GameState, viewer: PlayerId): GameState {
   for (const uid of next.players[viewer].mainDeck) secret.add(uid);
   for (const uid of next.players[viewer].runeDeck) secret.add(uid);
 
+  /*
+   * The chain is deliberately untouched: 108.1.b makes cards and abilities on
+   * it Public Information, and a response window only works if both players can
+   * read what they are answering.
+   */
+
   // 128 — a hidden card is face-down; only its controller knows what it is.
   for (const hidden of Object.values(next.hidden)) {
     if (hidden.controller !== viewer) secret.add(hidden.uid);

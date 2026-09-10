@@ -37,7 +37,8 @@ export function resetUids(): void {
  * Builds the opening game state for 1v1 (Duel), following the Setup Process
  * (110-118) and the mode's own setup (485.5).
  *
- * Not implemented: the mulligan (117). Both players simply keep their four.
+ * The mulligan (117) is opt-in and lives in `startGame`, so a caller that
+ * does not want a pre-game gets a state that is ready to play.
  */
 export function setupGame({ decks, byId, seed = 1, firstPlayer }: SetupInput): GameState {
   resetUids();
@@ -134,6 +135,9 @@ export function setupGame({ decks, byId, seed = 1, firstPlayer }: SetupInput): G
     hidden: {},
     battlefields,
     showdown: null,
+    chain: [],
+    priority: null,
+    chainPasses: 0,
     pendingMulligan: [],
     victoryScore: VICTORY_SCORE,
     winner: null,

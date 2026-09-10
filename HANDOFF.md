@@ -53,6 +53,8 @@ All five originally planned phases are done and committed.
 | 6 | Playmat board, hover detail, auto-pay | done |
 | 7 | Hidden cards, Gear as permanents | done |
 | 8 | Online play over Supabase Realtime | done |
+| 9 | Rules fidelity A: exhausted units, cleanups, Temporary, mulligan | done |
+| 10 | Rules fidelity B: the chain, priority, timing gate | done |
 
 ```
 c9c39fd  Import: standalone section headers and sideboards
@@ -64,7 +66,7 @@ ee0cb84  Rules engine: pure reducer over the official Core Rules
 457bf25  Card database: Vite/React scaffold, Riftcodex pipeline, browser UI
 ```
 
-**77 tests pass.** Production build is clean (~95 KB gzipped JS).
+**126 tests pass.** Production build is clean (~95 KB gzipped JS).
 
 Two decisions the user made. Don't re-litigate them:
 
@@ -174,14 +176,15 @@ but changes no stats.
 ever gains the field. Fixing it means either finding the value upstream or
 scraping it off the card images.
 
-### 2. 23 of 28 keywords do nothing
+### 2. Most keywords still do nothing
 
-Automated: `Assault`, `Shield`, `Tank`, `Backline`, `Ganking` (Might and
-movement), plus `Hidden` and `Equip`, which have their own actions.
+Automated: `Action` and `Reaction` (the timing gate), `Assault`, `Shield`,
+`Tank`, `Backline`, `Ganking` (Might and movement), `Accelerate` and
+`Temporary`, plus `Hidden` and `Equip`, which have their own actions.
 
-Not automated: `Accelerate, Action, Add, Ambush, Buff, Deathknell, Deflect,
-Empower, Empowered, Flow, Hunt, Legion, Mighty, Quick-Draw, Reaction, Repeat,
-Stun, Temporary, Unique, Vision, Weaponmaster`.
+Not automated: `Add, Ambush, Buff, Deathknell, Deflect, Empower, Empowered,
+Flow, Hunt, Legion, Mighty, Quick-Draw, Repeat, Stun, Unique, Vision,
+Weaponmaster`.
 
 Cards whose text isn't handled still play with correct stats and costs, and
 their text is surfaced in the board's "apply by hand" panel
@@ -190,9 +193,14 @@ remove it while coverage is partial.
 
 ### 3. Other unimplemented rules
 
-- **Mulligan** (117) — both players simply keep their opening four.
-- **Chain and priority** (327–340) — a showdown is pass/pass only. No spell can
-  be played in response to another, no triggered abilities go on a chain.
+- **Triggered abilities never reach the chain.** The chain itself works
+  (327–340): spells go on it, both players get a priority window, the newest
+  resolves first, and `counterItem` clears an item without refunding its cost.
+  What is missing is anything that would *put* a trigger there, because no card
+  effect fires yet. Same blocker as the effects registry below.
+- **Targets are chosen by the caller, not the board.** `PLAY_CARD` accepts
+  `targets`, and the resolver drops an instruction whose targets have all gone
+  (359.3.e.7) — but nothing in the UI asks a player to pick one yet.
 - **Damage assignment is automatic.** Every hard constraint is enforced (lethal
   in full before another unit, no over-assignment while targets remain,
   Tank first / Backline last), but the rules let the *player* choose the order
@@ -200,8 +208,7 @@ remove it while coverage is partial.
 - **No undo/replay.** The pure reducer makes it possible and `GameState.log`
   holds human-readable lines, but no *action* history is kept. Adding one is
   small.
-- **No AI opponent.** Hotseat only.
-- **No online play.** By design for V1.
+- **No AI opponent.** Hotseat and online only.
 
 ---
 
