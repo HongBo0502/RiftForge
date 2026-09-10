@@ -297,33 +297,60 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
       const p = draft.players[player];
       const fromChampionZone = p.championZone === action.uid;
       const inHand = p.hand.includes(action.uid);
-      if (!inHand && !fromChampionZone) return reject('That card is not available to play.');
+      const facedown = draft.hidden[action.uid];
+      const fromHidden = Boolean(facedown && facedown.controller === player);
+      if (!inHand && !fromChampionZone && !fromHidden) {
+        return reject('That card is not available to play.');
+      }
 
       const card = cardOf(draft, action.uid, lookup);
       if (!card) return reject('Unknown card.');
 
-      if (draft.phase !== 'main') return reject('Cards are played in the Main Phase.', '316.5');
-      if (draft.showdown && !hasKeyword(card, 'Reaction') && !hasKeyword(card, 'Action')) {
+      // 811.1.b — a facedown card gains Reaction only from the turn after it
+      // was hidden, so it cannot be hidden and used in the same turn.
+      if (fromHidden && draft.turn <= facedown.hiddenOnTurn) {
+        return reject('A hidden card can only be played from your next turn.', '811.1.b');
+      }
+
+      // 813 — Reaction lets a card be played in a showdown; a facedown card has
+      // it while facedown.
+      const reactive = fromHidden || hasKeyword(card, 'Reaction') || hasKeyword(card, 'Action');
+      if (draft.phase !== 'main' && !reactive) {
+        return reject('Cards are played in the Main Phase.', '316.5');
+      }
+      if (draft.showdown && !reactive) {
         return reject('Only Action or Reaction cards can be played in a showdown.', '343.1.a');
       }
 
-      // Auto-pay: work out which runes cover the cost, then spend them.
-      // action.payment lets the UI override the choice of runes.
-      const planned = action.payment
-        ? ({ ok: true, plan: action.payment } as const)
-        : planPayment(draft, player, card, lookup);
-      if (!planned.ok) return reject(planned.reason, planned.rule);
-      spendPlan(draft, player, planned.plan, lookup);
+      // 811.1.b — playing from Hidden ignores the card's base cost.
+      if (!fromHidden) {
+        // Auto-pay: work out which runes cover the cost, then spend them.
+        // action.payment lets the UI override the choice of runes.
+        const planned = action.payment
+          ? ({ ok: true, plan: action.payment } as const)
+          : planPayment(draft, player, card, lookup);
+        if (!planned.ok) return reject(planned.reason, planned.rule);
+        spendPlan(draft, player, planned.plan, lookup);
+      }
 
       // Remove from its origin zone.
       if (inHand) p.hand = p.hand.filter((u) => u !== action.uid);
-      else p.championZone = null;
+      else if (fromChampionZone) p.championZone = null;
+      else delete draft.hidden[action.uid];
+
+      /*
+       * 811.1.d.1 — a hidden permanent must be played to the battlefield it was
+       * hidden at, and that overrides Gear's normal base-only restriction.
+       */
+      const forced: Location | undefined = fromHidden
+        ? { kind: 'battlefield', index: facedown.battlefield }
+        : undefined;
 
       if (card.type === 'Unit') {
         // Units enter at their controller's base unless played to a
         // battlefield they already hold.
-        let destination: Location = { kind: 'base', player };
-        if (action.to?.kind === 'battlefield') {
+        let destination: Location = forced ?? { kind: 'base', player };
+        if (!forced && action.to?.kind === 'battlefield') {
           const bf = draft.battlefields[action.to.index];
           if (!bf) return reject('No such battlefield.');
           if (bf.controller !== player) {
@@ -343,12 +370,23 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
           enteredOnTurn: draft.turn,
           movesThisTurn: 0,
         };
-        log(draft, player, `Played ${card.baseName}.`);
+        log(draft, player, `Played ${card.baseName}${fromHidden ? ' from hidden' : ''}.`);
+      } else if (card.type === 'Gear') {
+        // 147-149 — Gear are permanents. They enter ready, at their
+        // controller's Base unless an effect says otherwise (149.2).
+        draft.gear[action.uid] = {
+          uid: action.uid,
+          controller: player,
+          location: forced ?? { kind: 'base', player },
+          ready: true,
+          attachedTo: null,
+        };
+        log(draft, player, `Played ${card.baseName}${fromHidden ? ' from hidden' : ''}.`);
       } else {
-        // Spells and gear resolve, then go to the trash. Their text is not
-        // automated, so surface it rather than pretending it resolved.
+        // Spells resolve and go to the trash. Their text is not automated, so
+        // surface it rather than pretending it resolved.
         p.trash.push(action.uid);
-        log(draft, player, `Played ${card.baseName}.`);
+        log(draft, player, `Played ${card.baseName}${fromHidden ? ' from hidden' : ''}.`);
       }
 
       const manual = unautomatedText(card);
@@ -358,6 +396,98 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
       }
 
       checkVictory(draft);
+      return { ok: true, state: draft };
+    }
+
+    // -----------------------------------------------------------------
+    case 'HIDE_CARD': {
+      const p = draft.players[player];
+      const inHand = p.hand.includes(action.uid);
+      const fromChampionZone = p.championZone === action.uid;
+      if (!inHand && !fromChampionZone) return reject('That card is not in your hand.');
+
+      const card = cardOf(draft, action.uid, lookup);
+      if (!card) return reject('Unknown card.');
+
+      // 811.1 — Hidden is the prerequisite for the Hide action.
+      if (!hasKeyword(card, 'Hidden')) {
+        return reject(`${card.baseName} does not have Hidden.`, '811.1');
+      }
+      if (draft.phase !== 'main') return reject('Hide during your Main Phase.', '811.1.b');
+      if (draft.showdown) return reject('Hide only in an Open State.', '811.1.b');
+
+      const bf = draft.battlefields[action.battlefield];
+      if (!bf) return reject('No such battlefield.');
+      // 811.1.b — a battlefield you control, with no facedown card already there.
+      if (bf.controller !== player) {
+        return reject('Hide only at a battlefield you control.', '811.1.b');
+      }
+      if (Object.values(draft.hidden).some((h) => h.battlefield === action.battlefield)) {
+        return reject('A card is already hidden there.', '811.1.b');
+      }
+
+      // Cost is [A]: 1 Power of any domain. Spend the pool first, else recycle.
+      const held = (Object.entries(p.power) as [Domain, number][]).find(([, n]) => (n ?? 0) > 0);
+      if (held) {
+        p.power[held[0]] = (p.power[held[0]] ?? 0) - 1;
+      } else {
+        const rune = Object.values(draft.runes).find((r) => r.controller === player);
+        if (!rune) return reject('Hiding costs 1 Power of any domain.', '811.1.b');
+        delete draft.runes[rune.uid];
+        p.runeDeck.push(rune.uid);
+      }
+
+      if (inHand) p.hand = p.hand.filter((u) => u !== action.uid);
+      else p.championZone = null;
+
+      draft.hidden[action.uid] = {
+        uid: action.uid,
+        controller: player,
+        battlefield: action.battlefield,
+        // Reaction is gained from the *next* turn, so record this one. 811.1.b
+        hiddenOnTurn: draft.turn,
+      };
+      log(draft, player, `Hid a card at battlefield ${action.battlefield + 1}.`, '811.1.b');
+      return { ok: true, state: draft };
+    }
+
+    // -----------------------------------------------------------------
+    case 'EQUIP_GEAR': {
+      const gear = draft.gear[action.uid];
+      if (!gear) return reject('No such gear.');
+      if (gear.controller !== player) return reject('That gear is not yours.');
+      if (gear.attachedTo) return reject('That gear is already attached.');
+      if (draft.phase !== 'main') return reject('Equip during your Main Phase.', '151.2');
+      if (draft.showdown) return reject('Equip only in an Open State.', '151.2');
+
+      const unit = draft.units[action.unitUid];
+      if (!unit) return reject('No such unit.');
+      if (unit.controller !== player) return reject('Attach only to a unit you control.', '818');
+
+      const card = cardOf(draft, action.uid, lookup);
+      if (!card) return reject('Unknown card.');
+      if (!hasKeyword(card, 'Equip')) {
+        return reject(`${card.baseName} has no Equip ability.`, '818');
+      }
+
+      // Equip costs 1 Power of the gear's own domain.
+      const domain = (card.domains.find((d) => d !== 'Colorless') ?? 'Colorless') as Domain;
+      const p = draft.players[player];
+      if ((p.power[domain] ?? 0) > 0) {
+        p.power[domain] = (p.power[domain] ?? 0) - 1;
+      } else {
+        const rune = Object.values(draft.runes).find(
+          (r) => r.controller === player && cardOf(draft, r.uid, lookup)?.domains[0] === domain,
+        );
+        if (!rune) return reject(`Equip costs 1 ${domain} Power.`, '818');
+        delete draft.runes[rune.uid];
+        p.runeDeck.push(rune.uid);
+      }
+
+      // 152.2 — attached gear follows its unit's location.
+      gear.attachedTo = unit.uid;
+      gear.location = unit.location;
+      log(draft, player, `Equipped ${card.baseName}.`, '818');
       return { ok: true, state: draft };
     }
 
@@ -378,6 +508,10 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
       unit.ready = false;
       unit.movesThisTurn += 1;
       unit.location = action.to;
+      // 152.2 — attached gear is located wherever its unit is.
+      for (const gear of Object.values(draft.gear)) {
+        if (gear.attachedTo === unit.uid) gear.location = action.to;
+      }
       log(draft, player, `Moved ${card?.baseName ?? 'a unit'}.`, '144');
 
       if (action.to.kind === 'battlefield') {

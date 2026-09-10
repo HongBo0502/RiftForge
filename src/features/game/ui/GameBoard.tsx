@@ -108,6 +108,7 @@ export default function GameBoard({ state, lookup, onAction, rejection, onExit }
             cardFor={cardFor}
             bind={bind}
           />
+          <GearRow state={state} owner={them} cardFor={cardFor} bind={bind} />
         </Zone>
 
         {/* ---- centre line: battlefields, contested from both sides ---- */}
@@ -126,6 +127,8 @@ export default function GameBoard({ state, lookup, onAction, rejection, onExit }
               onSelectUnit={(uid) => setSelected(selected === uid ? null : uid)}
               canMoveHere={selected !== null && canDo({ type: 'MOVE_UNIT', uid: selected, to: { kind: 'battlefield', index } })}
               onMoveHere={() => moveTo({ kind: 'battlefield', index })}
+              canPlayHidden={(uid) => canDo({ type: 'PLAY_CARD', uid })}
+              onPlayHidden={(uid) => onAction({ type: 'PLAY_CARD', uid })}
             />
           ))}
         </div>
@@ -139,6 +142,15 @@ export default function GameBoard({ state, lookup, onAction, rejection, onExit }
             bind={bind}
             selected={selected}
             onSelect={(uid) => setSelected(selected === uid ? null : uid)}
+          />
+          <GearRow
+            state={state}
+            owner={me}
+            cardFor={cardFor}
+            bind={bind}
+            equipTarget={selected && state.units[selected] ? selected : null}
+            canEquip={(uid) => Boolean(selected) && canDo({ type: 'EQUIP_GEAR', uid, unitUid: selected! })}
+            onEquip={(uid) => selected && onAction({ type: 'EQUIP_GEAR', uid, unitUid: selected })}
           />
           {selected && state.units[selected]?.location.kind === 'battlefield' && (
             <button
@@ -187,6 +199,7 @@ export default function GameBoard({ state, lookup, onAction, rejection, onExit }
         bind={bind}
         onConsider={setConsidering}
         onPlay={play}
+        onHide={(uid, battlefield) => onAction({ type: 'HIDE_CARD', uid, battlefield })}
       />
 
       <div className="mx-auto mt-2 flex max-w-6xl gap-2">
@@ -337,6 +350,67 @@ function UnitRow({
   );
 }
 
+/**
+ * Gear at a base. Gear are permanents (147), not spells — they stay on the mat.
+ * Select one of your units first and any Equipment that can attach offers it.
+ */
+function GearRow({
+  state,
+  owner,
+  cardFor,
+  bind,
+  equipTarget,
+  canEquip,
+  onEquip,
+}: {
+  state: GameState;
+  owner: PlayerId;
+  cardFor: (uid: string) => Card | undefined;
+  bind: Bind;
+  equipTarget?: string | null;
+  canEquip?: (uid: string) => boolean;
+  onEquip?: (uid: string) => void;
+}) {
+  const gear = Object.values(state.gear).filter(
+    (g) => g.controller === owner && g.location.kind === 'base',
+  );
+  if (gear.length === 0) return null;
+
+  return (
+    <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+      <span className="mat-zone-label">Gear</span>
+      {gear.map((g) => {
+        const card = cardFor(g.uid);
+        const attachable = Boolean(equipTarget && canEquip?.(g.uid));
+        return (
+          <span key={g.uid} className="flex items-center gap-1">
+            <span
+              {...bind(card)}
+              title={card?.name}
+              className="grid h-9 w-7 place-items-center overflow-hidden rounded border border-line piece"
+            >
+              {card && cardImage(card, 'thumb') ? (
+                <img src={cardImage(card, 'thumb')!} alt="" className="h-full w-full object-cover" />
+              ) : (
+                <span className="text-[8px]">{card?.baseName}</span>
+              )}
+            </span>
+            {attachable && (
+              <button
+                type="button"
+                onClick={() => onEquip?.(g.uid)}
+                className="rounded border border-calm px-1.5 py-0.5 text-[10px] text-calm"
+              >
+                Equip
+              </button>
+            )}
+          </span>
+        );
+      })}
+    </div>
+  );
+}
+
 /** A card resting on the mat. Rotation is the exhausted signal, not greying. */
 function MatCard({
   card,
@@ -418,6 +492,8 @@ function BattlefieldZone({
   onSelectUnit,
   canMoveHere,
   onMoveHere,
+  canPlayHidden,
+  onPlayHidden,
 }: {
   index: number;
   state: GameState;
@@ -430,6 +506,8 @@ function BattlefieldZone({
   onSelectUnit: (uid: string) => void;
   canMoveHere: boolean;
   onMoveHere: () => void;
+  canPlayHidden: (uid: string) => boolean;
+  onPlayHidden: (uid: string) => void;
 }) {
   const bf = state.battlefields[index];
   const card = cardFor(bf.uid);
@@ -494,15 +572,32 @@ function BattlefieldZone({
         {hidden.length > 0 && (
           <div className="flex items-center gap-1">
             <span className="mat-zone-label">Hidden</span>
-            {hidden.map((h) => (
-              <span
-                key={h.uid}
-                className="grid size-8 place-items-center rounded border border-line-bright bg-surface-2 text-[9px] text-muted"
-                title={h.controller === me ? 'Your hidden card' : 'Their hidden card'}
-              >
-                {h.controller === me ? 'you' : '?'}
-              </span>
-            ))}
+            {hidden.map((h) => {
+              const mineHidden = h.controller === me;
+              const playable = mineHidden && canPlayHidden(h.uid);
+              return (
+                <button
+                  key={h.uid}
+                  type="button"
+                  disabled={!playable}
+                  onClick={() => onPlayHidden(h.uid)}
+                  title={
+                    !mineHidden
+                      ? 'Their hidden card'
+                      : playable
+                        ? 'Play from hidden — ignores its cost'
+                        : 'Gains Reaction from your next turn (811.1.b)'
+                  }
+                  className={`grid size-9 place-items-center rounded border text-[9px] ${
+                    playable
+                      ? 'border-calm bg-calm/15 text-calm'
+                      : 'border-line-bright bg-surface-2 text-muted'
+                  }`}
+                >
+                  {mineHidden ? (playable ? 'play' : 'set') : '?'}
+                </button>
+              );
+            })}
           </div>
         )}
 
@@ -659,6 +754,17 @@ function RunePips({
   );
 }
 
+/** Battlefield indexes where this card could legally be hidden right now. */
+function hideTargets(
+  state: GameState,
+  lookup: (id: string) => Card | undefined,
+  uid: string,
+): number[] {
+  return state.battlefields
+    .map((_, index) => index)
+    .filter((index) => reduce(state, { type: 'HIDE_CARD', uid, battlefield: index }, lookup).ok);
+}
+
 function Hand({
   state,
   me,
@@ -667,6 +773,7 @@ function Hand({
   bind,
   onConsider,
   onPlay,
+  onHide,
 }: {
   state: GameState;
   me: PlayerId;
@@ -675,6 +782,7 @@ function Hand({
   bind: Bind;
   onConsider: (uid: string | null) => void;
   onPlay: (uid: string) => void;
+  onHide: (uid: string, battlefield: number) => void;
 }) {
   const p = state.players[me];
   const slots = [
@@ -727,6 +835,23 @@ function Hand({
                   Champion
                 </p>
               )}
+
+              {/*
+               * Hide is a separate action from playing (811.1.c.1), so it needs
+               * its own control. Only battlefields you control can take one, and
+               * only one facedown card each.
+               */}
+              {hideTargets(state, lookup, uid).map((index) => (
+                <button
+                  key={index}
+                  type="button"
+                  onClick={() => onHide(uid, index)}
+                  title="Hide facedown here for 1 Power — playable from your next turn"
+                  className="mt-0.5 w-full rounded border border-chaos px-1 py-0.5 text-[9px] text-chaos"
+                >
+                  Hide {index + 1}
+                </button>
+              ))}
             </div>
           );
         })}

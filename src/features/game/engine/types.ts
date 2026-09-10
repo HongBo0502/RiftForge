@@ -58,6 +58,23 @@ export interface UnitState {
   movesThisTurn: number;
 }
 
+/**
+ * Gear on the board. Gear are permanents (147) and enter play ready, at their
+ * controller's Base unless an effect says otherwise (149.1, 149.2).
+ *
+ * Note: Equipment carry a printed Might Bonus in the card's lower-right corner
+ * (137), but the dataset does not include that value, so attaching Equipment
+ * currently changes no stats. See DESIGN gaps in HANDOFF.md.
+ */
+export interface GearState {
+  uid: string;
+  controller: PlayerId;
+  location: Location;
+  ready: boolean;
+  /** Unit uid this Gear is attached to, via Equip. 716, 818 */
+  attachedTo: string | null;
+}
+
 /** A rune in play. Runes are not permanents. 161.1 */
 export interface RuneState {
   uid: string;
@@ -143,6 +160,7 @@ export interface GameState {
   instances: Record<string, CardInstance>;
   units: Record<string, UnitState>;
   runes: Record<string, RuneState>;
+  gear: Record<string, GearState>;
   hidden: Record<string, HiddenState>;
   battlefields: BattlefieldState[];
   showdown: ShowdownState | null;
@@ -176,6 +194,13 @@ export type GameAction =
        */
       payment?: PaymentPlan;
     }
+  /**
+   * Hide a card with [Hidden] facedown at a battlefield you control. 811.1.b
+   * Costs 1 Power of any domain. Hiding is not playing and opens no chain.
+   */
+  | { type: 'HIDE_CARD'; uid: string; battlefield: number }
+  /** Attach Equipment to one of your units. 818 */
+  | { type: 'EQUIP_GEAR'; uid: string; unitUid: string }
   /** Standard move of a ready unit. 447 */
   | { type: 'MOVE_UNIT'; uid: string; to: Location }
   /** Pass focus during a showdown. 347.2 */

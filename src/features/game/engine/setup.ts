@@ -130,6 +130,7 @@ export function setupGame({ decks, byId, seed = 1, firstPlayer }: SetupInput): G
     instances,
     units: {},
     runes: {},
+    gear: {},
     hidden: {},
     battlefields,
     showdown: null,

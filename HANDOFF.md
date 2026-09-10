@@ -14,7 +14,7 @@ folder is an unrelated scratch drawer — don't touch it).
 npm install
 npm run fetch-cards   # only needed if public/data is missing or a set dropped
 npm run dev           # http://localhost:5273
-npm test              # 56 tests
+npm test              # 77 tests
 ```
 
 ### Starting a session on this
@@ -27,12 +27,10 @@ Open Claude Code with the **parent** folder as the project root (that is where
 
 Read riftforge/HANDOFF.md. Work in riftforge/.
 
-Task: item A — make Hidden work end to end.
+Task: item A — start the card effects registry.
 
-Stop when `npm test` passes with new tests covering: hiding costs 1 Power of
-any domain, a hidden card cannot be played on the turn it was hidden, it can
-from its owner's next turn, and redact() never leaks its identity.
-Do not start item B.
+Stop when `npm test` passes with the registry in place and the cards from one
+real deck registered. Do not start item B.
 ```
 
 `/caveman` is a compression mode, not a scope change — it makes replies terse
@@ -52,6 +50,8 @@ All five originally planned phases are done and committed.
 | 3 | Rules engine | done |
 | 4 | Hotseat board | done |
 | 5 | PWA / offline | done |
+| 6 | Playmat board, hover detail, auto-pay | done |
+| 7 | Hidden cards, Gear as permanents | done |
 
 ```
 c9c39fd  Import: standalone section headers and sideboards
@@ -63,7 +63,7 @@ ee0cb84  Rules engine: pure reducer over the official Core Rules
 457bf25  Card database: Vite/React scaffold, Riftcodex pipeline, browser UI
 ```
 
-**56 tests pass.** Production build is clean (~95 KB gzipped JS).
+**77 tests pass.** Production build is clean (~95 KB gzipped JS).
 
 Two decisions the user made. Don't re-litigate them:
 
@@ -97,12 +97,14 @@ src/
       types.ts             GameState, GameAction, Location
       setup.ts             build the opening state from two decks
       reducer.ts           (state, action) => state
+      payment.ts           works out which runes pay a cost (auto-pay)
       combat.ts            damage assignment, showdown resolution
       scoring.ts           Conquer/Hold, burn out, win check
       keywords.ts          keyword parsing + "what isn't automated"
       redact.ts            hidden-information enforcement
       rng.ts               seeded RNG
-    game/ui/             board, pieces, deck select, pass-device screen
+    game/ui/             playmat board, card preview, deck select, handoff
+DESIGN.md                board design contract — read before UI work
 ```
 
 ---
@@ -158,38 +160,33 @@ win check.
 **Individual card text is mostly not automated.** These are the real gaps, worst
 first:
 
-### 1. Hidden cards cannot actually be hidden — the mechanic is half-built
+### 1. Equipment Might Bonus is missing from the dataset
 
-`HiddenState` exists, `redact()` conceals it correctly, and `combat.ts` trashes
-foreign hidden cards on losing a battlefield (466.5.c). But **there is no
-`HIDE_CARD` action** — `state.hidden` is only ever deleted, never populated
-(`combat.ts:244` is the only writer). So no game can produce a hidden card.
+Equipment print a Might Bonus in the card's lower-right corner (137), and that
+is the whole point of attaching one. The Riftcodex dataset has **no field for
+it** — every Gear card comes back with `might: null`. Attaching Equipment
+therefore works mechanically (it attaches, follows its unit, detaches on death)
+but changes no stats.
 
-This matters more than its size suggests: the project the user originally
-described was built around a **Teemo, Swift Scout hidden-card deck**. That deck
-is currently unplayable in any meaningful sense.
+`hidden.test.ts` has a test that documents this and will fail loudly if the data
+ever gains the field. Fixing it means either finding the value upstream or
+scraping it off the card images.
 
-### 2. Gear is trashed the moment it is played
+### 2. 23 of 28 keywords do nothing
 
-In `reducer.ts` `PLAY_CARD`, everything that is not a Unit is pushed to the
-trash. Gear is a **permanent** (147) that should stay on the board and attach to
-a unit via `[Equip]`. Right now it costs resources and then vanishes. There are
-132 Gear cards in the dataset.
-
-### 3. 23 of 28 keywords do nothing
-
-Automated: `Assault`, `Shield`, `Tank`, `Backline`, `Ganking`.
+Automated: `Assault`, `Shield`, `Tank`, `Backline`, `Ganking` (Might and
+movement), plus `Hidden` and `Equip`, which have their own actions.
 
 Not automated: `Accelerate, Action, Add, Ambush, Buff, Deathknell, Deflect,
-Empower, Empowered, Equip, Flow, Hidden, Hunt, Legion, Mighty, Quick-Draw,
-Reaction, Repeat, Stun, Temporary, Unique, Vision, Weaponmaster`.
+Empower, Empowered, Flow, Hunt, Legion, Mighty, Quick-Draw, Reaction, Repeat,
+Stun, Temporary, Unique, Vision, Weaponmaster`.
 
 Cards whose text isn't handled still play with correct stats and costs, and
 their text is surfaced in the board's "apply by hand" panel
 (`keywords.ts: unautomatedText`). That panel is the honesty mechanism — never
 remove it while coverage is partial.
 
-### 4. Other unimplemented rules
+### 3. Other unimplemented rules
 
 - **Mulligan** (117) — both players simply keep their opening four.
 - **Chain and priority** (327–340) — a showdown is pass/pass only. No spell can
@@ -210,27 +207,7 @@ remove it while coverage is partial.
 
 Pick up here. Ordered by what unblocks the most.
 
-### A. Make Hidden work end to end  — highest value, smallest scope
-
-Restores the archetype the whole project started from, and exercises the
-redaction path that is currently only covered by tests.
-
-1. Add `{ type: 'HIDE_CARD'; uid: string; battlefield: number }` to `GameAction`.
-2. Implement it in `reducer.ts`: cost is `:rb_rune_rainbow:` (1 Power of any
-   domain) normally; the card moves from hand into `state.hidden` at a
-   battlefield **where the player has units**.
-3. Enforce the timing rule: a hidden card only gains Reaction — i.e. becomes
-   playable — **from its owner's next turn**. `HiddenState.hiddenOnTurn` is
-   already there for exactly this; compare against `state.turn`.
-4. Playing it later costs `:rb_energy_0:`.
-5. Teemo, Swift Scout's Legend ability lets you pay **Energy instead of Power**
-   to hide. That is a card-specific effect — see B.
-6. UI: a "Hide" affordance on hand cards, and the existing `FaceDownCard` at the
-   battlefield. Confirm via `redact` that the opponent sees only a back.
-
-Grep `docs/core-rules.txt` for `Hidden` and for rule 466.5.c before starting.
-
-### B. Card effects registry — the main long-term axis
+### A. Card effects registry — the main long-term axis
 
 Create `src/features/game/engine/effects/` keyed by `riftboundId` (stable, e.g.
 `ogn-194-298`). Each entry hooks named lifecycle points the reducer already has
@@ -241,13 +218,7 @@ coverage is always safe.
 Start with the ~40 cards in the two decks the user actually plays, not
 alphabetically.
 
-### C. Fix Gear
-
-Give Gear a place on the board instead of the trash. Needs an `attachedTo` field
-and `[Equip]` handling. Smaller than it sounds, and 132 cards currently
-misbehave.
-
-### D. A greedy bot
+### B. A greedy bot
 
 The user asked for this. `reduce()` is pure and returns a reason instead of
 throwing, so a bot can enumerate candidate actions and dry-run each to find the
@@ -260,7 +231,7 @@ frame it as a sparring partner.
 Worth doing partly as a **test harness**: hundreds of bot-vs-bot games will
 shake out engine bugs the 56 unit tests can't reach.
 
-### E. Online play (V2)
+### C. Online play (V2)
 
 Only after the above. The engine was designed for it: run the same reducer on
 both clients and relay **actions**, not state, with `redact()` deciding what

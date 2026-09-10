@@ -52,6 +52,7 @@ function board(runeDomains: Domain[], pool: { energy?: number; power?: Partial<R
     },
     instances: {} as GameState['instances'],
     units: {},
+    gear: {},
     runes: {} as GameState['runes'],
     hidden: {},
     battlefields: [],

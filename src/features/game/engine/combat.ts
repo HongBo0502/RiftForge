@@ -123,6 +123,18 @@ const unitsAt = (state: GameState, index: number, player?: PlayerId): UnitState[
 function killUnit(state: GameState, uid: string, lookup: CardLookup): void {
   const instance = state.instances[uid];
   const card = lookup(instance?.cardId ?? '');
+
+  /*
+   * 149.3 — gear left unattached at a battlefield is recalled to its
+   * controller's base in the next cleanup. Detaching here and sending it home
+   * in one step is the same outcome without modelling the corrective action.
+   */
+  for (const gear of Object.values(state.gear)) {
+    if (gear.attachedTo !== uid) continue;
+    gear.attachedTo = null;
+    gear.location = { kind: 'base', player: gear.controller };
+  }
+
   delete state.units[uid];
   if (instance) state.players[instance.owner].trash.push(uid);
   state.log.push({
