@@ -57,6 +57,7 @@ function board(runeDomains: Domain[], pool: { energy?: number; power?: Partial<R
     hidden: {},
     battlefields: [],
     showdown: null,
+    pendingMulligan: [],
     victoryScore: 8,
     winner: null,
     log: [],

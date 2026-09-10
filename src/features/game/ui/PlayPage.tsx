@@ -11,6 +11,7 @@ import { setupGame } from '../engine/setup';
 import type { GameAction, GameState, PlayerId } from '../engine/types';
 import { useOnlineMatch } from '../online/useOnlineMatch';
 import GameBoard from './GameBoard';
+import MulliganScreen from './MulliganScreen';
 import OnlinePanel from './OnlinePanel';
 
 /**
@@ -51,8 +52,13 @@ export default function PlayPage() {
       return;
     }
     setRejection(null);
-    // Hand over the device whenever the turn changes.
-    if (result.state.turnPlayer !== game.turnPlayer && !result.state.winner) {
+    // Hand over the device whenever control passes — a turn change, or the
+    // other player's turn to mulligan.
+    const turnChanged = result.state.turnPlayer !== game.turnPlayer;
+    const mulliganPassed =
+      game.pendingMulligan[0] !== result.state.pendingMulligan[0] &&
+      result.state.pendingMulligan.length > 0;
+    if ((turnChanged || mulliganPassed) && !result.state.winner) {
       setHandoffPending(true);
     }
     setGame(result.state);
@@ -72,6 +78,22 @@ export default function PlayPage() {
 
   if (mode === 'online') {
     if (online.status === 'playing' && online.state) {
+      if (online.state.phase === 'mulligan' && online.state.pendingMulligan.length > 0) {
+        const mine = online.state.pendingMulligan[0] === online.seat;
+        return mine ? (
+          <MulliganScreen
+            state={redact(online.state, online.seat!)}
+            seat={online.seat!}
+            lookup={lookup}
+            onConfirm={(swap) => online.act({ type: 'MULLIGAN', swap })}
+          />
+        ) : (
+          <div className="mx-auto max-w-md px-4 py-20 text-center">
+            <div className="mx-auto size-8 animate-spin rounded-full border-2 border-line border-t-accent" />
+            <p className="mt-3 text-sm text-muted">Waiting for the other player to mulligan…</p>
+          </div>
+        );
+      }
       return (
         <GameBoard
           // Online: the board is fixed to this client's seat, and every action
@@ -111,7 +133,9 @@ export default function PlayPage() {
         decks={decks}
         onStart={(p1, p2, seed) => {
           setGame(
-            startGame(setupGame({ decks: { p1, p2 }, byId: dataset.byId, seed })),
+            startGame(setupGame({ decks: { p1, p2 }, byId: dataset.byId, seed }), lookup, {
+              mulligan: true,
+            }),
           );
           setRejection(null);
         }}
@@ -139,11 +163,25 @@ export default function PlayPage() {
     );
   }
 
+  if (game.phase === 'mulligan' && game.pendingMulligan.length > 0 && !handoffPending) {
+    const who = game.pendingMulligan[0];
+    return (
+      <MulliganScreen
+        // Redacted like everything else: you only ever see your own hand.
+        state={redact(game, who)}
+        seat={who}
+        lookup={lookup}
+        onConfirm={(swap) => dispatch({ type: 'MULLIGAN', swap })}
+      />
+    );
+  }
+
   if (handoffPending) {
     return (
       <div className="mx-auto max-w-md px-4 py-20 text-center">
         <h1 className="text-2xl font-semibold">
-          Pass to {game.turnPlayer === 'p1' ? 'Player 1' : 'Player 2'}
+          Pass to{' '}
+          {(game.pendingMulligan[0] ?? game.turnPlayer) === 'p1' ? 'Player 1' : 'Player 2'}
         </h1>
         <p className="mt-2 text-sm text-muted">
           Their hand is hidden until they tap below.
@@ -153,7 +191,7 @@ export default function PlayPage() {
           onClick={() => setHandoffPending(false)}
           className="mt-6 rounded-lg bg-accent px-6 py-3 font-semibold text-ink"
         >
-          I'm {game.turnPlayer === 'p1' ? 'Player 1' : 'Player 2'}
+          I'm {(game.pendingMulligan[0] ?? game.turnPlayer) === 'p1' ? 'Player 1' : 'Player 2'}
         </button>
       </div>
     );

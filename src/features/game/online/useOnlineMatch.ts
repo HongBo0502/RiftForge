@@ -88,7 +88,7 @@ export function useOnlineMatch(byId: Map<string, Card>): OnlineMatch {
       } as Record<PlayerId, Deck>;
 
       setSeat(role.current === 'host' ? hostPlays : guestPlays);
-      commit(startGame(setupGame({ decks, byId, seed })));
+      commit(startGame(setupGame({ decks, byId, seed }), lookup, { mulligan: true }));
       setStatus('playing');
     },
     [byId, commit],
@@ -237,7 +237,14 @@ export function useOnlineMatch(byId: Map<string, Card>): OnlineMatch {
     roomCode,
     seat,
     state,
-    myTurn: Boolean(state && seat && state.turnPlayer === seat && !state.winner),
+    myTurn: Boolean(
+      state &&
+        seat &&
+        !state.winner &&
+        (state.phase === 'mulligan'
+          ? state.pendingMulligan[0] === seat
+          : state.turnPlayer === seat),
+    ),
     host: (code, deck) => open(code, deck, 'host'),
     join: (code, deck) => open(code, deck, 'guest'),
     act,

@@ -1,10 +1,13 @@
 import type { Card, Domain } from '@/types';
+import { cleanup, expireTemporary } from './cleanup';
+import { shuffle } from './rng';
 import { closeShowdown, openShowdown, type CardLookup } from './combat';
 import { hasKeyword, unautomatedText } from './keywords';
 import { type PaymentPlan, planPayment } from './payment';
 import { checkVictory, drawCard, score } from './scoring';
 import type {
   ActionResult,
+  Phase,
   GameAction,
   GameState,
   Location,
@@ -91,7 +94,7 @@ function emptyRunePools(state: GameState): void {
 }
 
 /** Runs the effects of the phase the state is currently in. */
-function applyPhase(state: GameState): void {
+function applyPhase(state: GameState, lookup: CardLookup): void {
   const player = state.turnPlayer;
 
   switch (state.phase) {
@@ -110,6 +113,13 @@ function applyPhase(state: GameState): void {
     }
 
     case 'beginning': {
+      /*
+       * Temporary permanents die here, *before* the scoring step, so one
+       * cannot bank a Hold point on the turn it expires.
+       */
+      expireTemporary(state, player, lookup);
+      cleanup(state);
+
       // 315.2.b — the Turn Player Holds every battlefield they control.
       state.battlefields.forEach((bf, index) => {
         if (bf.controller === player) score(state, player, index, 'hold');
@@ -166,7 +176,7 @@ function applyPhase(state: GameState): void {
 }
 
 /** Moves to the next phase, or to the next player's turn after Ending. */
-function advance(state: GameState): void {
+function advance(state: GameState, lookup: CardLookup): void {
   const order: GameState['phase'][] = [
     'awaken',
     'beginning',
@@ -186,29 +196,72 @@ function advance(state: GameState): void {
   } else {
     state.phase = next;
   }
-  applyPhase(state);
+  applyPhase(state, lookup);
+  cleanup(state);
   checkVictory(state);
 }
 
 /** Runs the automatic start-of-turn phases and stops at the Main Phase. */
-export function advanceToMain(state: GameState): GameState {
+export function advanceToMain(state: GameState, lookup: CardLookup): GameState {
   const draft = clone(state);
   let guard = 0;
   while (draft.phase !== 'main' && !draft.winner && guard++ < 20) {
-    advance(draft);
+    advance(draft, lookup);
   }
   return draft;
 }
 
 /** Applies the current phase's effects without advancing — used at game start. */
-export function startGame(state: GameState): GameState {
+export interface StartOptions {
+  /**
+   * Open in the mulligan phase (117) instead of going straight to turn one.
+   * Off by default so a caller that does not care — most tests — gets a game
+   * that is ready to play.
+   */
+  mulligan?: boolean;
+}
+
+export function startGame(
+  state: GameState,
+  lookup: CardLookup,
+  options: StartOptions = {},
+): GameState {
   const draft = clone(state);
-  applyPhase(draft);
+
+  if (options.mulligan) {
+    // 117 — resolved in turn order, starting with the first player.
+    draft.phase = 'mulligan';
+    draft.pendingMulligan = [draft.firstPlayer, OPPONENT[draft.firstPlayer]];
+    return draft;
+  }
+
+  applyPhase(draft, lookup);
   let guard = 0;
   while (draft.phase !== 'main' && !draft.winner && guard++ < 20) {
-    advance(draft);
+    advance(draft, lookup);
   }
   return draft;
+}
+
+/**
+ * Sets the phase without narrowing it.
+ *
+ * Assigning a literal directly makes TypeScript narrow `state.phase` to that
+ * literal for the rest of the block, which then reports the loop below as
+ * comparing two types that cannot overlap.
+ */
+function setPhase(state: GameState, phase: Phase): void {
+  state.phase = phase;
+}
+
+/** Runs the opening phases once the pre-game is finished. */
+function beginFirstTurn(draft: GameState, lookup: CardLookup): void {
+  setPhase(draft, 'awaken');
+  applyPhase(draft, lookup);
+  let guard = 0;
+  while (draft.phase !== 'main' && !draft.winner && guard++ < 20) {
+    advance(draft, lookup);
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -254,11 +307,72 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
   const player = state.turnPlayer;
   const draft = clone(state);
 
+  if (state.phase === 'mulligan' && action.type !== 'MULLIGAN' && action.type !== 'CONCEDE') {
+    return reject('Finish the mulligan first.', '117');
+  }
+
   switch (action.type) {
     // -----------------------------------------------------------------
     case 'ADVANCE_PHASE': {
       if (draft.showdown) return reject('Resolve the showdown first.', '343.1');
-      advance(draft);
+      advance(draft, lookup);
+      return { ok: true, state: draft };
+    }
+
+    // -----------------------------------------------------------------
+    case 'MULLIGAN': {
+      if (draft.phase !== 'mulligan') return reject('The mulligan is over.', '117');
+
+      // 117 — resolved in turn order, so only the player at the front acts.
+      const who = draft.pendingMulligan[0];
+      if (!who) return reject('Nobody owes a mulligan.', '117');
+
+      const p = draft.players[who];
+      const swap = action.swap ?? [];
+
+      // 117.1 — up to two cards.
+      if (swap.length > 2) return reject('You may set aside at most two cards.', '117.1');
+      if (new Set(swap).size !== swap.length) return reject('Each card can be set aside once.');
+      for (const uid of swap) {
+        if (!p.hand.includes(uid)) return reject('That card is not in your hand.');
+      }
+
+      p.hand = p.hand.filter((uid) => !swap.includes(uid));
+
+      // 117.2 — draw as many as were set aside, before recycling them, so a
+      // set-aside card cannot be drawn straight back.
+      for (let i = 0; i < swap.length; i++) {
+        const drawn = p.mainDeck.shift();
+        if (drawn) p.hand.push(drawn);
+      }
+
+      /*
+       * 117.3 / 416.5 — recycled to the bottom of the Main Deck, and two or
+       * more simultaneously go in random order.
+       *
+       * This must use the seeded RNG. Online play rebuilds both clients from
+       * one seed and relays actions, so an unseeded shuffle here would give the
+       * two players different decks with nothing to signal it.
+       */
+      if (swap.length > 1) {
+        const shuffled = shuffle(swap, draft.rng);
+        draft.rng = shuffled.seed;
+        p.mainDeck.push(...shuffled.items);
+      } else {
+        p.mainDeck.push(...swap);
+      }
+
+      log(
+        draft,
+        who,
+        swap.length === 0
+          ? 'Kept their opening hand.'
+          : `Mulliganed ${swap.length} card${swap.length === 1 ? '' : 's'}.`,
+        '117',
+      );
+
+      draft.pendingMulligan = draft.pendingMulligan.slice(1);
+      if (draft.pendingMulligan.length === 0) beginFirstTurn(draft, lookup);
       return { ok: true, state: draft };
     }
 
@@ -322,13 +436,21 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
         return reject('Only Action or Reaction cards can be played in a showdown.', '343.1.a');
       }
 
+      // 805.1 — Accelerate is an additional cost, and only means anything on a
+      // unit that actually has the keyword.
+      const accelerated =
+        Boolean(action.accelerate) && card.type === 'Unit' && hasKeyword(card, 'Accelerate');
+      if (action.accelerate && !accelerated) {
+        return reject(`${card.baseName} does not have Accelerate.`, '805.1');
+      }
+
       // 811.1.b — playing from Hidden ignores the card's base cost.
       if (!fromHidden) {
         // Auto-pay: work out which runes cover the cost, then spend them.
         // action.payment lets the UI override the choice of runes.
         const planned = action.payment
           ? ({ ok: true, plan: action.payment } as const)
-          : planPayment(draft, player, card, lookup);
+          : planPayment(draft, player, card, lookup, { accelerate: accelerated });
         if (!planned.ok) return reject(planned.reason, planned.rule);
         spendPlan(draft, player, planned.plan, lookup);
       }
@@ -363,7 +485,13 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
           uid: action.uid,
           controller: player,
           location: destination,
-          ready: true,
+          /*
+           * 178.1.a.1 — a unit enters exhausted. It therefore cannot take a
+           * Standard Move on the turn it lands, which is what stops a freshly
+           * played unit conquering immediately. Accelerate (805.1) is the
+           * intended way around it, and pays for the privilege.
+           */
+          ready: accelerated,
           damage: 0,
           mightBonus: 0,
           designation: null,
@@ -530,6 +658,7 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
         }
       }
 
+      cleanup(draft);
       checkVictory(draft);
       return { ok: true, state: draft };
     }
@@ -543,6 +672,7 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
       // 347.2.a — the showdown ends once every player has passed in sequence.
       if (showdown.passes >= 2) {
         closeShowdown(draft, lookup);
+        cleanup(draft);
       } else {
         showdown.focus = OPPONENT[showdown.focus];
       }
@@ -558,7 +688,7 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
       // player's Awaken and on through their start-of-turn phases.
       let guard = 0;
       do {
-        advance(draft);
+        advance(draft, lookup);
       } while (draft.phase !== 'main' && !draft.winner && guard++ < 20);
       return { ok: true, state: draft };
     }

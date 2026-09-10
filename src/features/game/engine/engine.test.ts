@@ -45,6 +45,7 @@ function newGame(seed = 7, firstPlayer: PlayerId = 'p1'): GameState {
   resetUids();
   return startGame(
     setupGame({ decks: { p1: makeDeck('p1', 0), p2: makeDeck('p2', 3) }, byId: BY_ID, seed, firstPlayer }),
+    lookup,
   );
 }
 

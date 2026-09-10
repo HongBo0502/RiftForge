@@ -18,7 +18,15 @@ export type PlayerId = 'p1' | 'p2';
 export const OPPONENT: Record<PlayerId, PlayerId> = { p1: 'p2', p2: 'p1' };
 
 /** Turn phases, in order. 314-317 */
-export type Phase = 'awaken' | 'beginning' | 'channel' | 'draw' | 'main' | 'ending';
+export type Phase =
+  /** Pre-game: each player resolves their mulligan in turn order. 117 */
+  | 'mulligan'
+  | 'awaken'
+  | 'beginning'
+  | 'channel'
+  | 'draw'
+  | 'main'
+  | 'ending';
 
 export const PHASE_ORDER: Phase[] = ['awaken', 'beginning', 'channel', 'draw', 'main', 'ending'];
 
@@ -164,6 +172,11 @@ export interface GameState {
   hidden: Record<string, HiddenState>;
   battlefields: BattlefieldState[];
   showdown: ShowdownState | null;
+  /**
+   * Players who still owe a mulligan, in turn order. Empty once the pre-game
+   * is done, which is every state that did not opt into mulligans. 117
+   */
+  pendingMulligan: PlayerId[];
   /** 8 by default in 1v1. 194.3 / 485.3 */
   victoryScore: number;
   winner: PlayerId | null;
@@ -193,6 +206,11 @@ export type GameAction =
        * one to override, e.g. to keep a particular domain rune on the board.
        */
       payment?: PaymentPlan;
+      /**
+       * Pay Accelerate's additional [1][C] so the unit enters ready instead of
+       * exhausted (805.1). Ignored on cards without the keyword.
+       */
+      accelerate?: boolean;
     }
   /**
    * Hide a card with [Hidden] facedown at a battlefield you control. 811.1.b
@@ -201,6 +219,11 @@ export type GameAction =
   | { type: 'HIDE_CARD'; uid: string; battlefield: number }
   /** Attach Equipment to one of your units. 818 */
   | { type: 'EQUIP_GEAR'; uid: string; unitUid: string }
+  /**
+   * Resolve this player's mulligan: set aside up to two cards, draw that many,
+   * and recycle the set-aside to the bottom of the Main Deck. 117
+   */
+  | { type: 'MULLIGAN'; swap: string[] }
   /** Standard move of a ready unit. 447 */
   | { type: 'MOVE_UNIT'; uid: string; to: Location }
   /** Pass focus during a showdown. 347.2 */

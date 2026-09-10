@@ -34,6 +34,15 @@ const domainOf = (state: GameState, uid: string, lookup: (id: string) => Card | 
   return (card?.domains.find((d) => d !== 'Colorless') ?? 'Colorless') as Domain;
 };
 
+export interface PlanOptions {
+  /**
+   * Accelerate: pay [1][C] as an *additional* cost so the unit enters ready
+   * (805.1.a). The Power portion must match one of the card's own domains,
+   * which the existing domain filter below already enforces.
+   */
+  accelerate?: boolean;
+}
+
 /**
  * Builds a payment plan for `card`, or explains why the player cannot pay.
  *
@@ -46,10 +55,12 @@ export function planPayment(
   player: PlayerId,
   card: Card,
   lookup: (id: string) => Card | undefined,
+  options: PlanOptions = {},
 ): PlanResult {
   const p = state.players[player];
-  const energyCost = card.energy ?? 0;
-  const powerCost = card.power ?? 0;
+  const surcharge = options.accelerate ? 1 : 0;
+  const energyCost = (card.energy ?? 0) + surcharge;
+  const powerCost = (card.power ?? 0) + surcharge;
 
   const plan: PaymentPlan = {
     exhaust: [],
@@ -127,6 +138,7 @@ export function canAfford(
   player: PlayerId,
   card: Card,
   lookup: (id: string) => Card | undefined,
+  options: PlanOptions = {},
 ): boolean {
-  return planPayment(state, player, card, lookup).ok;
+  return planPayment(state, player, card, lookup, options).ok;
 }

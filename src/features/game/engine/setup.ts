@@ -134,6 +134,7 @@ export function setupGame({ decks, byId, seed = 1, firstPlayer }: SetupInput): G
     hidden: {},
     battlefields,
     showdown: null,
+    pendingMulligan: [],
     victoryScore: VICTORY_SCORE,
     winner: null,
     unautomated: [],

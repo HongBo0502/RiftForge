@@ -48,6 +48,7 @@ function table(controller: PlayerId | null = 'p1'): GameState {
       { uid: 'bf', contributedBy: 'p1', controller, contested: false, scoredBy: [] },
     ],
     showdown: null,
+    pendingMulligan: [],
     victoryScore: 8,
     winner: null,
     log: [],
