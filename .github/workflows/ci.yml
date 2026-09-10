@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  # Card data is fetched fresh on every run, so a weekly build catches a new
+  # set breaking the dataset contract before a player does.
+  schedule:
+    - cron: '0 6 * * 1'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      # Card data is not committed — this repository redistributes none of
+      # Riot's content. The fetch script verifies what it downloads (card and
+      # set counts, image and type completeness, spot-checks on known cards)
+      # and exits non-zero rather than writing a truncated dataset.
+      - name: Fetch card data
+        run: npm run fetch-cards
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm test
+
+      - name: Build
+        run: npm run build
+        env:
+          # Absent on forks and pull requests. The app still builds and runs;
+          # only online play is disabled, and the lobby says so.
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+
+      - name: Upload build
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+          retention-days: 7

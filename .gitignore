@@ -6,3 +6,10 @@ docs/pdf/
 
 # Local credentials; see .env.example
 .env
+
+# Generated from Riot's own sources at build time, never committed.
+# Regenerate with:  npm run fetch-cards  and  python scripts/extract-rules.py
+# Keeping them out of git means this repo redistributes none of Riot's card
+# data or rules documents; it only links to them.
+public/data/
+docs/*.txt

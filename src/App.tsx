@@ -1,7 +1,13 @@
+import { Suspense, lazy } from 'react';
 import { NavLink, Navigate, Route, Routes } from 'react-router-dom';
-import CardsPage from '@/features/cards/CardsPage';
-import DecksPage from '@/features/decks/DecksPage';
-import PlayPage from '@/features/game/ui/PlayPage';
+
+/*
+ * Split by route. Someone who only browses cards should not download the deck
+ * builder, the rules engine or the realtime client.
+ */
+const CardsPage = lazy(() => import('@/features/cards/CardsPage'));
+const DecksPage = lazy(() => import('@/features/decks/DecksPage'));
+const PlayPage = lazy(() => import('@/features/game/ui/PlayPage'));
 
 const NAV = [
   { to: '/cards', label: 'Cards', icon: CardsIcon },
@@ -16,13 +22,15 @@ export default function App() {
 
       {/* Bottom nav is fixed on mobile, so keep content clear of it. */}
       <main className="pb-20 sm:pb-8">
-        <Routes>
-          <Route path="/" element={<Navigate to="/cards" replace />} />
-          <Route path="/cards" element={<CardsPage />} />
-          <Route path="/decks" element={<DecksPage />} />
-          <Route path="/play" element={<PlayPage />} />
-          <Route path="*" element={<Navigate to="/cards" replace />} />
-        </Routes>
+        <Suspense fallback={<RouteSpinner />}>
+          <Routes>
+            <Route path="/" element={<Navigate to="/cards" replace />} />
+            <Route path="/cards" element={<CardsPage />} />
+            <Route path="/decks" element={<DecksPage />} />
+            <Route path="/play" element={<PlayPage />} />
+            <Route path="*" element={<Navigate to="/cards" replace />} />
+          </Routes>
+        </Suspense>
       </main>
 
       <MobileNav />
@@ -83,6 +91,14 @@ function MobileNav() {
       {/* Home-indicator inset on iOS. */}
       <div className="h-[env(safe-area-inset-bottom)]" />
     </nav>
+  );
+}
+
+function RouteSpinner() {
+  return (
+    <div className="flex justify-center py-20">
+      <div className="size-8 animate-spin rounded-full border-2 border-line border-t-accent" />
+    </div>
   );
 }
 

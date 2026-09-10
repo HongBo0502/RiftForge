@@ -1,4 +1,4 @@
-import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import type { RealtimeChannel, SupabaseClient } from '@supabase/supabase-js';
 import type { Message, Transport, TransportHandlers } from './transport';
 
 /**
@@ -9,8 +9,13 @@ import type { Message, Transport, TransportHandlers } from './transport';
  * two clients' memory. That keeps the free tier comfortable and means there is
  * no stored personal data to look after.
  *
- * Credentials come from the environment; the anon key is designed to be public
- * and shipped in client code. The service_role key must never appear here.
+ * The client library is loaded on demand, not at startup: it is ~57KB gzipped
+ * and most visitors only browse cards. Everything below the type imports is
+ * behind a dynamic import, so the cost falls only on players who go online.
+ *
+ * Credentials come from the environment; the publishable (anon) key is designed
+ * to be public and is baked into the bundle at build time either way. The
+ * service_role key must never appear here.
  */
 
 const url = import.meta.env.VITE_SUPABASE_URL as string | undefined;
@@ -33,9 +38,10 @@ export function onlineConfigProblem(): string | null {
 
 let client: SupabaseClient | null = null;
 
-function getClient(): SupabaseClient {
+async function getClient(): Promise<SupabaseClient> {
   if (!url || !anonKey) throw new Error(onlineConfigProblem() ?? 'Online play is not configured.');
   if (!client) {
+    const { createClient } = await import('@supabase/supabase-js');
     client = createClient(url, anonKey, {
       auth: { persistSession: false },
       // One message per player action; no need for high throughput.
@@ -50,29 +56,32 @@ export function createSupabaseTransport(
   selfId: string,
   handlers: TransportHandlers,
 ): Transport {
-  const channel = getClient().channel(`riftforge:${roomCode}`, {
-    config: {
-      broadcast: { self: false, ack: true },
-      presence: { key: selfId },
-    },
-  });
+  let channel: RealtimeChannel | null = null;
 
   return {
     async connect() {
+      const supabase = await getClient();
+      channel = supabase.channel(`riftforge:${roomCode}`, {
+        config: {
+          broadcast: { self: false, ack: true },
+          presence: { key: selfId },
+        },
+      });
+
       channel
         .on('broadcast', { event: 'msg' }, ({ payload }) => {
           handlers.onMessage(payload as Message);
         })
         .on('presence', { event: 'sync' }, () => {
           // Anyone other than us in the room counts as the peer being present.
-          const others = Object.keys(channel.presenceState()).filter((k) => k !== selfId);
+          const others = Object.keys(channel!.presenceState()).filter((k) => k !== selfId);
           handlers.onPeer(others.length > 0);
         });
 
       await new Promise<void>((resolve, reject) => {
-        channel.subscribe((status, err) => {
+        channel!.subscribe((status, err) => {
           if (status === 'SUBSCRIBED') {
-            void channel.track({ joinedAt: Date.now() });
+            void channel!.track({ joinedAt: Date.now() });
             resolve();
           } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
             const error = err ?? new Error(`Realtime channel ${status}`);
@@ -84,12 +93,14 @@ export function createSupabaseTransport(
     },
 
     async send(message: Message) {
+      if (!channel) throw new Error('Not connected.');
       const result = await channel.send({ type: 'broadcast', event: 'msg', payload: message });
       if (result !== 'ok') handlers.onError(new Error(`Send failed: ${result}`));
     },
 
     async disconnect() {
-      await channel.unsubscribe();
+      await channel?.unsubscribe();
+      channel = null;
     },
   };
 }
