@@ -30,9 +30,51 @@ const OUT_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', 'public', 'd
  */
 const IMAGE_PREFIX = 'https://cmsassets.rgpub.io/sanity/images/dsfx7636/game_data_live/';
 
-async function getJSON(url) {
-  const res = await fetch(url, { headers: { accept: 'application/json' } });
-  if (!res.ok) throw new Error(`GET ${url} -> ${res.status} ${res.statusText}`);
+/**
+ * Riftcodex is a small community API behind a CDN, and CI runners come from
+ * datacenter IP ranges that get challenged or rate-limited more often than a
+ * laptop does. Retry with backoff, identify ourselves properly, and fail with
+ * something actionable rather than a bare status code.
+ */
+const MAX_ATTEMPTS = 4;
+const USER_AGENT =
+  'riftforge/0.1 (+https://github.com/HongBo0502/RiftForge) card-dataset-fetch';
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+async function getJSON(url, attempt = 1) {
+  let res;
+  try {
+    res = await fetch(url, {
+      headers: { accept: 'application/json', 'user-agent': USER_AGENT },
+      signal: AbortSignal.timeout(30_000),
+    });
+  } catch (err) {
+    if (attempt >= MAX_ATTEMPTS) {
+      throw new Error(
+        `GET ${url} failed after ${attempt} attempts: ${err.message}. ` +
+          `The Riftcodex API may be down or blocking this network.`,
+      );
+    }
+    await sleep(attempt * 2000);
+    return getJSON(url, attempt + 1);
+  }
+
+  // 429 and 5xx are worth retrying; 4xx otherwise is not going to improve.
+  if (!res.ok) {
+    const retryable = res.status === 429 || res.status >= 500;
+    if (retryable && attempt < MAX_ATTEMPTS) {
+      const retryAfter = Number(res.headers.get('retry-after')) || attempt * 3;
+      await sleep(retryAfter * 1000);
+      return getJSON(url, attempt + 1);
+    }
+    const body = await res.text().catch(() => '');
+    throw new Error(
+      `GET ${url} -> ${res.status} ${res.statusText}` +
+        (body ? ` :: ${body.slice(0, 200)}` : ''),
+    );
+  }
+
   return res.json();
 }
 
@@ -108,6 +150,8 @@ async function fetchAllCards() {
   const items = [...first.items];
   process.stdout.write(`  page 1/${pages}`);
   for (let p = 2; p <= pages; p++) {
+    // Be a polite client: 15 pages back-to-back is what trips rate limiting.
+    await sleep(150);
     const page = await getJSON(`${API}/cards?page=${p}&size=${PAGE_SIZE}`);
     items.push(...page.items);
     process.stdout.write(`\r  page ${p}/${pages}`);
