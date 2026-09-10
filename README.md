@@ -22,6 +22,9 @@ Online 2-player is deliberately out of scope for V1 — see *Multiplayer* below.
 56 tests pass (`npm test`), covering deck legality, decklist parsing, and the
 engine — including a full game played to 8 points.
 
+Deployed on Cloudflare Pages — see [DEPLOY.md](DEPLOY.md).
+Licence boundary with Riot's content: [NOTICE.md](NOTICE.md).
+
 **Picking this up fresh? Read [HANDOFF.md](HANDOFF.md)** — it records the
 current state, the known gaps, and what to do next.
 
@@ -31,7 +34,7 @@ current state, the known gaps, and what to do next.
 
 ```bash
 npm install
-npm run fetch-cards   # pulls the card dataset into public/data (needs network)
+npm run fetch-cards   # required — card data is not committed (see NOTICE.md)
 npm run dev           # http://localhost:5273
 ```
 

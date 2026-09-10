@@ -12,7 +12,8 @@
     "test:watch": "vitest",
     "fetch-cards": "node scripts/fetch-cards.mjs",
     "typecheck": "tsc --noEmit",
-    "ci": "npm run typecheck && npm test && npm run build"
+    "ci": "npm run typecheck && npm test && npm run build",
+    "build:deploy": "npm run fetch-cards && npm run build"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.116.0",
