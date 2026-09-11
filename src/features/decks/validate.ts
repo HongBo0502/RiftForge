@@ -1,5 +1,6 @@
 import type { Card, Domain } from '@/types';
 import { nameKey } from '@/types';
+import { hasKeyword } from '@/features/game/engine/keywords';
 import type { Deck } from './types';
 import { countCards } from './types';
 
@@ -22,6 +23,8 @@ export const RUNE_DECK_SIZE = 12;
 export const MAX_COPIES = 3;
 /** 103.2.d.1 — 3 signature cards in total, regardless of name. */
 export const MAX_SIGNATURE = 3;
+/** 825.3.a — a card with Unique is limited to one per deck, not three. */
+export const MAX_UNIQUE_COPIES = 1;
 
 export type IssueLevel = 'error' | 'warning';
 
@@ -98,20 +101,34 @@ export function validateDeck(deck: Deck, byId: Map<string, Card>): Validation {
   // Copies are counted by name (132.4), so every printing and both subtitle
   // spellings of one card share the limit — and the limit applies to the main
   // deck and sideboard *combined* (Tournament Rules 403.3).
-  const copies = new Map<string, { count: number; label: string }>();
+  const copies = new Map<string, { count: number; label: string; unique: boolean }>();
   for (const { card, qty } of [...mainCards, ...sideboardCards]) {
     const key = nameKey(card.baseName);
     const seen = copies.get(key);
-    if (seen) seen.count += qty;
-    else copies.set(key, { count: qty, label: card.baseName });
+    if (seen) {
+      seen.count += qty;
+      // 825.3.a is a property of the name, and a reprint may carry Unique even
+      // if the copy counted first did not.
+      seen.unique = seen.unique || hasKeyword(card, 'Unique');
+    } else {
+      copies.set(key, { count: qty, label: card.baseName, unique: hasKeyword(card, 'Unique') });
+    }
   }
-  for (const { count, label } of copies.values()) {
-    if (count > MAX_COPIES) {
+  for (const { count, label, unique } of copies.values()) {
+    /*
+     * 825.3.a — Unique overrides the usual three. 825.3.b keeps the signature
+     * allowance separate: three signature cards in total, but still only one of
+     * any given Unique name, so the two limits are checked independently.
+     */
+    const limit = unique ? MAX_UNIQUE_COPIES : MAX_COPIES;
+    if (count > limit) {
       add(
         'error',
         'main',
-        `${count} copies of ${label} across deck and sideboard; the limit is ${MAX_COPIES}.`,
-        '403.3',
+        unique
+          ? `${count} copies of ${label}, which is Unique; the limit is ${MAX_UNIQUE_COPIES}.`
+          : `${count} copies of ${label} across deck and sideboard; the limit is ${MAX_COPIES}.`,
+        unique ? '825.3.a' : '403.3',
       );
     }
   }

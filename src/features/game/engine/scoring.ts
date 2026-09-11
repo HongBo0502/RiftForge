@@ -1,3 +1,5 @@
+import type { Card } from '@/types';
+import { keywordValue } from './keywords';
 import type { GameState, PlayerId } from './types';
 
 /**
@@ -22,6 +24,7 @@ export function score(
   player: PlayerId,
   index: number,
   method: 'conquer' | 'hold',
+  lookup?: (cardId: string) => Card | undefined,
 ): void {
   const battlefield = state.battlefields[index];
   if (!battlefield) return;
@@ -30,6 +33,14 @@ export function score(
   if (battlefield.scoredBy.includes(player)) return;
 
   battlefield.scoredBy.push(player);
+
+  /*
+   * Hunt X — "When I Conquer or Hold, my controller gains X XP." 823.1.c.1
+   *
+   * This runs before the Final Point check below, because 471.1.b withholds the
+   * *point*, not the scoring event: the battlefield was still Conquered or Held.
+   */
+  if (lookup) huntXp(state, player, index, method, lookup);
 
   const atFinalPoint = state.players[player].points >= state.victoryScore - 1;
   if (method === 'conquer' && atFinalPoint) {
@@ -55,6 +66,40 @@ export function score(
     player,
     text: `${method === 'conquer' ? 'Conquered' : 'Held'} battlefield ${index + 1} — ${state.players[player].points} point${state.players[player].points === 1 ? '' : 's'}.`,
     rule: method === 'conquer' ? '469.1' : '469.2',
+  });
+}
+
+/**
+ * Hunt X. 823
+ *
+ * Hunt is both a Conquer and a Hold effect (823.1.b), and the unit has to be at
+ * the battlefield being scored for it to be the one doing the conquering or
+ * holding. 823.2 sums multiple grants, which the printed value already covers.
+ */
+function huntXp(
+  state: GameState,
+  player: PlayerId,
+  index: number,
+  method: 'conquer' | 'hold',
+  lookup: (cardId: string) => Card | undefined,
+): void {
+  let gained = 0;
+  for (const unit of Object.values(state.units)) {
+    if (unit.controller !== player) continue;
+    if (unit.location.kind !== 'battlefield' || unit.location.index !== index) continue;
+    const card = lookup(state.instances[unit.uid]?.cardId ?? '');
+    // 823.1.c.2 — X defaults to 1 when it is not printed.
+    if (card) gained += keywordValue(card, 'Hunt') ?? 0;
+  }
+  if (gained === 0) return;
+
+  state.players[player].xp += gained;
+  state.log.push({
+    turn: state.turn,
+    phase: state.phase,
+    player,
+    text: `Hunt: gained ${gained} XP on ${method === 'conquer' ? 'conquering' : 'holding'} battlefield ${index + 1} (${state.players[player].xp} total).`,
+    rule: '823.1.c.1',
   });
 }
 

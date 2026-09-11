@@ -221,6 +221,15 @@ and `aria-label` always spell every one of them out in words.
 | Damage | Fury chip, top-right | Unchanged |
 | XP | Public counter in the status bar, hidden at zero | 729.2 makes it public; showing 0/0 all game is noise |
 
+### Ambush
+
+Playing a unit straight onto a battlefield is a permission almost no card has
+(822.1.b), so it is not a standing affordance. Pick a card up and any
+battlefield where the engine would accept it grows an **Ambush here** button,
+in Chaos like the chain strip — both mean "this is happening off the normal
+turn sequence". The button's legality is the engine's answer, never a rule
+re-implemented in the component.
+
 ---
 
 ## 7. Motion & interaction

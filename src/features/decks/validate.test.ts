@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { Card } from '@/types';
 import { nameKey } from '@/types';
 import { BY_ID, CARDS, card } from '@/test/dataset';
+import { hasKeyword } from '@/features/game/engine/keywords';
 import { emptyDeck, type Deck } from './types';
 import { MAIN_DECK_MIN, RUNE_DECK_SIZE, inIdentity, validateDeck } from './validate';
 
@@ -110,6 +111,20 @@ describe('validateDeck', () => {
     deck.main = deck.main.filter((e) => e.cardId !== base.id);
     deck.main.push({ cardId: base.id, qty: 2 }, { cardId: variant.id, qty: 2 });
     expect(errorsIn(deck).join()).toMatch(/4 copies of .*limit is 3/);
+  });
+
+  it('allows only one copy of a card with Unique (825.3.a)', () => {
+    const unique = identityCards.find((c) => hasKeyword(c, 'Unique'));
+    if (!unique) return; // no Unique card in this identity; nothing to assert
+
+    const deck = legalDeck();
+    deck.main = deck.main.filter((e) => e.cardId !== unique.id);
+    deck.main.push({ cardId: unique.id, qty: 1 });
+    expect(errorsIn(deck).join()).not.toMatch(/Unique/);
+
+    deck.main = deck.main.filter((e) => e.cardId !== unique.id);
+    deck.main.push({ cardId: unique.id, qty: 2 });
+    expect(errorsIn(deck).join()).toMatch(/which is Unique; the limit is 1/);
   });
 
   it('rejects cards outside the domain identity', () => {

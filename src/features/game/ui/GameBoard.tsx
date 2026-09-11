@@ -76,8 +76,8 @@ export default function GameBoard({
     return result.ok ? result.plan : null;
   }, [considering, state, me, lookup]);
 
-  const play = (uid: string) => {
-    onAction({ type: 'PLAY_CARD', uid });
+  const play = (uid: string, to?: Location) => {
+    onAction({ type: 'PLAY_CARD', uid, to });
     setConsidering(null);
     clear();
   };
@@ -167,6 +167,15 @@ export default function GameBoard({
               onMoveHere={() => moveTo({ kind: 'battlefield', index })}
               canPlayHidden={(uid) => canDo({ type: 'PLAY_CARD', uid })}
               onPlayHidden={(uid) => onAction({ type: 'PLAY_CARD', uid })}
+              canAmbushHere={
+                considering !== null &&
+                canDo({
+                  type: 'PLAY_CARD',
+                  uid: considering,
+                  to: { kind: 'battlefield', index },
+                })
+              }
+              onAmbushHere={() => considering && play(considering, { kind: 'battlefield', index })}
             />
           ))}
         </div>
@@ -675,6 +684,8 @@ function BattlefieldZone({
   onMoveHere,
   canPlayHidden,
   onPlayHidden,
+  canAmbushHere,
+  onAmbushHere,
 }: {
   index: number;
   state: GameState;
@@ -689,6 +700,9 @@ function BattlefieldZone({
   onMoveHere: () => void;
   canPlayHidden: (uid: string) => boolean;
   onPlayHidden: (uid: string) => void;
+  /** Ambush (822): playing the hand card under consideration to this battlefield. */
+  canAmbushHere: boolean;
+  onAmbushHere: () => void;
 }) {
   const bf = state.battlefields[index];
   const card = cardFor(bf.uid);
@@ -801,6 +815,23 @@ function BattlefieldZone({
             className="w-full rounded-md bg-calm py-1.5 text-[12px] font-semibold text-ink"
           >
             Move here
+          </button>
+        )}
+
+        {/*
+          822.1.b — a unit with Ambush lands where you already have units, which
+          is the only way to play a unit straight to a battlefield. It only
+          appears while such a card is picked up, so the mat stays quiet
+          otherwise.
+        */}
+        {canAmbushHere && (
+          <button
+            type="button"
+            onClick={onAmbushHere}
+            title="Ambush: play here, at Reaction speed (822)"
+            className="w-full rounded-md bg-chaos py-1.5 text-[12px] font-semibold text-ink"
+          >
+            Ambush here
           </button>
         )}
       </div>

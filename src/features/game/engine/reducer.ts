@@ -9,7 +9,7 @@ import {
 import { cleanup, expireTemporary } from './cleanup';
 import { shuffle } from './rng';
 import { closeShowdown, openShowdown, type CardLookup } from './combat';
-import { hasKeyword, unautomatedText } from './keywords';
+import { dependencyContext, hasKeyword, unautomatedText } from './keywords';
 import { type PaymentPlan, planPayment } from './payment';
 import { checkVictory, drawCard, score } from './scoring';
 import { expireStatuses } from './statuses';
@@ -130,7 +130,7 @@ function applyPhase(state: GameState, lookup: CardLookup): void {
 
       // 315.2.b — the Turn Player Holds every battlefield they control.
       state.battlefields.forEach((bf, index) => {
-        if (bf.controller === player) score(state, player, index, 'hold');
+        if (bf.controller === player) score(state, player, index, 'hold', lookup);
       });
       checkVictory(state);
       break;
@@ -208,6 +208,8 @@ function advance(state: GameState, lookup: CardLookup): void {
     state.turn += 1;
     state.phase = 'awaken';
     for (const bf of state.battlefields) bf.scoredBy = [];
+    // 812.1.c — Legion asks about *this* turn, so the record starts empty.
+    for (const id of ['p1', 'p2'] as PlayerId[]) state.players[id].finalizedThisTurn = [];
   } else {
     state.phase = next;
   }
@@ -475,9 +477,23 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
         return reject('A hidden card can only be played from your next turn.', '811.1.b');
       }
 
+      /*
+       * Ambush (822.1.b) — a unit with it may be played to a battlefield where
+       * its controller already has units, whoever controls the battlefield, and
+       * it has Reaction while doing exactly that. Both halves hang off the same
+       * check, so work it out before the timing gate.
+       */
+      const ambushTarget = action.to?.kind === 'battlefield' ? action.to.index : null;
+      const ambushing =
+        !fromHidden &&
+        card.type === 'Unit' &&
+        hasKeyword(card, 'Ambush') &&
+        ambushTarget !== null &&
+        unitsAt(draft, ambushTarget, actor).length > 0;
+
       // 358.4 — Main Phase in an Open State allows anything; a showdown allows
       // Action and Reaction; a live chain allows Reaction alone.
-      const mistimed = checkTiming(draft, card, fromHidden);
+      const mistimed = checkTiming(draft, card, fromHidden, ambushing);
       if (mistimed) return mistimed;
 
       // 805.1 — Accelerate is an additional cost, and only means anything on a
@@ -494,7 +510,11 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
         // action.payment lets the UI override the choice of runes.
         const planned = action.payment
           ? ({ ok: true, plan: action.payment } as const)
-          : planPayment(draft, actor, card, lookup, { accelerate: accelerated });
+          : planPayment(draft, actor, card, lookup, {
+              accelerate: accelerated,
+              // 809 — an opponent's Deflect makes choosing it cost more.
+              targets: action.targets,
+            });
         if (!planned.ok) return reject(planned.reason, planned.rule);
         spendPlan(draft, actor, planned.plan, lookup);
       }
@@ -519,8 +539,13 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
         if (!forced && action.to?.kind === 'battlefield') {
           const bf = draft.battlefields[action.to.index];
           if (!bf) return reject('No such battlefield.');
-          if (bf.controller !== actor) {
-            return reject('Units can only be played to a battlefield you control.');
+          // 822.1.b — Ambush adds "where you control units" to the usual
+          // "a battlefield you control".
+          if (bf.controller !== actor && !ambushing) {
+            return reject(
+              'Units are played to a battlefield you control, or with Ambush to one where you have units.',
+              '822.1.b',
+            );
           }
           destination = action.to;
         }
@@ -577,8 +602,11 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
        * anything the engine cannot do is surfaced now. A spell's text does not
        * apply until it resolves, so that is flagged in resolveChain instead.
        */
+      // 329.3 — the card is finalized now, which is what Legion counts. 812.1.c
+      p.finalizedThisTurn.push(action.uid);
+
       if (card.type === 'Unit' || card.type === 'Gear') {
-        const manual = unautomatedText(card);
+        const manual = unautomatedText(card, dependencyContext(draft, actor, action.uid));
         if (manual) {
           draft.unautomated.push(`${card.baseName}: ${manual.replace(/\n/g, ' ')}`);
           log(draft, actor, `${card.baseName}'s text is not automated — apply it by hand.`);

@@ -154,6 +154,12 @@ export interface PlayerState {
    * leaves it alone. `[Level N]` abilities read it. 728-733
    */
   xp: number;
+  /**
+   * Instance uids this player has finalized this turn, cleared at each turn
+   * rollover. Legion asks whether you have played *another* card this turn, so
+   * the identities matter, not just the count. 812.1.c
+   */
+  finalizedThisTurn: string[];
   /** Set once the player has drawn from an empty deck. 431 */
   burnedOut: boolean;
 }

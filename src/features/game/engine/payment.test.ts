@@ -34,6 +34,7 @@ function board(runeDomains: Domain[], pool: { energy?: number; power?: Partial<R
         energy: pool.energy ?? 0,
         power: pool.power ?? {},
         xp: 0,
+        finalizedThisTurn: [],
         burnedOut: false,
       },
       p2: {
@@ -49,6 +50,7 @@ function board(runeDomains: Domain[], pool: { energy?: number; power?: Partial<R
         energy: 0,
         power: {},
         xp: 0,
+        finalizedThisTurn: [],
         burnedOut: false,
       },
     },

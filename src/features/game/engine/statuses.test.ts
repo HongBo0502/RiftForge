@@ -60,6 +60,7 @@ function table(): GameState {
     energy: 20,
     power: { Mind: 5, Chaos: 5, Order: 5, Calm: 5, Body: 5, Fury: 5 },
     xp: 0,
+    finalizedThisTurn: [],
     burnedOut: false,
   });
 

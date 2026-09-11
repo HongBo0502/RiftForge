@@ -14,7 +14,7 @@ folder is an unrelated scratch drawer — don't touch it).
 npm install
 npm run fetch-cards   # only needed if public/data is missing or a set dropped
 npm run dev           # http://localhost:5273
-npm test              # 144 tests
+npm test              # 169 tests
 ```
 
 ### Starting a session on this
@@ -56,6 +56,7 @@ All planned phases are done and committed.
 | 9 | Rules fidelity A: exhausted units, cleanups, Temporary, mulligan | done |
 | 10 | Rules fidelity B: the chain, priority, timing gate | done |
 | 11 | Rules fidelity C: Stun, Buff, Empowered, XP | done |
+| 12 | Rules fidelity D: the keywords the engine can enforce alone | done |
 
 ```
 c9c39fd  Import: standalone section headers and sideboards
@@ -67,7 +68,7 @@ ee0cb84  Rules engine: pure reducer over the official Core Rules
 457bf25  Card database: Vite/React scaffold, Riftcodex pipeline, browser UI
 ```
 
-**144 tests pass.** Production build is clean (~95 KB gzipped JS).
+**169 tests pass.** Production build is clean (~95 KB gzipped JS).
 
 Two decisions the user made. Don't re-litigate them:
 
@@ -177,22 +178,36 @@ but changes no stats.
 ever gains the field. Fixing it means either finding the value upstream or
 scraping it off the card images.
 
-### 2. Most keywords still do nothing
+### 2. Six keywords are still waiting on card effects
 
-Automated: `Action` and `Reaction` (the timing gate), `Assault`, `Shield`,
-`Tank`, `Backline`, `Ganking` (Might and movement), `Accelerate` and
-`Temporary`, plus `Hidden` and `Equip`, which have their own actions.
+The Core Rules glossary is 805-829: 25 keywords. Nineteen are enforced.
 
-Not automated: `Add, Ambush, Buff, Deathknell, Deflect, Empower, Empowered,
-Flow, Hunt, Legion, Mighty, Quick-Draw, Repeat, Stun, Unique, Vision,
-Weaponmaster`.
+Automated: `Action`, `Reaction` (the timing gate), `Assault`, `Shield`, `Tank`,
+`Backline`, `Ganking`, `Accelerate`, `Temporary`, `Hidden`, `Equip`, `Ambush`,
+`Deflect`, `Hunt`, `Quick-Draw`, `Unique`, and the three Dependent Keywords
+`Level`, `Legion` and `Empowered`. Plus `Mighty`, which is rule 706's
+description rather than a keyword.
 
-`Stun`, `Buff` and `Empower` stay on that list on purpose. The *statuses* are
-built and enforced (`engine/statuses.ts`) — buffs count toward Might, a stunned
-unit deals no combat damage, stun expires with the turn — but all three are
-Limited Actions (423.2.a, 426.2.a, 441.3.a): a player may only do them when a
-card says so, and no card effect fires yet. The keyword moves off this list when
-something can trigger it, not when the state exists.
+**Not automated, and why** — each needs something the engine cannot supply:
+
+| Keyword | Blocked on |
+|---|---|
+| `Deathknell` (808) | "When I die, [Effect]" — the effect is card text |
+| `Vision` (817) | triggers Predict (436), which needs a player-decision queue |
+| `Repeat` (820) | an inline `Repeat [Cost]`, so it needs a cost parser |
+| `Weaponmaster` (821) | a choice prompt plus the Equip cost parser |
+| `Flow` (829) | an alternate cost *and* a Banishment zone, which `PlayerState` has not got |
+| `Empower` (827) | the activated ability: an inline cost again |
+
+`Stun`, `Buff` and `Empower`'s *statuses* are built and enforced
+(`engine/statuses.ts`), but stunning, buffing and empowering are Limited
+Actions (423.2.a, 426.2.a, 441.3.a) — only a card may do them, and no card
+effect fires yet.
+
+`[Burn N]` appears on 13 cards but is **not in the Core Rules glossary at all**.
+Its only definition is card reminder text ("put the top N cards of your Main
+Deck into your trash"). Do not implement it from reminder text alone; find the
+rule first.
 
 Cards whose text isn't handled still play with correct stats and costs, and
 their text is surfaced in the board's "apply by hand" panel

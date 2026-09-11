@@ -108,6 +108,7 @@ export function setupGame({ decks, byId, seed = 1, firstPlayer }: SetupInput): G
       energy: 0,
       power: {},
       xp: 0,
+      finalizedThisTurn: [],
       burnedOut: false,
     };
   }

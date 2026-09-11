@@ -1,4 +1,5 @@
 import type { Card, Domain } from '@/types';
+import { keywordValue } from './keywords';
 import type { GameState, PlayerId } from './types';
 
 /**
@@ -41,6 +42,32 @@ export interface PlanOptions {
    * which the existing domain filter below already enforces.
    */
   accelerate?: boolean;
+  /** What this card chooses, so Deflect can charge for it. 809 */
+  targets?: string[];
+}
+
+/**
+ * The extra Power owed for choosing things with Deflect. 809.1.c
+ *
+ * Only an *opponent's* objects charge it, and it is charged once per time they
+ * are chosen — so a spell naming the same unit twice pays twice. 809.2 sums
+ * multiple sources of the keyword, which `keywordValue` already collapses into
+ * one printed number per card.
+ */
+export function deflectSurcharge(
+  state: GameState,
+  player: PlayerId,
+  targets: string[],
+  lookup: (id: string) => Card | undefined,
+): number {
+  let owed = 0;
+  for (const target of targets) {
+    const unit = state.units[target] ?? state.gear[target];
+    if (!unit || unit.controller === player) continue;
+    const card = lookup(state.instances[target]?.cardId ?? '');
+    if (card) owed += keywordValue(card, 'Deflect') ?? 0;
+  }
+  return owed;
 }
 
 /**
@@ -59,6 +86,9 @@ export function planPayment(
 ): PlanResult {
   const p = state.players[player];
   const surcharge = options.accelerate ? 1 : 0;
+  // 809.1.c.1 — Deflect's Power may always be of any Domain, so it is settled
+  // separately from the card's own domain-locked Power cost.
+  const deflect = deflectSurcharge(state, player, options.targets ?? [], lookup);
   const energyCost = (card.energy ?? 0) + surcharge;
   const powerCost = (card.power ?? 0) + surcharge;
 
@@ -101,6 +131,33 @@ export function planPayment(
       ok: false,
       reason: `Not enough ${label} Power — short by ${powerOwed}.`,
       rule: '163.2',
+    };
+  }
+
+  // --- Deflect (809) -------------------------------------------------------
+  // Any Domain will do here, so this takes whatever is left rather than
+  // competing with the card's own Power cost for a particular domain.
+  let deflectOwed = deflect;
+  for (const [domain, held] of Object.entries(p.power) as [Domain, number][]) {
+    if (deflectOwed <= 0) break;
+    const spent = plan.powerFromPool[domain] ?? 0;
+    const free = (held ?? 0) - spent;
+    if (free <= 0) continue;
+    const take = Math.min(free, deflectOwed);
+    plan.powerFromPool[domain] = spent + take;
+    deflectOwed -= take;
+  }
+  for (const rune of owned) {
+    if (deflectOwed <= 0) break;
+    if (plan.recycle.includes(rune.uid)) continue;
+    plan.recycle.push(rune.uid);
+    deflectOwed -= 1;
+  }
+  if (deflectOwed > 0) {
+    return {
+      ok: false,
+      reason: `Deflect needs ${deflect} more Power — short by ${deflectOwed}.`,
+      rule: '809.1.c',
     };
   }
 

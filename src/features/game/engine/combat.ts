@@ -56,6 +56,28 @@ export function damageContribution(
   return state.units[uid]?.stunned ? 0 : unitMight(state, uid, lookup);
 }
 
+/**
+ * Mighty. 706-711
+ *
+ * "A Unit is Mighty as long as its Might is 5 or greater" (708), evaluated on
+ * its *current* Might while on the board (710). Not a keyword — a description
+ * other cards check — so it reads the same number combat does.
+ */
+export const MIGHTY_THRESHOLD = 5;
+
+export function isMighty(state: GameState, uid: string, lookup: CardLookup): boolean {
+  if (!state.units[uid]) return false;
+  return unitMight(state, uid, lookup) >= MIGHTY_THRESHOLD;
+}
+
+/**
+ * Mighty for a card outside the board. 711 — a unit in the trash or hand is
+ * judged on its printed Might, whatever was done to it while it was in play.
+ */
+export function cardIsMighty(card: Card | undefined): boolean {
+  return (card?.might ?? 0) >= MIGHTY_THRESHOLD;
+}
+
 /** Damage needed to kill a unit now, given what is already marked on it. */
 function lethalFor(state: GameState, uid: string, lookup: CardLookup): number {
   const unit = state.units[uid];
@@ -252,7 +274,7 @@ export function resolveCombat(state: GameState, index: number, lookup: CardLooku
     if (battlefield.controller !== winner) {
       battlefield.controller = winner;
       // 466.5.d — establishing control is a Conquer if not yet scored.
-      score(state, winner, index, 'conquer');
+      score(state, winner, index, 'conquer', lookup);
     }
     clearForeignHiddenCards(state, index, lookup);
   } else if (controllers.size === 0) {
@@ -338,7 +360,7 @@ export function closeShowdown(state: GameState, lookup: CardLookup): void {
     const winner = [...controllers][0];
     if (battlefield.controller !== winner) {
       battlefield.controller = winner;
-      score(state, winner, index, 'conquer');
+      score(state, winner, index, 'conquer', lookup);
       clearForeignHiddenCards(state, index, lookup);
     }
   }

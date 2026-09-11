@@ -1,5 +1,5 @@
 import type { Card } from '@/types';
-import { hasKeyword, unautomatedText } from './keywords';
+import { dependencyContext, hasKeyword, unautomatedText } from './keywords';
 import type { ChainItem, ChainInstruction, GameState, PlayerId, Rejection } from './types';
 import { OPPONENT } from './types';
 
@@ -58,8 +58,21 @@ export function activePlayer(state: GameState): PlayerId {
  * A facedown card has Reaction while it is facedown (811.1.b), which is the
  * whole point of hiding one.
  */
-export function checkTiming(state: GameState, card: Card, fromHidden: boolean): Rejection | null {
-  const reaction = fromHidden || hasKeyword(card, 'Reaction');
+export function checkTiming(
+  state: GameState,
+  card: Card,
+  fromHidden: boolean,
+  /** Being played to a battlefield where its controller has units. 822.1.b */
+  ambushing = false,
+): Rejection | null {
+  const reaction =
+    fromHidden ||
+    hasKeyword(card, 'Reaction') ||
+    // 819.1.b — a gear with Quick-Draw has Reaction inherently.
+    hasKeyword(card, 'Quick-Draw') ||
+    // 822.1.b — Ambush grants Reaction, but only while landing where you
+    // already have units. Played anywhere else it is an ordinary unit.
+    (ambushing && hasKeyword(card, 'Ambush'));
   const action = reaction || hasKeyword(card, 'Action');
 
   if (isClosedState(state)) {
@@ -179,7 +192,7 @@ export function resolveTop(state: GameState, lookup: CardLookup): Resolution | n
    * engine admits what it did not do. Nothing is flagged if every instruction
    * fizzled — there was nothing left to apply by hand.
    */
-  const manual = card ? unautomatedText(card) : null;
+  const manual = card ? unautomatedText(card, dependencyContext(state, item.controller, item.uid)) : null;
   if (manual && outcome.executed.length > 0) {
     state.unautomated.push(`${card?.baseName}: ${manual.replace(/\n/g, ' ')}`);
     log(state, item.controller, `${card?.baseName}'s text is not automated — apply it by hand.`);
