@@ -50,6 +50,7 @@ function table(): GameState {
     points: 0,
     energy: 30,
     power: { Mind: 9, Chaos: 9, Order: 9, Calm: 9, Body: 9, Fury: 9 },
+    xp: 0,
     burnedOut: false,
   });
 
@@ -104,6 +105,9 @@ function placeUnit(state: GameState, controller: PlayerId, uid: string, index = 
     ready: true,
     damage: 0,
     mightBonus: 0,
+    buffs: 0,
+    stunned: false,
+    empowered: false,
     designation: null,
     enteredOnTurn: 1,
     movesThisTurn: 0,

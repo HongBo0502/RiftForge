@@ -107,6 +107,7 @@ export function setupGame({ decks, byId, seed = 1, firstPlayer }: SetupInput): G
       points: 0,
       energy: 0,
       power: {},
+      xp: 0,
       burnedOut: false,
     };
   }

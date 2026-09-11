@@ -307,6 +307,16 @@ function StatusBar({
       <span className="rounded bg-surface-2 px-2 py-0.5 text-[10px] uppercase tracking-wider text-muted">
         {state.phase}
       </span>
+      {/* 729.2 — XP is public, and only shown once either player has any. */}
+      {(state.players[me].xp > 0 || state.players[them].xp > 0) && (
+        <span className="flex items-center gap-2 text-[11px] tabular-nums text-muted">
+          <span className="uppercase tracking-wider">XP</span>
+          <span style={{ color: 'var(--color-seat-you)' }}>{state.players[me].xp}</span>
+          <span className="opacity-50">/</span>
+          <span style={{ color: 'var(--color-seat-them)' }}>{state.players[them].xp}</span>
+        </span>
+      )}
+
       <span className="ml-auto flex items-center gap-3">
         <Score label="You" value={state.players[me].points} colour="var(--color-seat-you)" />
         <Score label="Them" value={state.players[them].points} colour="var(--color-seat-them)" />
@@ -570,17 +580,34 @@ function MatCard({
   const accent = DOMAIN_COLOR[card?.domains[0] ?? 'Colorless'];
   const boosted = might !== (card?.might ?? 0);
 
+  // Statuses are spelled out rather than abbreviated: at 48px a single letter
+  // is a guess, and these change what the unit can do.
+  const statuses = [
+    unit.ready ? null : 'exhausted',
+    unit.stunned ? 'stunned' : null,
+    unit.empowered ? 'empowered' : null,
+    unit.buffs > 0 ? `${unit.buffs} buff${unit.buffs === 1 ? '' : 's'}` : null,
+    unit.damage > 0 ? `${unit.damage} damage` : null,
+  ].filter(Boolean);
+
   return (
     <button
       type="button"
       onClick={onClick}
       {...bind(card)}
-      title={card?.name}
-      aria-label={`${card?.name ?? 'Unit'}, ${might} might${unit.ready ? '' : ', exhausted'}`}
+      title={[card?.name, ...statuses].filter(Boolean).join(' · ')}
+      aria-label={[`${card?.name ?? 'Unit'}, ${might} might`, ...statuses].join(', ')}
       className={`relative shrink-0 overflow-hidden rounded-md piece ${
         unit.ready ? '' : 'piece-exhausted'
       } ${selected ? 'ring-2 ring-calm' : ''}`}
-      style={{ width: 48, height: 67, margin: unit.ready ? undefined : '9px 0' }}
+      style={{
+        width: 48,
+        height: 67,
+        margin: unit.ready ? undefined : '9px 0',
+        // 441 — Empowered never expires on its own, so it reads as a standing
+        // aura rather than a chip that competes with the turn's own state.
+        boxShadow: unit.empowered ? 'inset 0 0 0 2px var(--color-fury), 0 0 8px -1px var(--color-fury)' : undefined,
+      }}
     >
       {src ? (
         <img src={src} alt="" className="h-full w-full object-cover" loading="lazy" />
@@ -595,6 +622,17 @@ function MatCard({
         />
       )}
 
+      {/*
+        423.1.b — a stunned unit still stands there and can still be killed, it
+        just deals nothing. Dimming the piece says "present but not fighting"
+        where a corner chip would read as one more counter.
+      */}
+      {unit.stunned && (
+        <span className="absolute inset-0 flex items-center justify-center bg-ink/65">
+          <span className="text-[8px] font-bold uppercase tracking-wider text-mind">Stun</span>
+        </span>
+      )}
+
       <span
         className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-0.5 bg-ink/85"
         style={{ borderTop: `2px solid ${accent}` }}
@@ -603,6 +641,10 @@ function MatCard({
         <span className={`text-[10px] font-bold tabular-nums ${boosted ? 'text-order' : ''}`}>
           {might}
         </span>
+        {/* 703 — one dot per buff counter, next to the Might it is paying for. */}
+        {Array.from({ length: unit.buffs }, (_, i) => (
+          <span key={i} className="size-1.5 rounded-full bg-order" />
+        ))}
       </span>
 
       {unit.damage > 0 && (

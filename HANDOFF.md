@@ -14,7 +14,7 @@ folder is an unrelated scratch drawer — don't touch it).
 npm install
 npm run fetch-cards   # only needed if public/data is missing or a set dropped
 npm run dev           # http://localhost:5273
-npm test              # 77 tests
+npm test              # 144 tests
 ```
 
 ### Starting a session on this
@@ -41,7 +41,7 @@ without dropping technical substance. Levels: `/caveman lite`, `/caveman`
 
 ## Where it stands
 
-All five originally planned phases are done and committed.
+All planned phases are done and committed.
 
 | | | |
 |---|---|---|
@@ -55,6 +55,7 @@ All five originally planned phases are done and committed.
 | 8 | Online play over Supabase Realtime | done |
 | 9 | Rules fidelity A: exhausted units, cleanups, Temporary, mulligan | done |
 | 10 | Rules fidelity B: the chain, priority, timing gate | done |
+| 11 | Rules fidelity C: Stun, Buff, Empowered, XP | done |
 
 ```
 c9c39fd  Import: standalone section headers and sideboards
@@ -66,7 +67,7 @@ ee0cb84  Rules engine: pure reducer over the official Core Rules
 457bf25  Card database: Vite/React scaffold, Riftcodex pipeline, browser UI
 ```
 
-**126 tests pass.** Production build is clean (~95 KB gzipped JS).
+**144 tests pass.** Production build is clean (~95 KB gzipped JS).
 
 Two decisions the user made. Don't re-litigate them:
 
@@ -185,6 +186,13 @@ Automated: `Action` and `Reaction` (the timing gate), `Assault`, `Shield`,
 Not automated: `Add, Ambush, Buff, Deathknell, Deflect, Empower, Empowered,
 Flow, Hunt, Legion, Mighty, Quick-Draw, Repeat, Stun, Unique, Vision,
 Weaponmaster`.
+
+`Stun`, `Buff` and `Empower` stay on that list on purpose. The *statuses* are
+built and enforced (`engine/statuses.ts`) — buffs count toward Might, a stunned
+unit deals no combat damage, stun expires with the turn — but all three are
+Limited Actions (423.2.a, 426.2.a, 441.3.a): a player may only do them when a
+card says so, and no card effect fires yet. The keyword moves off this list when
+something can trigger it, not when the state exists.
 
 Cards whose text isn't handled still play with correct stats and costs, and
 their text is surfaced in the board's "apply by hand" panel

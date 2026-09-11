@@ -12,6 +12,7 @@ import { closeShowdown, openShowdown, type CardLookup } from './combat';
 import { hasKeyword, unautomatedText } from './keywords';
 import { type PaymentPlan, planPayment } from './payment';
 import { checkVictory, drawCard, score } from './scoring';
+import { expireStatuses } from './statuses';
 import type {
   ActionResult,
   Phase,
@@ -170,12 +171,19 @@ function applyPhase(state: GameState, lookup: CardLookup): void {
     }
 
     case 'ending': {
-      // 317.2 — heal all units, expire "this turn" effects, empty pools.
+      // 317.2.b step 3c — heal all units.
       for (const unit of Object.values(state.units)) {
         unit.damage = 0;
         unit.mightBonus = 0;
         unit.designation = null;
       }
+      /*
+       * 317.2.c step 3d — all "this turn" effects expire, which 423.1.a.2 says
+       * includes Stun. Buffs are counters and survive (705); Empowered is only
+       * removed by Disempower (442).
+       */
+      expireStatuses(state);
+      // 317.2.d step 3e.
       emptyRunePools(state);
       break;
     }
@@ -530,6 +538,9 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
           ready: accelerated,
           damage: 0,
           mightBonus: 0,
+          buffs: 0,
+          stunned: false,
+          empowered: false,
           designation: null,
           enteredOnTurn: draft.turn,
           movesThisTurn: 0,

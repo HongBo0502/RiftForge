@@ -206,6 +206,21 @@ While it is up, End turn, phase advance and movement are all disabled — the
 engine refuses them anyway, and offering a control that always fails teaches
 nothing.
 
+### Unit statuses
+
+A unit's piece is 48px, which is too small for a row of icons nobody can name.
+So each status is drawn as the thing it actually does, and the piece's `title`
+and `aria-label` always spell every one of them out in words.
+
+| Status | On the piece | Why that form |
+|---|---|---|
+| Exhausted | Rotated 90° | Already the physical gesture at a real table |
+| Stunned | Piece dimmed under a "STUN" scrim | It is present and killable but deals nothing (423.1.b) — dimming says exactly that, where a corner chip would read as one more counter |
+| Buff | A gold dot per counter, beside the Might it pays for | 703 makes each buff +1 Might; putting the dot next to the number ties the bonus to its source, and a buff is spendable so its count has to be visible |
+| Empowered | A standing Fury outline and glow | 441/442 — nothing expires it, so it is an aura rather than a chip competing with the turn's own state |
+| Damage | Fury chip, top-right | Unchanged |
+| XP | Public counter in the status bar, hidden at zero | 729.2 makes it public; showing 0/0 all game is noise |
+
 ---
 
 ## 7. Motion & interaction

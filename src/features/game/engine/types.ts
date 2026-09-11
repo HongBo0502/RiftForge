@@ -59,6 +59,23 @@ export interface UnitState {
   damage: number;
   /** Might granted by "this turn" effects; expires in the Ending Phase. 317.2.c */
   mightBonus: number;
+  /**
+   * Buff counters. Each is +1 Might (703). Normally capped at one (702.3), but
+   * held as a count because some effects grant permission to exceed it
+   * (426.1.b.2). Removed entirely when the unit leaves play (705).
+   */
+  buffs: number;
+  /**
+   * Stunned. Contributes no Might in the combat damage step (423.1.b) but still
+   * needs its full Might in damage to die (423.1.c). Clears at the Ending
+   * Phase's expiration step (423.1.a.2).
+   */
+  stunned: boolean;
+  /**
+   * Empowered. A binary state other cards read; nothing expires it, and only
+   * Disempower removes it. 441, 442
+   */
+  empowered: boolean;
   /** Set during combat. 464.2.c */
   designation: 'attacker' | 'defender' | null;
   /** Turn this unit arrived, so summoning-turn restrictions can be checked. */
@@ -131,6 +148,12 @@ export interface PlayerState {
   /** Rune Pool. Empties at the start of each Main Phase and each turn's end. 167 */
   energy: number;
   power: Partial<Record<Domain, number>>;
+  /**
+   * XP. A resource, not a game object (731): it cannot be targeted, it never
+   * expires, and there is no cap (733). Public information (729.2), so `redact`
+   * leaves it alone. `[Level N]` abilities read it. 728-733
+   */
+  xp: number;
   /** Set once the player has drawn from an empty deck. 431 */
   burnedOut: boolean;
 }

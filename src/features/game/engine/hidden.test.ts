@@ -29,6 +29,7 @@ function table(controller: PlayerId | null = 'p1'): GameState {
     points: 0,
     energy: 20,
     power: { Mind: 5, Chaos: 5, Order: 5, Calm: 5, Body: 5, Fury: 5 },
+    xp: 0,
     burnedOut: false,
   });
 
@@ -219,6 +220,9 @@ describe('Gear (147-152)', () => {
       ready: true,
       damage: 0,
       mightBonus: 0,
+      buffs: 0,
+      stunned: false,
+      empowered: false,
       designation: null,
       enteredOnTurn: 1,
       movesThisTurn: 0,
@@ -256,6 +260,9 @@ describe('Gear (147-152)', () => {
       ready: true,
       damage: 0,
       mightBonus: 0,
+      buffs: 0,
+      stunned: false,
+      empowered: false,
       designation: null,
       enteredOnTurn: 1,
       movesThisTurn: 0,

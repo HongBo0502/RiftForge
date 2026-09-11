@@ -36,7 +36,24 @@ export function unitMight(state: GameState, uid: string, lookup: CardLookup): nu
   if (card && unit.designation === 'defender') role = keywordValue(card, 'Shield') ?? 0;
 
   // 143.2.b — Might below 0 is treated as 0.
-  return Math.max(0, base + unit.mightBonus + role);
+  // 703 — each buff counter is +1 Might.
+  return Math.max(0, base + unit.mightBonus + unit.buffs + role);
+}
+
+/**
+ * What a unit adds to its side's total in the combat damage step. 465.2
+ *
+ * Only differs from `unitMight` when the unit is stunned: 423.1.b takes its
+ * Might out of the damage being dealt, while 423.1.c keeps its full Might as
+ * the amount needed to kill it. Using one number for both would either make a
+ * stunned unit deal damage or make it die to a single point.
+ */
+export function damageContribution(
+  state: GameState,
+  uid: string,
+  lookup: CardLookup,
+): number {
+  return state.units[uid]?.stunned ? 0 : unitMight(state, uid, lookup);
 }
 
 /** Damage needed to kill a unit now, given what is already marked on it. */
@@ -158,8 +175,16 @@ export function resolveCombat(state: GameState, index: number, lookup: CardLooku
 
   // 465.1 — the damage step only runs while both sides are present.
   if (attackers.length > 0 && defenders.length > 0) {
-    const attackMight = attackers.reduce((sum, u) => sum + unitMight(state, u.uid, lookup), 0);
-    const defendMight = defenders.reduce((sum, u) => sum + unitMight(state, u.uid, lookup), 0);
+    // 423.1.b — a stunned unit is present and can still be killed, but adds
+    // nothing to the damage its side deals.
+    const attackMight = attackers.reduce(
+      (sum, u) => sum + damageContribution(state, u.uid, lookup),
+      0,
+    );
+    const defendMight = defenders.reduce(
+      (sum, u) => sum + damageContribution(state, u.uid, lookup),
+      0,
+    );
 
     // 465.2.c — the attacker assigns first, but damage is dealt simultaneously.
     const onDefenders = assignDamage(state, attackMight, defenders.map((u) => u.uid), lookup);

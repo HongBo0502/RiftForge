@@ -40,6 +40,7 @@ function table(controller: PlayerId | null = null): GameState {
     points: 0,
     energy: 30,
     power: { Mind: 9, Chaos: 9, Order: 9, Calm: 9, Body: 9, Fury: 9 },
+    xp: 0,
     burnedOut: false,
   });
   const state: GameState = {
@@ -96,6 +97,9 @@ function placeUnit(state: GameState, card: Card, controller: PlayerId, index: nu
     ready: true,
     damage: 0,
     mightBonus: 0,
+    buffs: 0,
+    stunned: false,
+    empowered: false,
     designation: null,
     enteredOnTurn: 1,
     movesThisTurn: 0,
@@ -241,6 +245,10 @@ describe('zone change makes a new object (102)', () => {
     state.units.u1.damage = 2;
     state.units.u1.mightBonus = 1;
     state.units.u1.designation = 'attacker';
+    // 124.1 lists statuses alongside damage and counters — all of it goes.
+    state.units.u1.buffs = 1;
+    state.units.u1.stunned = true;
+    state.units.u1.empowered = true;
 
     toZone(state, 'u1', 'hand');
 
@@ -252,6 +260,9 @@ describe('zone change makes a new object (102)', () => {
     expect(state.units.u1.damage).toBe(0);
     expect(state.units.u1.mightBonus).toBe(0);
     expect(state.units.u1.designation).toBeNull();
+    expect(state.units.u1.buffs).toBe(0);
+    expect(state.units.u1.stunned).toBe(false);
+    expect(state.units.u1.empowered).toBe(false);
   });
 
   it('detaches gear whose host leaves the board', () => {
