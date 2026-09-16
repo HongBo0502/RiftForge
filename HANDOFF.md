@@ -14,7 +14,7 @@ folder is an unrelated scratch drawer — don't touch it).
 npm install
 npm run fetch-cards   # only needed if public/data is missing or a set dropped
 npm run dev           # http://localhost:5273
-npm test              # 169 tests
+npm test              # 189 tests
 ```
 
 ### Starting a session on this
@@ -57,6 +57,7 @@ All planned phases are done and committed.
 | 10 | Rules fidelity B: the chain, priority, timing gate | done |
 | 11 | Rules fidelity C: Stun, Buff, Empowered, XP | done |
 | 12 | Rules fidelity D: the keywords the engine can enforce alone | done |
+| 13 | Card effects: text parser, executor, wired into chain resolution | started |
 
 ```
 c9c39fd  Import: standalone section headers and sideboards
@@ -68,7 +69,7 @@ ee0cb84  Rules engine: pure reducer over the official Core Rules
 457bf25  Card database: Vite/React scaffold, Riftcodex pipeline, browser UI
 ```
 
-**169 tests pass.** Production build is clean (~95 KB gzipped JS).
+**189 tests pass.** Production build is clean (~95 KB gzipped JS).
 
 Two decisions the user made. Don't re-litigate them:
 
@@ -106,6 +107,11 @@ src/
       combat.ts            damage assignment, showdown resolution
       scoring.ts           Conquer/Hold, burn out, win check
       keywords.ts          keyword parsing + "what isn't automated"
+    game/effects/        card text -> instructions -> execution
+      types.ts             the effect vocabulary (verbs, selectors, triggers)
+      parse.ts             printed card text -> Instruction[]   (strict; refuses rather than guesses)
+      execute.ts           runs instructions through the engine primitives
+      run.ts               bridge used by chain resolution, memoised per card
       redact.ts            hidden-information enforcement
       rng.ts               seeded RNG
     game/online/         transport, Supabase adapter, match hook

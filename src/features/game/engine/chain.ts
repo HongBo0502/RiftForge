@@ -1,5 +1,6 @@
 import type { Card } from '@/types';
-import { dependencyContext, hasKeyword, unautomatedText } from './keywords';
+import { runCardEffects } from '../effects/run';
+import { hasKeyword, unautomatedText } from './keywords';
 import type { ChainItem, ChainInstruction, GameState, PlayerId, Rejection } from './types';
 import { OPPONENT } from './types';
 
@@ -188,14 +189,18 @@ export function resolveTop(state: GameState, lookup: CardLookup): Resolution | n
   }
 
   /*
-   * A spell's text applies now, not when it was played, so this is where the
-   * engine admits what it did not do. Nothing is flagged if every instruction
-   * fizzled — there was nothing left to apply by hand.
+   * A spell's text applies now, not when it was played. The parser reads what
+   * it can and the engine runs it; whatever is left over is what the player
+   * still has to do by hand. Nothing is flagged if every instruction fizzled —
+   * there was nothing to apply.
    */
-  const manual = card ? unautomatedText(card, dependencyContext(state, item.controller, item.uid)) : null;
-  if (manual && outcome.executed.length > 0) {
-    state.unautomated.push(`${card?.baseName}: ${manual.replace(/\n/g, ' ')}`);
-    log(state, item.controller, `${card?.baseName}'s text is not automated — apply it by hand.`);
+  if (card && outcome.executed.length > 0) {
+    const ran = runCardEffects(state, card, item.controller, item.uid, lookup);
+    const manual = ran.leftover ?? null;
+    if (manual) {
+      state.unautomated.push(`${card.baseName}: ${manual.replace(/\n/g, ' ')}`);
+      log(state, item.controller, `${card.baseName}'s text is not automated — apply it by hand.`);
+    }
   }
   log(state, item.controller, `${card?.baseName ?? item.label ?? 'A chain item'} resolved.`, '340.1');
 
