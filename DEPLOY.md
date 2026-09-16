@@ -24,13 +24,18 @@ pick the repo, then:
 | Setting | Value |
 |---|---|
 | Framework preset | None |
-| Build command | `npm run build:deploy` |
+| Build command | `npm run build` |
 | Build output directory | `dist` |
 | Node version | read from `.nvmrc` (22) |
 
-**The build command matters.** It is `build:deploy`, not `build` — card data is
-not committed to the repo (see `NOTICE.md`), so the host has to fetch it before
-building. Plain `npm run build` produces a site with an empty card database.
+**The build needs no network.** The card dataset is committed to the repo
+(`public/data/`), deliberately: Riftcodex sits behind Cloudflare and refuses
+datacenter IPs, so a build runner cannot fetch it. Do not "fix" the build
+command to fetch cards first — that is what breaks the deploy, not what makes it
+work. `build:deploy` is kept as an alias of `build` so an older Pages
+configuration pointing at it still works.
+
+To refresh the data, run `npm run fetch-cards` **locally** and commit the result.
 
 ### 3. Environment variables
 
