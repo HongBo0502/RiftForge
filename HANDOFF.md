@@ -107,13 +107,16 @@ src/
       combat.ts            damage assignment, showdown resolution
       scoring.ts           Conquer/Hold, burn out, win check
       keywords.ts          keyword parsing + "what isn't automated"
-    game/effects/        card text -> instructions -> execution
-      types.ts             the effect vocabulary (verbs, selectors, triggers)
-      parse.ts             printed card text -> Instruction[]   (strict; refuses rather than guesses)
-      execute.ts           runs instructions through the engine primitives
-      run.ts               bridge used by chain resolution, memoised per card
+      chain.ts             the chain, priority, timing gate
+      statuses.ts          Stun, Buff, Empowered, XP
+      cleanup.ts           cleanups, zone changes, Temporary
       redact.ts            hidden-information enforcement
       rng.ts               seeded RNG
+    game/effects/        card text -> instructions -> execution
+      types.ts             the effect vocabulary (verbs, selectors, triggers)
+      parse.ts             printed card text -> Instruction[]  (strict; refuses rather than guesses)
+      execute.ts           runs instructions through the engine primitives
+      run.ts               bridge used by chain resolution, memoised per card
     game/online/         transport, Supabase adapter, match hook
     game/ui/             playmat board, card preview, deck select, handoff
 DESIGN.md                board design contract — read before UI work
