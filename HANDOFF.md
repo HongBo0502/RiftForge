@@ -71,6 +71,10 @@ ee0cb84  Rules engine: pure reducer over the official Core Rules
 
 **189 tests pass.** Production build is clean (~95 KB gzipped JS).
 
+**This document is the engine track.** Board and visual work has its own brief:
+`DESIGN-HANDOFF.md`. Keep them apart — a session changing how the mat looks
+should not be changing how a rule resolves.
+
 Two decisions the user made. Don't re-litigate them:
 
 - The simulator **enforces** rules; it is not a manual sandbox.
