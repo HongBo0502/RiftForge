@@ -133,6 +133,34 @@ export function drawCard(state: GameState, player: PlayerId): void {
 }
 
 /**
+ * Channels runes from the top of a player's Rune Deck onto the board. 430
+ *
+ * Deterministic — the top of the deck, not a choice — so this is safe for a
+ * card effect to trigger directly, unlike an instruction that would ask the
+ * player to pick among several cards. 430.2.a — runes channel ready by
+ * default; card text says otherwise with "channel N rune(s) exhausted."
+ *
+ * Returns how many actually channelled, which can be fewer than asked for if
+ * the Rune Deck ran out (430.4.a's "or as many as remain").
+ */
+export function channelRunes(
+  state: GameState,
+  player: PlayerId,
+  amount: number,
+  ready = true,
+): number {
+  const p = state.players[player];
+  let channelled = 0;
+  for (let i = 0; i < amount; i++) {
+    const uid = p.runeDeck.shift();
+    if (!uid) break;
+    state.runes[uid] = { uid, controller: player, ready };
+    channelled++;
+  }
+  return channelled;
+}
+
+/**
  * Win check, run during cleanups: at or above the Victory Score, and ahead of
  * every opponent. 472
  */

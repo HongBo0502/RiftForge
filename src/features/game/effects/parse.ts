@@ -257,9 +257,10 @@ const MATCHERS: Matcher[] = [
     return m ? { verb: 'gainXp', amount: Number(m[1]), who: YOU } : null;
   },
 
-  // "Gain 1 point." 194
+  // "Gain 1 point." / "You score 1 point." (the printed synonym after a
+  // conquer/hold trigger) 194
   (s) => {
-    const m = /^gain (\d+) points?\.?$/i.exec(s);
+    const m = /^(?:gain|you score) (\d+) points?\.?$/i.exec(s);
     return m ? { verb: 'gainPoints', amount: Number(m[1]), who: YOU } : null;
   },
 
@@ -269,6 +270,13 @@ const MATCHERS: Matcher[] = [
     if (!m) return null;
     const target = parseSelector(m[1]);
     return target ? { verb: 'recall', target } : null;
+  },
+
+  // "Channel 1 rune." / "Channel 2 runes exhausted." 430
+  // The top of the Rune Deck, not a choice — safe to run without a target.
+  (s) => {
+    const m = /^channel (\d+|a|an|one|two|three) runes?( exhausted)?\.?$/i.exec(s);
+    return m ? { verb: 'channel', amount: amountIn(m[1]) ?? 1, ready: !m[2] } : null;
   },
 
   // "I have +2 Might." — a continuous stat line, often gated by a Dependent
@@ -346,8 +354,16 @@ export function parseCard(card: Card): ParsedCard {
      * A sentence can chain instructions: "Discard 1, then draw 2." Each part
      * has to parse, or the whole sentence is unparsed — half an effect is not
      * something to apply quietly.
+     *
+     * The `and(?=\s+channel\s)` branch is deliberately narrow — "Draw 1 and
+     * channel 1 rune exhausted." is the only real shape that joins two
+     * instructions with a bare "and" rather than ", then". A general "and"
+     * split would also cut selector phrases like "a unit and an enemy unit".
      */
-    const parts = text.split(/,\s*then\s+|\.\s+/).map((p) => p.trim()).filter(Boolean);
+    const parts = text
+      .split(/,\s*then\s+|\.\s+|\s+and(?=\s+channel\s)/)
+      .map((p) => p.trim())
+      .filter(Boolean);
     const instructions: Instruction[] = [];
     let ok = true;
     for (const part of parts) {

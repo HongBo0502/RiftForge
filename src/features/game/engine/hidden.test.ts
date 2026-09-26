@@ -246,6 +246,74 @@ describe('Gear (147-152)', () => {
     }
   });
 
+  it('pays the Equip cost actually printed on the card, not a flat 1 Power (818.1.c)', () => {
+    // Blighted Battleaxe: "[Equip] :rb_energy_1::rb_rune_fury:" — 1 Energy AND
+    // 1 Fury Power. A cost of just "1 Power of the gear's own domain" would
+    // never touch Energy at all.
+    const axe = BY_ID.get('69bff35558d0fbca04e93716')!;
+    const state = table('p1');
+    const gearUid = inHand(state, axe, 'g1');
+    const played = reduce(state, { type: 'PLAY_CARD', uid: gearUid }, lookup);
+    expect(played.ok).toBe(true);
+    if (!played.ok) return;
+
+    const withUnit = structuredClone(played.state);
+    withUnit.instances.u1 = { uid: 'u1', cardId: plainCard.id, owner: 'p1' };
+    withUnit.units.u1 = {
+      uid: 'u1',
+      controller: 'p1',
+      location: { kind: 'base', player: 'p1' },
+      ready: true,
+      damage: 0,
+      mightBonus: 0,
+      buffs: 0,
+      stunned: false,
+      empowered: false,
+      designation: null,
+      enteredOnTurn: 1,
+      movesThisTurn: 0,
+    };
+
+    const before = withUnit.players.p1;
+    const equipped = reduce(withUnit, { type: 'EQUIP_GEAR', uid: gearUid, unitUid: 'u1' }, lookup);
+    expect(equipped.ok).toBe(true);
+    if (!equipped.ok) return;
+
+    expect(equipped.state.players.p1.energy).toBe(before.energy - 1);
+    expect(equipped.state.players.p1.power.Fury).toBe((before.power.Fury ?? 0) - 1);
+  });
+
+  it('refuses an Equip whose cost is not a plain resource cost (818.1.c)', () => {
+    // Blade of the Ruined King: "[Equip] — :rb_rune_order:, Kill a friendly unit"
+    const blade = BY_ID.get('69bc5bdad308c64675ca8830')!;
+    const state = table('p1');
+    const gearUid = inHand(state, blade, 'g1');
+    const played = reduce(state, { type: 'PLAY_CARD', uid: gearUid }, lookup);
+    expect(played.ok).toBe(true);
+    if (!played.ok) return;
+
+    const withUnit = structuredClone(played.state);
+    withUnit.instances.u1 = { uid: 'u1', cardId: plainCard.id, owner: 'p1' };
+    withUnit.units.u1 = {
+      uid: 'u1',
+      controller: 'p1',
+      location: { kind: 'base', player: 'p1' },
+      ready: true,
+      damage: 0,
+      mightBonus: 0,
+      buffs: 0,
+      stunned: false,
+      empowered: false,
+      designation: null,
+      enteredOnTurn: 1,
+      movesThisTurn: 0,
+    };
+
+    const result = reduce(withUnit, { type: 'EQUIP_GEAR', uid: gearUid, unitUid: 'u1' }, lookup);
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.rule).toBe('818.1.c');
+  });
+
   it('refuses to attach to an opponent unit (818)', () => {
     const state = table('p1');
     const gearUid = inHand(state, gearCard, 'g1');

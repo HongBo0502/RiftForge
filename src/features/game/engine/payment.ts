@@ -1,5 +1,5 @@
 import type { Card, Domain } from '@/types';
-import { keywordValue } from './keywords';
+import { keywordValue, type EquipCost } from './keywords';
 import type { GameState, PlayerId } from './types';
 
 /**
@@ -198,4 +198,83 @@ export function canAfford(
   options: PlanOptions = {},
 ): boolean {
   return planPayment(state, player, card, lookup, options).ok;
+}
+
+/**
+ * A payment plan for an Equip ability's cost. 818.1.c
+ *
+ * A separate planner from `planPayment` because an Equip cost is read off the
+ * gear's own text (`keywords.ts`'s `equipCost`), not off `card.energy` /
+ * `card.power` / `card.domains` — those describe the cost to *play* the gear,
+ * a different number. Same settling order as `planPayment`: domain-locked
+ * Power first (scarcest), then any-domain Power, then Energy.
+ */
+export function planEquipCost(
+  state: GameState,
+  player: PlayerId,
+  cost: EquipCost,
+  lookup: (id: string) => Card | undefined,
+): PlanResult {
+  const p = state.players[player];
+  const plan: PaymentPlan = { exhaust: [], recycle: [], energyFromPool: 0, powerFromPool: {} };
+  const owned = Object.values(state.runes).filter((r) => r.controller === player);
+  const spentRune = new Set<string>();
+
+  for (const [domain, amount] of Object.entries(cost.power) as [Domain, number][]) {
+    let owed = amount;
+    const held = p.power[domain] ?? 0;
+    const fromPool = Math.min(held, owed);
+    if (fromPool > 0) {
+      plan.powerFromPool[domain] = (plan.powerFromPool[domain] ?? 0) + fromPool;
+      owed -= fromPool;
+    }
+    for (const rune of owned) {
+      if (owed <= 0) break;
+      if (spentRune.has(rune.uid) || domainOf(state, rune.uid, lookup) !== domain) continue;
+      plan.recycle.push(rune.uid);
+      spentRune.add(rune.uid);
+      owed -= 1;
+    }
+    if (owed > 0) {
+      return { ok: false, reason: `Equip needs ${amount} ${domain} Power.`, rule: '818.1.c' };
+    }
+  }
+
+  // 135.2.e.5 — the [A] shorthand: any Domain's Power will do.
+  let anyOwed = cost.anyPower;
+  for (const [domain, held] of Object.entries(p.power) as [Domain, number][]) {
+    if (anyOwed <= 0) break;
+    const spent = plan.powerFromPool[domain] ?? 0;
+    const free = (held ?? 0) - spent;
+    if (free <= 0) continue;
+    const take = Math.min(free, anyOwed);
+    plan.powerFromPool[domain] = spent + take;
+    anyOwed -= take;
+  }
+  for (const rune of owned) {
+    if (anyOwed <= 0) break;
+    if (spentRune.has(rune.uid)) continue;
+    plan.recycle.push(rune.uid);
+    spentRune.add(rune.uid);
+    anyOwed -= 1;
+  }
+  if (anyOwed > 0) {
+    return { ok: false, reason: `Equip needs ${cost.anyPower} more Power.`, rule: '818.1.c' };
+  }
+
+  let energyOwed = cost.energy;
+  const fromPool = Math.min(p.energy, energyOwed);
+  plan.energyFromPool = fromPool;
+  energyOwed -= fromPool;
+  for (const rune of owned) {
+    if (energyOwed <= 0) break;
+    if (!rune.ready || spentRune.has(rune.uid)) continue;
+    plan.exhaust.push(rune.uid);
+    energyOwed -= 1;
+  }
+  if (energyOwed > 0) {
+    return { ok: false, reason: 'Not enough Energy to Equip.', rule: '818.1.c' };
+  }
+
+  return { ok: true, plan };
 }

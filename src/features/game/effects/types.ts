@@ -71,6 +71,8 @@ export type Instruction =
   | { verb: 'gainXp'; amount: number; who: Selector }
   | { verb: 'gainPoints'; amount: number; who: Selector }
   | { verb: 'recall'; target: Selector }
+  /** "Channel N rune(s) exhausted." 430 — deterministic, so not a choice. */
+  | { verb: 'channel'; amount: number; ready: boolean }
   /*
    * The next three are never dispatched through `execute()` — they describe
    * board state, not a one-shot or triggered event, so they are read directly

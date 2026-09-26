@@ -6,6 +6,7 @@ import {
   clauseIsActive,
   dependencyContext,
   dependentClauses,
+  equipCost,
   hasKeyword,
   keywordValue,
   unautomatedText,
@@ -374,6 +375,26 @@ describe('Quick-Draw (819)', () => {
 
     const played = reduce(state, { type: 'PLAY_CARD', uid: 'g1' }, lookup);
     expect(played.ok).toBe(true);
+  });
+});
+
+describe('Equip cost (818.1.c)', () => {
+  it('reads a plain single-domain Power cost', () => {
+    // B.F. Sword: "[Equip] :rb_rune_order:"
+    const sword = BY_ID.get('69bc5bddd308c64675ca886f')!;
+    expect(equipCost(sword)).toEqual({ energy: 0, power: { Order: 1 }, anyPower: 0 });
+  });
+
+  it('reads an Energy + Power cost', () => {
+    // Blighted Battleaxe: "[Equip] :rb_energy_1::rb_rune_fury:"
+    const axe = BY_ID.get('69bff35558d0fbca04e93716')!;
+    expect(equipCost(axe)).toEqual({ energy: 1, power: { Fury: 1 }, anyPower: 0 });
+  });
+
+  it('refuses a cost with a non-resource component rather than dropping it', () => {
+    // Blade of the Ruined King: "[Equip] — :rb_rune_order:, Kill a friendly unit"
+    const blade = BY_ID.get('69bc5bdad308c64675ca8830')!;
+    expect(equipCost(blade)).toBeNull();
   });
 });
 

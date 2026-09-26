@@ -9,10 +9,10 @@ import {
 import { cleanup, expireTemporary } from './cleanup';
 import { shuffle } from './rng';
 import { closeShowdown, openShowdown, type CardLookup } from './combat';
-import { conditionActive, dependencyContext, hasKeyword, unautomatedText } from './keywords';
+import { conditionActive, dependencyContext, equipCost, hasKeyword, unautomatedText } from './keywords';
 import { parseCardCached, stripAutomatedEffectLines } from '../effects/parse';
-import { type PaymentPlan, planPayment } from './payment';
-import { checkVictory, drawCard, score } from './scoring';
+import { type PaymentPlan, planEquipCost, planPayment } from './payment';
+import { channelRunes, checkVictory, drawCard, score } from './scoring';
 import { expireStatuses } from './statuses';
 import type {
   ActionResult,
@@ -142,14 +142,7 @@ function applyPhase(state: GameState, lookup: CardLookup): void {
       // 485.7 — the player going second channels an extra rune on their first turn.
       const extra = player !== state.firstPlayer && state.turn <= 2 ? 1 : 0;
       const want = RUNES_PER_CHANNEL + extra;
-      const p = state.players[player];
-      const channelled = Math.min(want, p.runeDeck.length);
-
-      for (let i = 0; i < channelled; i++) {
-        const uid = p.runeDeck.shift();
-        if (!uid) break;
-        state.runes[uid] = { uid, controller: player, ready: true };
-      }
+      const channelled = channelRunes(state, player, want);
       log(
         state,
         player,
@@ -705,19 +698,16 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
         return reject(`${card.baseName} has no Equip ability.`, '818');
       }
 
-      // Equip costs 1 Power of the gear's own domain.
-      const domain = (card.domains.find((d) => d !== 'Colorless') ?? 'Colorless') as Domain;
-      const p = draft.players[player];
-      if ((p.power[domain] ?? 0) > 0) {
-        p.power[domain] = (p.power[domain] ?? 0) - 1;
-      } else {
-        const rune = Object.values(draft.runes).find(
-          (r) => r.controller === player && cardOf(draft, r.uid, lookup)?.domains[0] === domain,
-        );
-        if (!rune) return reject(`Equip costs 1 ${domain} Power.`, '818');
-        delete draft.runes[rune.uid];
-        p.runeDeck.push(rune.uid);
+      // 818.1.c — Equip's cost is printed on the card, not assumed. A cost
+      // this reader cannot fully parse (a non-resource cost, e.g. "Kill a
+      // friendly unit") is refused rather than silently skipped.
+      const cost = equipCost(card);
+      if (!cost) {
+        return reject(`${card.baseName}'s Equip cost isn't automated — apply it by hand.`, '818.1.c');
       }
+      const planned = planEquipCost(draft, player, cost, lookup);
+      if (!planned.ok) return reject(planned.reason, planned.rule);
+      spendPlan(draft, player, planned.plan, lookup);
 
       // 152.2 — attached gear follows its unit's location.
       gear.attachedTo = unit.uid;

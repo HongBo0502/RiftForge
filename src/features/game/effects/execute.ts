@@ -1,6 +1,6 @@
 import type { Card } from '@/types';
 import { toZone } from '../engine/cleanup';
-import { drawCard } from '../engine/scoring';
+import { channelRunes, drawCard } from '../engine/scoring';
 import { buff, disempower, empower, gainXp, stun } from '../engine/statuses';
 import type { GameState, PlayerId, UnitState } from '../engine/types';
 import { OPPONENT } from '../engine/types';
@@ -225,6 +225,11 @@ export function execute(
           const unit = state.units[uid];
           if (unit) unit.location = { kind: 'base', player: unit.controller };
         }
+        break;
+
+      case 'channel':
+        // 430 — the top of the caster's own Rune Deck, never a choice.
+        channelRunes(state, context.controller, instruction.amount, instruction.ready);
         break;
 
       // staticMight/entersReady/entersExhausted describe board state, not a

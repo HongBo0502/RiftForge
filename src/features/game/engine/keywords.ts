@@ -1,4 +1,4 @@
-import type { Card } from '@/types';
+import type { Card, Domain } from '@/types';
 import type { GameState, PlayerId } from './types';
 
 /**
@@ -154,6 +154,65 @@ export function keywordValue(card: Card, keyword: string): number | null {
 
 export function hasKeyword(card: Card, keyword: string): boolean {
   return keywordValue(card, keyword) !== null;
+}
+
+/** What an Equip ability actually costs. 818.1.c */
+export interface EquipCost {
+  energy: number;
+  /** Power of a specific domain, e.g. from `:rb_rune_fury:`. */
+  power: Partial<Record<Domain, number>>;
+  /** Power of any domain, from `:rb_rune_rainbow:` — the [A] shorthand (135.2.e.5). */
+  anyPower: number;
+}
+
+const RUNE_DOMAIN = new Set<string>(['fury', 'calm', 'mind', 'body', 'chaos', 'order']);
+
+/**
+ * Reads the resource cost off an "[Equip] <symbols>" line. 818.1.c
+ *
+ * Printed as "[Equip] :rb_energy_1::rb_rune_fury:" — symbols right after the
+ * bare marker, not a number inside it (`keywordValue`'s `[Equip N]` reading
+ * does not apply here; Equip never carries its cost that way in the dataset).
+ *
+ * Returns null when the line has anything beyond Energy/Power symbols —
+ * "Equip [3][A], Kill a friendly unit" has a cost this cannot pay on its own,
+ * and guessing which unit to kill would be worse than refusing. A card whose
+ * Equip cost cannot be read this way keeps its Equip ability off the board's
+ * automatic offer; the rules text still surfaces in the apply-by-hand panel.
+ */
+export function equipCost(card: Card): EquipCost | null {
+  const line = (card.text ?? '').split('\n').find((l) => /\[Equip\]/i.test(l));
+  if (!line) return null;
+
+  const afterMarker = line.split(/\[Equip\]/i)[1] ?? '';
+  const segment = afterMarker.split('(')[0];
+  const tokens = segment.match(/:rb_(?:energy_\d+|rune_[a-z]+):/gi) ?? [];
+  // Every non-whitespace character must belong to a matched token, or there is
+  // a real cost here (a non-resource cost, or a symbol this reader misses).
+  if (segment.replace(/\s+/g, '') !== tokens.join('')) return null;
+  if (tokens.length === 0) return null;
+
+  let energy = 0;
+  let anyPower = 0;
+  const power: Partial<Record<Domain, number>> = {};
+  for (const token of tokens) {
+    const energyMatch = /^:rb_energy_(\d+):$/i.exec(token);
+    if (energyMatch) {
+      energy += Number(energyMatch[1]);
+      continue;
+    }
+    const runeMatch = /^:rb_rune_([a-z]+):$/i.exec(token);
+    const name = runeMatch?.[1].toLowerCase() ?? '';
+    if (name === 'rainbow') {
+      anyPower += 1;
+    } else if (RUNE_DOMAIN.has(name)) {
+      const domain = (name[0].toUpperCase() + name.slice(1)) as Domain;
+      power[domain] = (power[domain] ?? 0) + 1;
+    } else {
+      return null; // an Equip symbol this reader does not recognise
+    }
+  }
+  return { energy, power, anyPower };
 }
 
 /** Every bracketed marker on a card, keywords and otherwise. */

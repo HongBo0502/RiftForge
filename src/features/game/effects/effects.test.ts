@@ -142,6 +142,14 @@ describe('reading an instruction', () => {
     expect(parseInstruction('Stun a unit at a battlefield.')).toMatchObject({ verb: 'stun' });
   });
 
+  it('reads "you score N point" as the same verb as "gain N point" (194)', () => {
+    expect(parseInstruction('You score 1 point.')).toEqual({
+      verb: 'gainPoints',
+      amount: 1,
+      who: { kind: 'player', side: 'you' },
+    });
+  });
+
   it('reads a Might change and its duration', () => {
     expect(parseInstruction('Give a unit +2 :rb_might: this turn.')).toMatchObject({
       verb: 'might',
@@ -151,6 +159,15 @@ describe('reading an instruction', () => {
     expect(parseInstruction('Give an enemy unit here -1 :rb_might: this turn.')).toMatchObject({
       verb: 'might',
       amount: -1,
+    });
+  });
+
+  it('reads Channel, ready by default and exhausted when the card says so (430)', () => {
+    expect(parseInstruction('Channel 1 rune.')).toEqual({ verb: 'channel', amount: 1, ready: true });
+    expect(parseInstruction('Channel 2 runes exhausted.')).toEqual({
+      verb: 'channel',
+      amount: 2,
+      ready: false,
     });
   });
 
@@ -223,6 +240,19 @@ describe('reading a card', () => {
 });
 
 describe('executing instructions', () => {
+  it('channels from the top of the caster\'s Rune Deck (430)', () => {
+    const state = table();
+    state.instances['r1'] = { uid: 'r1', cardId: anyUnit.id, owner: 'p1' };
+    state.players.p1.runeDeck.unshift('r1');
+    const before = state.players.p1.runeDeck.length;
+
+    execute(state, [parseInstruction('Channel 1 rune exhausted.')!], { controller: 'p1' }, might(state));
+
+    expect(state.runes.r1).toBeDefined();
+    expect(state.runes.r1.ready).toBe(false);
+    expect(state.players.p1.runeDeck).toHaveLength(before - 1);
+  });
+
   it('draws, and burn out still applies (431)', () => {
     const state = table();
     const before = state.players.p1.hand.length;
@@ -381,10 +411,10 @@ describe('coverage', () => {
    * that makes the parser read fewer cards fails here rather than quietly
    * shrinking what the game can play.
    */
-  it('fully reads at least 215 of the printed cards', () => {
+  it('fully reads at least 219 of the printed cards', () => {
     const playable = CARDS.filter((c) => ['Unit', 'Spell', 'Gear'].includes(c.type ?? ''));
     const full = playable.filter((c) => c.text && parseCard(c).unparsed.length === 0);
-    expect(full.length).toBeGreaterThanOrEqual(215);
+    expect(full.length).toBeGreaterThanOrEqual(219);
   });
 
   it('never invents an instruction for text it does not understand', () => {
