@@ -221,6 +221,20 @@ describe('playing cards', () => {
     expect(played.players.p1.hand).not.toContain(unitUid);
   });
 
+  it('enters ready when its text overrides the exhausted-on-entry default (178.1.a.1)', () => {
+    // Eager Drakehound's whole printed text is "I enter ready."
+    const drakehound = BY_ID.get('69bc5be4d308c64675ca88f3')!;
+    const game = grantResources(newGame(), 'p1');
+    game.players.p1.power.Fury = 99;
+    game.instances['drakehound-1'] = { uid: 'drakehound-1', cardId: drakehound.id, owner: 'p1' };
+    game.players.p1.hand.push('drakehound-1');
+
+    const played = apply(game, { type: 'PLAY_CARD', uid: 'drakehound-1' });
+    expect(played.units['drakehound-1'].ready).toBe(true);
+    // The engine applied it, so the "apply by hand" panel should not repeat it.
+    expect(played.unautomated).toEqual([]);
+  });
+
   it('flags card text it does not automate rather than pretending it resolved', () => {
     const game = grantResources(newGame(), 'p1');
     const spellUid = game.players.p1.hand.find((uid) => {

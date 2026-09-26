@@ -1,5 +1,7 @@
 import type { Card } from '@/types';
 import type {
+  Condition,
+  DependentKeyword,
   Duration,
   Instruction,
   ParsedAbility,
@@ -111,6 +113,26 @@ export function parseSelector(phrase: string): Selector | null {
     where,
     chosen: !everything,
     count: count === Infinity ? Number.POSITIVE_INFINITY : count,
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Dependent Keyword conditions — 727
+// ---------------------------------------------------------------------------
+
+/**
+ * Reads a leading `[Legion][>]`, `[Level N][>]` or `[Empowered][>]` off a
+ * sentence. 727.1 — "Starting from the Keyword to the end of the clause,
+ * the entire statement is the Dependent Ability", so what follows is gated by
+ * the condition, not a separate unconditional fact.
+ */
+function leadingCondition(sentence: string): { condition: Condition | null; rest: string } {
+  const m = /^\[(Legion|Level|Empowered)(?:\s+(\d+))?\]\[>\]\s*/i.exec(sentence);
+  if (!m) return { condition: null, rest: sentence };
+  const keyword = (m[1][0].toUpperCase() + m[1].slice(1).toLowerCase()) as DependentKeyword;
+  return {
+    condition: { keyword, value: m[2] ? Number(m[2]) : null },
+    rest: sentence.slice(m[0].length),
   };
 }
 
@@ -248,7 +270,32 @@ const MATCHERS: Matcher[] = [
     const target = parseSelector(m[1]);
     return target ? { verb: 'recall', target } : null;
   },
+
+  // "I have +2 Might." — a continuous stat line, often gated by a Dependent
+  // Keyword (see `leadingCondition`). Not "give" (a one-shot change to
+  // someone chosen) — this is always self, and lasts as long as the card is
+  // on the board. 143
+  (s) => STATIC_MIGHT_RE.test(s) ? { verb: 'staticMight', amount: Number(STATIC_MIGHT_RE.exec(s)![1]) } : null,
+
+  // "I enter ready." — overrides 178.1.a.1's exhausted-on-entry default.
+  (s) => (ENTERS_READY_RE.test(s) ? { verb: 'entersReady' } : null),
+
+  // "This enters exhausted." — overrides 147's ready-on-entry default for Gear.
+  (s) => (ENTERS_EXHAUSTED_RE.test(s) ? { verb: 'entersExhausted' } : null),
 ];
+
+/**
+ * These three shapes are read here, and also matched again — verbatim — by
+ * `stripAutomatedEffectLines` below, which keeps the "apply by hand" panel
+ * from telling a player to do by hand what `combat.ts`/`reducer.ts` already
+ * did for them. Keep the two in step.
+ */
+export const STATIC_MIGHT_RE = /^i have ([+-]\d+) (?::rb_might:|might)\.?$/i;
+export const ENTERS_READY_RE = /^i enter ready\.?$/i;
+export const ENTERS_EXHAUSTED_RE = /^this enters exhausted\.?$/i;
+
+/** Verbs read directly by the engine rather than run through `execute()`. */
+export const BOARD_STATE_VERBS = ['staticMight', 'entersReady', 'entersExhausted'] as const;
 
 /** Reads one sentence, or returns null if the vocabulary does not cover it. */
 export function parseInstruction(sentence: string): Instruction | null {
@@ -277,7 +324,8 @@ export function parseCard(card: Card): ParsedCard {
     if (/^(\[[^\]]*\]\s*)+$/.test(sentence)) continue;
     if (sentence === '[NO TEXT]') continue;
 
-    const withoutMarkers = sentence.replace(/\[[^\]]*\]/g, '').trim();
+    const { condition, rest } = leadingCondition(sentence);
+    const withoutMarkers = rest.replace(/\[[^\]]*\]/g, '').trim();
     /*
      * What is left may be nothing but cost symbols — "[Empower] :rb_energy_3:"
      * is a keyword and its cost, not an instruction. This has to run *after* the
@@ -311,9 +359,55 @@ export function parseCard(card: Card): ParsedCard {
       instructions.push(instruction);
     }
 
-    if (ok && instructions.length > 0) abilities.push({ trigger, instructions });
+    if (ok && instructions.length > 0) abilities.push({ trigger, instructions, condition });
     else unparsed.push(sentence);
   }
 
   return { abilities, unparsed };
+}
+
+/**
+ * Parses once per card, then reuses the answer.
+ *
+ * Card text never changes at runtime, and this is called from combat math
+ * (`unitMight`, on every Might read) as well as from resolution, so the cache
+ * matters, not just the parse itself.
+ */
+const parseCache = new Map<string, ParsedCard>();
+
+export function parseCardCached(card: Card): ParsedCard {
+  const hit = parseCache.get(card.id);
+  if (hit) return hit;
+  const parsed = parseCard(card);
+  parseCache.set(card.id, parsed);
+  return parsed;
+}
+
+/** Test seam: clears the memoised parses. */
+export function clearParseCache(): void {
+  parseCache.clear();
+}
+
+/**
+ * Drops lines from an already-computed "apply by hand" text that the engine
+ * now handles itself — `combat.ts` for `staticMight`, `reducer.ts` for
+ * `entersReady`/`entersExhausted` — so the panel does not ask a player to do
+ * by hand what already happened. `unautomatedText` (engine/keywords.ts) has
+ * already dropped an *inactive* Dependent Keyword's line and stripped the
+ * keyword markers off an active one, which is what lets the plain-text
+ * regexes below still match here.
+ */
+export function stripAutomatedEffectLines(text: string): string {
+  return text
+    .split('\n')
+    .filter((line) => {
+      const trimmed = line.trim();
+      return (
+        !STATIC_MIGHT_RE.test(trimmed) &&
+        !ENTERS_READY_RE.test(trimmed) &&
+        !ENTERS_EXHAUSTED_RE.test(trimmed)
+      );
+    })
+    .join('\n')
+    .trim();
 }

@@ -9,7 +9,8 @@ import {
 import { cleanup, expireTemporary } from './cleanup';
 import { shuffle } from './rng';
 import { closeShowdown, openShowdown, type CardLookup } from './combat';
-import { dependencyContext, hasKeyword, unautomatedText } from './keywords';
+import { conditionActive, dependencyContext, hasKeyword, unautomatedText } from './keywords';
+import { parseCardCached, stripAutomatedEffectLines } from '../effects/parse';
 import { type PaymentPlan, planPayment } from './payment';
 import { checkVictory, drawCard, score } from './scoring';
 import { expireStatuses } from './statuses';
@@ -532,6 +533,19 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
         ? { kind: 'battlefield', index: facedown.battlefield }
         : undefined;
 
+      /*
+       * "I enter ready." / "This enters exhausted." override 178.1.a.1's and
+       * 147's entry defaults. Read directly here rather than through
+       * `execute()` — see effects/types.ts's note on `entersReady`.
+       */
+      const entryContext = dependencyContext(draft, actor, action.uid);
+      const entryHas = (verb: 'entersReady' | 'entersExhausted'): boolean =>
+        parseCardCached(card).abilities.some(
+          (a) =>
+            (!a.condition || conditionActive(a.condition.keyword, a.condition.value, entryContext)) &&
+            a.instructions.some((i) => i.verb === verb),
+        );
+
       if (card.type === 'Unit') {
         // Units enter at their controller's base unless played to a
         // battlefield they already hold.
@@ -560,7 +574,7 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
            * played unit conquering immediately. Accelerate (805.1) is the
            * intended way around it, and pays for the privilege.
            */
-          ready: accelerated,
+          ready: accelerated || entryHas('entersReady'),
           damage: 0,
           mightBonus: 0,
           buffs: 0,
@@ -578,7 +592,7 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
           uid: action.uid,
           controller: actor,
           location: forced ?? { kind: 'base', player: actor },
-          ready: true,
+          ready: !entryHas('entersExhausted'),
           attachedTo: null,
         };
         log(draft, actor, `Played ${card.baseName}${fromHidden ? ' from hidden' : ''}.`);
@@ -606,7 +620,10 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
       p.finalizedThisTurn.push(action.uid);
 
       if (card.type === 'Unit' || card.type === 'Gear') {
-        const manual = unautomatedText(card, dependencyContext(draft, actor, action.uid));
+        const raw = unautomatedText(card, dependencyContext(draft, actor, action.uid));
+        // Drop lines the engine already applied itself: staticMight (unitMight,
+        // recomputed live) and entersReady/entersExhausted (set just above).
+        const manual = raw ? stripAutomatedEffectLines(raw) || null : raw;
         if (manual) {
           draft.unautomated.push(`${card.baseName}: ${manual.replace(/\n/g, ' ')}`);
           log(draft, actor, `${card.baseName}'s text is not automated — apply it by hand.`);

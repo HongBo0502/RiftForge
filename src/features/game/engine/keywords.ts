@@ -99,12 +99,22 @@ export function dependencyContext(
   };
 }
 
-/** Whether a dependent clause's ability currently applies. */
-export function clauseIsActive(clause: DependentClause, context: DependencyContext): boolean {
-  switch (clause.keyword) {
+/**
+ * Whether a Dependent Keyword's condition currently holds. 727
+ *
+ * Shared by `clauseIsActive` (keyword-marker text) and the effects parser's
+ * `Condition` (`effects/parse.ts`'s `leadingCondition`) — one predicate, so
+ * the two readings of "[Empowered][>]" can never disagree.
+ */
+export function conditionActive(
+  keyword: DependentKeyword,
+  value: number | null,
+  context: DependencyContext,
+): boolean {
+  switch (keyword) {
     // 824.1.b.1 — "While you have N or more XP".
     case 'Level':
-      return context.xp >= (clause.value ?? 1);
+      return context.xp >= (value ?? 1);
     // 812.1.b.1 — "If you have played another card this turn".
     case 'Legion':
       return context.playedAnotherCard;
@@ -112,6 +122,11 @@ export function clauseIsActive(clause: DependentClause, context: DependencyConte
     case 'Empowered':
       return context.empowered;
   }
+}
+
+/** Whether a dependent clause's ability currently applies. */
+export function clauseIsActive(clause: DependentClause, context: DependencyContext): boolean {
+  return conditionActive(clause.keyword, clause.value, context);
 }
 
 export type AutomatedKeyword = (typeof AUTOMATED_KEYWORDS)[number];

@@ -1,5 +1,6 @@
 import type { Card } from '@/types';
-import { keywordValue } from './keywords';
+import { parseCardCached } from '../effects/parse';
+import { conditionActive, dependencyContext, keywordValue } from './keywords';
 import { checkVictory, score } from './scoring';
 import type { GameState, PlayerId, UnitState } from './types';
 import { OPPONENT } from './types';
@@ -35,9 +36,36 @@ export function unitMight(state: GameState, uid: string, lookup: CardLookup): nu
   if (card && unit.designation === 'attacker') role = keywordValue(card, 'Assault') ?? 0;
   if (card && unit.designation === 'defender') role = keywordValue(card, 'Shield') ?? 0;
 
+  const staticBonus = card ? staticMightBonus(state, unit, card) : 0;
+
   // 143.2.b — Might below 0 is treated as 0.
   // 703 — each buff counter is +1 Might.
-  return Math.max(0, base + unit.mightBonus + unit.buffs + role);
+  return Math.max(0, base + staticBonus + unit.mightBonus + unit.buffs + role);
+}
+
+/**
+ * The sum of a card's printed "I have +N Might" lines that currently apply.
+ *
+ * Continuous, unlike `unit.mightBonus` (a one-shot change that got added to a
+ * running total) — recomputed from the card's text every time, so a
+ * Dependent-Keyword-gated line (`[Empowered][>] I have +2 Might.`) turns on
+ * and off with the condition instead of being baked in at play.
+ */
+function staticMightBonus(state: GameState, unit: UnitState, card: Card): number {
+  const parsed = parseCardCached(card);
+  if (parsed.abilities.length === 0) return 0;
+  const context = dependencyContext(state, unit.controller, unit.uid);
+
+  let bonus = 0;
+  for (const ability of parsed.abilities) {
+    if (ability.condition && !conditionActive(ability.condition.keyword, ability.condition.value, context)) {
+      continue;
+    }
+    for (const instruction of ability.instructions) {
+      if (instruction.verb === 'staticMight') bonus += instruction.amount;
+    }
+  }
+  return bonus;
 }
 
 /**

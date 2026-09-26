@@ -154,6 +154,13 @@ describe('reading an instruction', () => {
     });
   });
 
+  it('reads a static Might line and enter-state overrides', () => {
+    expect(parseInstruction('I have +2 :rb_might:.')).toEqual({ verb: 'staticMight', amount: 2 });
+    expect(parseInstruction('I have -1 :rb_might:.')).toEqual({ verb: 'staticMight', amount: -1 });
+    expect(parseInstruction('I enter ready.')).toEqual({ verb: 'entersReady' });
+    expect(parseInstruction('This enters exhausted.')).toEqual({ verb: 'entersExhausted' });
+  });
+
   it('refuses a Might change with a floor it cannot model', () => {
     // "to a minimum of 1" changes the arithmetic; applying the bonus without it
     // would take a unit below where the card allows.
@@ -167,7 +174,7 @@ describe('reading an instruction', () => {
       'Look at the top 3 cards of your Main Deck.',
       'They deal damage equal to their Mights to each other.',
       'Counter a spell.',
-      'I have +1 :rb_might:.',
+      'Recycle the rest.',
     ]) {
       expect(parseInstruction(sentence), sentence).toBeNull();
     }
@@ -198,6 +205,20 @@ describe('reading a card', () => {
     const parsed = parseCard(card);
     expect(parsed.abilities[0].trigger).toEqual({ on: 'play' });
     expect(parsed.abilities[0].instructions[0]).toMatchObject({ verb: 'draw' });
+  });
+
+  it('reads a Dependent Keyword clause as a condition, not a guess (727)', () => {
+    const card = { text: '[Empowered][>] I have +2 :rb_might:.' } as Card;
+    const parsed = parseCard(card);
+    expect(parsed.unparsed).toEqual([]);
+    expect(parsed.abilities[0].condition).toEqual({ keyword: 'Empowered', value: null });
+    expect(parsed.abilities[0].instructions[0]).toEqual({ verb: 'staticMight', amount: 2 });
+  });
+
+  it('reads [Level N] with its number', () => {
+    const card = { text: '[Level 3][>] I have +1 :rb_might:.' } as Card;
+    const parsed = parseCard(card);
+    expect(parsed.abilities[0].condition).toEqual({ keyword: 'Level', value: 3 });
   });
 });
 
@@ -323,16 +344,47 @@ describe('end to end, through the chain', () => {
   });
 });
 
+describe('static Might (143, 727)', () => {
+  const empoweredUnit = { id: 'synthetic-empowered', type: 'Unit', might: 3, text: '[Empowered][>] I have +2 :rb_might:.' } as Card;
+  const synthLookup = (cardId: string): Card | undefined =>
+    cardId === empoweredUnit.id ? empoweredUnit : lookup(cardId);
+
+  it('applies only while the Dependent Keyword condition holds', () => {
+    const state = table();
+    state.instances.u1 = { uid: 'u1', cardId: empoweredUnit.id, owner: 'p1' };
+    state.units.u1 = {
+      uid: 'u1',
+      controller: 'p1',
+      location: { kind: 'battlefield', index: 0 },
+      ready: true,
+      damage: 0,
+      mightBonus: 0,
+      buffs: 0,
+      stunned: false,
+      empowered: false,
+      designation: null,
+      enteredOnTurn: 1,
+      movesThisTurn: 0,
+    };
+
+    expect(unitMight(state, 'u1', synthLookup)).toBe(3);
+    state.units.u1.empowered = true;
+    expect(unitMight(state, 'u1', synthLookup)).toBe(5);
+    state.units.u1.empowered = false;
+    expect(unitMight(state, 'u1', synthLookup)).toBe(3);
+  });
+});
+
 describe('coverage', () => {
   /*
    * A floor, not a target. It exists so the number can only go up: a change
    * that makes the parser read fewer cards fails here rather than quietly
    * shrinking what the game can play.
    */
-  it('fully reads at least 200 of the printed cards', () => {
+  it('fully reads at least 215 of the printed cards', () => {
     const playable = CARDS.filter((c) => ['Unit', 'Spell', 'Gear'].includes(c.type ?? ''));
     const full = playable.filter((c) => c.text && parseCard(c).unparsed.length === 0);
-    expect(full.length).toBeGreaterThanOrEqual(200);
+    expect(full.length).toBeGreaterThanOrEqual(215);
   });
 
   it('never invents an instruction for text it does not understand', () => {

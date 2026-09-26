@@ -226,6 +226,14 @@ export function execute(
           if (unit) unit.location = { kind: 'base', player: unit.controller };
         }
         break;
+
+      // staticMight/entersReady/entersExhausted describe board state, not a
+      // one-shot event. combat.ts and reducer.ts read them directly; callers
+      // are expected to filter them out before reaching here (run.ts does).
+      case 'staticMight':
+      case 'entersReady':
+      case 'entersExhausted':
+        break;
     }
 
     done.push(instruction);

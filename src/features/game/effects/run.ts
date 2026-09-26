@@ -3,23 +3,14 @@ import { unitMight } from '../engine/combat';
 import { dependencyContext, unautomatedText } from '../engine/keywords';
 import type { GameState, PlayerId } from '../engine/types';
 import { execute, needsNoChoices } from './execute';
-import { parseCard } from './parse';
+import { BOARD_STATE_VERBS, clearParseCache, parseCardCached } from './parse';
 
-/**
- * The bridge between a resolving card and its printed text.
- *
- * Parsing is pure and cheap, but it is the same answer every time for a given
- * card, so results are memoised by card id.
- */
-const cache = new Map<string, ReturnType<typeof parseCard>>();
+/** The bridge between a resolving card and its printed text. Cached by card id. */
+const parsedFor = parseCardCached;
 
-function parsedFor(card: Card) {
-  const hit = cache.get(card.id);
-  if (hit) return hit;
-  const parsed = parseCard(card);
-  cache.set(card.id, parsed);
-  return parsed;
-}
+/** Whether every instruction in an ability is one `execute()` never runs. */
+const isBoardState = (instructions: { verb: string }[]): boolean =>
+  instructions.every((i) => (BOARD_STATE_VERBS as readonly string[]).includes(i.verb));
 
 export interface RunResult {
   /** How many instructions the engine actually carried out. */
@@ -62,6 +53,9 @@ export function runCardEffects(
   const deferred: string[] = [];
 
   for (const ability of parsed.abilities) {
+    // Board-state abilities (staticMight, entersReady, entersExhausted) are
+    // read directly by combat.ts/reducer.ts, not run here — see BOARD_STATE_VERBS.
+    if (isBoardState(ability.instructions)) continue;
     if (ability.trigger !== null) {
       deferred.push('a triggered ability');
       continue;
@@ -95,6 +89,4 @@ export function runCardEffects(
 }
 
 /** Test seam: clears the memoised parses. */
-export function clearEffectCache(): void {
-  cache.clear();
-}
+export const clearEffectCache = clearParseCache;

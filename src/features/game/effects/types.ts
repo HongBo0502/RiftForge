@@ -34,6 +34,21 @@ export type Selector =
 /** How long a modification lasts. 317.2.c */
 export type Duration = 'thisTurn' | 'permanent';
 
+/** The three Dependent Keywords that can gate an ability. 727 */
+export type DependentKeyword = 'Legion' | 'Level' | 'Empowered';
+
+/**
+ * A Dependent Keyword clause gating an ability, e.g. `[Empowered][>]`. 727
+ *
+ * `value` is the N in `[Level N]`; null for keywords that carry no value.
+ * The engine already tracks XP, "played another card this turn" and the
+ * Empowered status (`engine/keywords.ts`), so this is read, not guessed.
+ */
+export interface Condition {
+  keyword: DependentKeyword;
+  value: number | null;
+}
+
 /**
  * One executable instruction.
  *
@@ -55,7 +70,19 @@ export type Instruction =
   | { verb: 'exhaust'; target: Selector }
   | { verb: 'gainXp'; amount: number; who: Selector }
   | { verb: 'gainPoints'; amount: number; who: Selector }
-  | { verb: 'recall'; target: Selector };
+  | { verb: 'recall'; target: Selector }
+  /*
+   * The next three are never dispatched through `execute()` — they describe
+   * board state, not a one-shot or triggered event, so they are read directly
+   * by `combat.ts` (continuously, for `staticMight`) and `reducer.ts` (once,
+   * at the moment a permanent enters). See effects/parse.ts's `BOARD_STATE_VERBS`.
+   */
+  /** "I have +N Might." — a continuous stat line, not a one-shot change. 143 */
+  | { verb: 'staticMight'; amount: number }
+  /** "I enter ready." — overrides 178.1.a.1's default for a Unit. */
+  | { verb: 'entersReady' }
+  /** "This enters exhausted." — overrides 147's default for Gear. */
+  | { verb: 'entersExhausted' };
 
 export type Verb = Instruction['verb'];
 
@@ -72,6 +99,8 @@ export type Trigger =
 export interface ParsedAbility {
   trigger: Trigger | null;
   instructions: Instruction[];
+  /** The Dependent Keyword gating this ability, if any. Null means always active. */
+  condition: Condition | null;
 }
 
 export interface ParsedCard {
