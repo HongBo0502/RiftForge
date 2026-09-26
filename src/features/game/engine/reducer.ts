@@ -10,7 +10,8 @@ import { cleanup, expireTemporary } from './cleanup';
 import { shuffle } from './rng';
 import { closeShowdown, openShowdown, type CardLookup } from './combat';
 import { conditionActive, dependencyContext, equipCost, hasKeyword, unautomatedText } from './keywords';
-import { parseCardCached, stripAutomatedEffectLines } from '../effects/parse';
+import { activatableAbility } from '../effects/run';
+import { parseCardCached, stripAutomatedLines } from '../effects/parse';
 import { type PaymentPlan, planEquipCost, planPayment } from './payment';
 import { channelRunes, checkVictory, drawCard, score } from './scoring';
 import { expireStatuses } from './statuses';
@@ -615,8 +616,9 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
       if (card.type === 'Unit' || card.type === 'Gear') {
         const raw = unautomatedText(card, dependencyContext(draft, actor, action.uid));
         // Drop lines the engine already applied itself: staticMight (unitMight,
-        // recomputed live) and entersReady/entersExhausted (set just above).
-        const manual = raw ? stripAutomatedEffectLines(raw) || null : raw;
+        // recomputed live), entersReady/entersExhausted (set just above), Equip
+        // and Activated Abilities (real board actions, not manual text).
+        const manual = raw ? stripAutomatedLines(raw) || null : raw;
         if (manual) {
           draft.unautomated.push(`${card.baseName}: ${manual.replace(/\n/g, ' ')}`);
           log(draft, actor, `${card.baseName}'s text is not automated — apply it by hand.`);
@@ -713,6 +715,50 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
       gear.attachedTo = unit.uid;
       gear.location = unit.location;
       log(draft, player, `Equipped ${card.baseName}.`, '818');
+      return { ok: true, state: draft };
+    }
+
+    // -----------------------------------------------------------------
+    case 'ACTIVATE_ABILITY': {
+      const source = draft.units[action.uid] ?? draft.gear[action.uid];
+      if (!source) return reject('No such unit or gear.');
+      if (source.controller !== player) return reject('That is not yours.');
+
+      /*
+       * 145.2 / 151.2 — the controller's own Main Phase, Open State, never a
+       * showdown. This is stricter than a card's own timing keywords because
+       * an Activated Ability carries none of its own unless it prints
+       * [Action]/[Reaction] — which this reader refuses rather than guesses.
+       * `player` is always `state.turnPlayer` (bound once at the top of
+       * `reduce()`), so the phase/chain/showdown checks below already imply
+       * "your own turn" — there is no separate case to reject.
+       */
+      if (draft.phase !== 'main') return reject('Activate during your Main Phase.', '145.2');
+      if (draft.chain.length > 0) return reject('Activate only in an Open State.', '145.2');
+      if (draft.showdown) return reject('Activated Abilities cannot be used in a showdown.', '145.2');
+
+      const card = cardOf(draft, action.uid, lookup);
+      if (!card) return reject('Unknown card.');
+      const ability = activatableAbility(draft, player, action.uid, card);
+      if (!ability) {
+        return reject(`${card.baseName} has no automated Activated Ability right now.`, '145.1');
+      }
+      if (ability.cost.exhaustSelf && !source.ready) {
+        return reject('That is already exhausted.', '145.1');
+      }
+
+      const planned = planEquipCost(draft, player, ability.cost, lookup);
+      if (!planned.ok) return reject(planned.reason, planned.rule);
+      spendPlan(draft, player, planned.plan, lookup);
+      if (ability.cost.exhaustSelf) source.ready = false;
+
+      pushChainItem(draft, {
+        uid: action.uid,
+        controller: player,
+        kind: 'ability',
+        instructions: [{ text: unautomatedText(card) ?? card.baseName, targets: [] }],
+      });
+      log(draft, player, `Activated ${card.baseName}'s ability.`, '145.1');
       return { ok: true, state: draft };
     }
 

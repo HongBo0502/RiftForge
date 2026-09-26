@@ -1,5 +1,5 @@
 import type { Card } from '@/types';
-import { runCardEffects } from '../effects/run';
+import { activatableAbility, runActivatedAbility, runCardEffects } from '../effects/run';
 import { hasKeyword, unautomatedText } from './keywords';
 import type { ChainItem, ChainInstruction, GameState, PlayerId, Rejection } from './types';
 import { OPPONENT } from './types';
@@ -193,9 +193,24 @@ export function resolveTop(state: GameState, lookup: CardLookup): Resolution | n
    * it can and the engine runs it; whatever is left over is what the player
    * still has to do by hand. Nothing is flagged if every instruction fizzled —
    * there was nothing to apply.
+   *
+   * An Activated Ability's *source* stays on the board (it is not a spell), so
+   * it runs the one specific ability that was paid for, not the whole card's
+   * text — re-derived here rather than stored on the item, so a permanent's
+   * card and Dependent Keyword condition are read fresh at resolution. If the
+   * condition changed between activation and resolution, the effect is
+   * reported as manual text rather than silently skipped.
    */
   if (card && outcome.executed.length > 0) {
-    const ran = runCardEffects(state, card, item.controller, item.uid, lookup);
+    const ran =
+      item.kind === 'ability'
+        ? (() => {
+            const ability = activatableAbility(state, item.controller, item.uid, card);
+            return ability
+              ? runActivatedAbility(state, ability, item.controller, item.uid, lookup)
+              : { ran: 0, leftover: unautomatedText(card) };
+          })()
+        : runCardEffects(state, card, item.controller, item.uid, lookup);
     const manual = ran.leftover ?? null;
     if (manual) {
       state.unautomated.push(`${card.baseName}: ${manual.replace(/\n/g, ' ')}`);

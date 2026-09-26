@@ -156,8 +156,8 @@ export function hasKeyword(card: Card, keyword: string): boolean {
   return keywordValue(card, keyword) !== null;
 }
 
-/** What an Equip ability actually costs. 818.1.c */
-export interface EquipCost {
+/** A cost expressed purely in Energy/Power symbols — no choice, no zone change. */
+export interface ResourceCost {
   energy: number;
   /** Power of a specific domain, e.g. from `:rb_rune_fury:`. */
   power: Partial<Record<Domain, number>>;
@@ -165,27 +165,21 @@ export interface EquipCost {
   anyPower: number;
 }
 
+/** What an Equip ability actually costs. 818.1.c */
+export type EquipCost = ResourceCost;
+
 const RUNE_DOMAIN = new Set<string>(['fury', 'calm', 'mind', 'body', 'chaos', 'order']);
 
 /**
- * Reads the resource cost off an "[Equip] <symbols>" line. 818.1.c
+ * Reads a run of `:rb_energy_N:` / `:rb_rune_<domain>:` symbols as a resource
+ * cost. Shared by `equipCost` (818.1.c) and the effects parser's Activated
+ * Ability cost reader (145.1/151.1) — one reading of the symbol grammar.
  *
- * Printed as "[Equip] :rb_energy_1::rb_rune_fury:" — symbols right after the
- * bare marker, not a number inside it (`keywordValue`'s `[Equip N]` reading
- * does not apply here; Equip never carries its cost that way in the dataset).
- *
- * Returns null when the line has anything beyond Energy/Power symbols —
- * "Equip [3][A], Kill a friendly unit" has a cost this cannot pay on its own,
- * and guessing which unit to kill would be worse than refusing. A card whose
- * Equip cost cannot be read this way keeps its Equip ability off the board's
- * automatic offer; the rules text still surfaces in the apply-by-hand panel.
+ * Returns null when the segment has anything beyond those symbols — a
+ * non-resource cost (a choice, a zone change) that this reader cannot pay on
+ * its own. Refusing here is what keeps a partial cost from ever being paid.
  */
-export function equipCost(card: Card): EquipCost | null {
-  const line = (card.text ?? '').split('\n').find((l) => /\[Equip\]/i.test(l));
-  if (!line) return null;
-
-  const afterMarker = line.split(/\[Equip\]/i)[1] ?? '';
-  const segment = afterMarker.split('(')[0];
+export function readResourceSymbols(segment: string): ResourceCost | null {
   const tokens = segment.match(/:rb_(?:energy_\d+|rune_[a-z]+):/gi) ?? [];
   // Every non-whitespace character must belong to a matched token, or there is
   // a real cost here (a non-resource cost, or a symbol this reader misses).
@@ -209,10 +203,32 @@ export function equipCost(card: Card): EquipCost | null {
       const domain = (name[0].toUpperCase() + name.slice(1)) as Domain;
       power[domain] = (power[domain] ?? 0) + 1;
     } else {
-      return null; // an Equip symbol this reader does not recognise
+      return null; // a resource symbol this reader does not recognise
     }
   }
   return { energy, power, anyPower };
+}
+
+/**
+ * Reads the resource cost off an "[Equip] <symbols>" line. 818.1.c
+ *
+ * Printed as "[Equip] :rb_energy_1::rb_rune_fury:" — symbols right after the
+ * bare marker, not a number inside it (`keywordValue`'s `[Equip N]` reading
+ * does not apply here; Equip never carries its cost that way in the dataset).
+ *
+ * Returns null when the line has anything beyond Energy/Power symbols —
+ * "Equip [3][A], Kill a friendly unit" has a cost this cannot pay on its own,
+ * and guessing which unit to kill would be worse than refusing. A card whose
+ * Equip cost cannot be read this way keeps its Equip ability off the board's
+ * automatic offer; the rules text still surfaces in the apply-by-hand panel.
+ */
+export function equipCost(card: Card): EquipCost | null {
+  const line = (card.text ?? '').split('\n').find((l) => /\[Equip\]/i.test(l));
+  if (!line) return null;
+
+  const afterMarker = line.split(/\[Equip\]/i)[1] ?? '';
+  const segment = afterMarker.split('(')[0];
+  return readResourceSymbols(segment);
 }
 
 /** Every bracketed marker on a card, keywords and otherwise. */

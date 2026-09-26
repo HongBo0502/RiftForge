@@ -5,7 +5,7 @@ import { unitMight } from '../engine/combat';
 import { reduce } from '../engine/reducer';
 import type { GameState, PlayerId } from '../engine/types';
 import { execute, needsNoChoices, resolve } from './execute';
-import { parseCard, parseInstruction, parseSelector } from './parse';
+import { parseActivatedAbilityLine, parseCard, parseInstruction, parseSelector } from './parse';
 
 const lookup = (cardId: string): Card | undefined => BY_ID.get(cardId);
 
@@ -236,6 +236,68 @@ describe('reading a card', () => {
     const card = { text: '[Level 3][>] I have +1 :rb_might:.' } as Card;
     const parsed = parseCard(card);
     expect(parsed.abilities[0].condition).toEqual({ keyword: 'Level', value: 3 });
+  });
+});
+
+describe('Activated Abilities (145.1, 151.1)', () => {
+  it('reads a bare self-exhaust cost', () => {
+    expect(parseActivatedAbilityLine(':rb_exhaust:: Give a unit +3 :rb_might: this turn.')).toMatchObject({
+      cost: { energy: 0, power: {}, anyPower: 0, exhaustSelf: true },
+      instructions: [{ verb: 'might', amount: 3, duration: 'thisTurn' }],
+    });
+  });
+
+  it('reads an Energy+Power cost alongside a self-exhaust cost', () => {
+    expect(parseActivatedAbilityLine(':rb_energy_1::rb_rune_order:, :rb_exhaust:: Draw 1.')).toMatchObject({
+      cost: { energy: 1, power: { Order: 1 }, anyPower: 0, exhaustSelf: true },
+      instructions: [{ verb: 'draw', amount: 1 }],
+    });
+  });
+
+  it('refuses a cost clause that needs a choice, rather than skipping it', () => {
+    // Baited Hook's real cost includes "Kill a friendly unit" — a choice.
+    expect(
+      parseActivatedAbilityLine(
+        ':rb_energy_1::rb_rune_order:, :rb_exhaust:: Kill a friendly unit. Look at the top 5 cards of your Main Deck.',
+      ),
+    ).toBeNull();
+  });
+
+  it('refuses an ability with its own [Action]/[Reaction] timing marker', () => {
+    // Extended timing (338.1.a.2) isn't modeled yet — refuse rather than
+    // offer it at the wrong moment.
+    expect(parseActivatedAbilityLine('[Reaction][>] :rb_exhaust:: Draw 1.')).toBeNull();
+  });
+
+  it('refuses the whole line when a same-line clause changes what the effect does', () => {
+    // Tools of Empire: the printed amount is conditional on Empowered status,
+    // which a same-sentence "instead" clause carries — reading only the first
+    // sentence would apply the wrong amount when Empowered.
+    expect(
+      parseActivatedAbilityLine(
+        ":rb_exhaust:: Give a unit +2 :rb_might: this turn. If this is [Empowered], give that unit +4 :rb_might: this turn instead.",
+      ),
+    ).toBeNull();
+  });
+
+  it('refuses the whole line when a same-line restriction isn\'t modeled', () => {
+    // Xerath - Freed: the engine doesn't check battlefield location as a
+    // condition on activating, so offering this at all would be wrong.
+    expect(
+      parseActivatedAbilityLine(":rb_rune_fury:, :rb_exhaust:: Deal 3 to a unit. Use this ability only while I'm at a battlefield."),
+    ).toBeNull();
+  });
+
+  it('refuses every Activated Ability on a card whose restriction lives on a separate line', () => {
+    // Renata Glasc - Mastermind: one ability parses cleanly on its own line,
+    // but a later line restricts *all* of the card's abilities to a location
+    // the engine never checks.
+    const card = {
+      text: ':rb_energy_1::rb_rune_mind:: Draw 1.\nUse my abilities only while I\'m at a battlefield.',
+    } as Card;
+    const parsed = parseCard(card);
+    expect(parsed.activatedAbilities).toEqual([]);
+    expect(parsed.unparsed).toContain(':rb_energy_1::rb_rune_mind:: Draw 1.');
   });
 });
 

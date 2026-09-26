@@ -1,5 +1,7 @@
 import type { Card } from '@/types';
+import { readResourceSymbols } from '../engine/keywords';
 import type {
+  ActivatedAbility,
   Condition,
   DependentKeyword,
   Duration,
@@ -294,7 +296,7 @@ const MATCHERS: Matcher[] = [
 
 /**
  * These three shapes are read here, and also matched again — verbatim — by
- * `stripAutomatedEffectLines` below, which keeps the "apply by hand" panel
+ * `stripAutomatedLines` below, which keeps the "apply by hand" panel
  * from telling a player to do by hand what `combat.ts`/`reducer.ts` already
  * did for them. Keep the two in step.
  */
@@ -316,70 +318,164 @@ export function parseInstruction(sentence: string): Instruction | null {
 }
 
 /**
+ * Reads a run of instructions out of an effect's body text, or null if any
+ * part of it does not parse.
+ *
+ * A sentence can chain instructions: "Discard 1, then draw 2." Each part has
+ * to parse, or the whole chain is refused — half an effect applied quietly is
+ * worse than none of it.
+ *
+ * The `and(?=\s+channel\s)` branch is deliberately narrow — "Draw 1 and
+ * channel 1 rune exhausted." is the only real shape that joins two
+ * instructions with a bare "and" rather than ", then". A general "and" split
+ * would also cut selector phrases like "a unit and an enemy unit".
+ */
+function parseInstructionChain(text: string): Instruction[] | null {
+  const parts = text
+    .split(/,\s*then\s+|\.\s+|\s+and(?=\s+channel\s)/)
+    .map((p) => p.trim())
+    .filter(Boolean);
+  const instructions: Instruction[] = [];
+  for (const part of parts) {
+    const instruction = parseInstruction(part);
+    if (!instruction) return null;
+    instructions.push(instruction);
+  }
+  return instructions.length > 0 ? instructions : null;
+}
+
+/**
+ * Reads a "<cost>: <effect>" line as an Activated Ability. 145.1, 151.1
+ *
+ * The cost is whatever precedes the *last* colon that is followed by
+ * whitespace then the effect's capital letter or `[` — every earlier colon
+ * belongs to a `:rb_*:` symbol, which always closes with its own colon
+ * immediately followed by another symbol or a comma, never by a space. Real
+ * printed shapes: ":rb_exhaust:: Give a unit +3 :rb_might: this turn." and
+ * ":rb_energy_1:, :rb_exhaust:: Ready a gear."
+ *
+ * Refuses (returns null) rather than guesses when:
+ * - the ability carries its own `[Action]`/`[Reaction]` timing marker — that
+ *   changes *when* it can be used (338.1.a.2), which this reader does not
+ *   model yet, so offering it at the wrong timing would be worse than not
+ *   offering it;
+ * - any comma-separated cost clause is not a bare `:rb_exhaust:` token or a
+ *   pure resource-symbol run — "Recycle a unit from your trash" or "Kill a
+ *   friendly unit" as a cost needs a choice this reader cannot make;
+ * - any part of the effect fails `parseInstructionChain`.
+ */
+export function parseActivatedAbilityLine(sentence: string): ActivatedAbility | null {
+  const { condition, rest } = leadingCondition(sentence);
+  if (/^\[(Action|Reaction)\]\[>\]/i.test(rest)) return null;
+
+  const split = /^(.*?):\s+(?=[A-Z[])/.exec(rest);
+  if (!split) return null;
+
+  let energy = 0;
+  let anyPower = 0;
+  let exhaustSelf = false;
+  const power: ActivatedAbility['cost']['power'] = {};
+  for (const clause of split[1].split(',').map((c) => c.trim())) {
+    if (clause === ':rb_exhaust:') {
+      exhaustSelf = true;
+      continue;
+    }
+    const resource = readResourceSymbols(clause);
+    if (!resource) return null; // a cost clause this reader cannot pay alone
+    energy += resource.energy;
+    anyPower += resource.anyPower;
+    for (const [domain, amount] of Object.entries(resource.power)) {
+      power[domain as keyof typeof power] = (power[domain as keyof typeof power] ?? 0) + (amount ?? 0);
+    }
+  }
+
+  const effectText = rest.slice(split[0].length).replace(/\[[^\]]*\]/g, '').trim();
+  const instructions = parseInstructionChain(effectText);
+  if (!instructions) return null;
+
+  return { cost: { energy, power, anyPower, exhaustSelf }, instructions, condition };
+}
+
+/**
  * Reads a whole card.
  *
  * Every sentence either becomes an instruction or lands in `unparsed`. A card
  * is only played automatically when `unparsed` is empty; a partially understood
  * card still shows its whole remaining text, because applying half an ability
  * silently is worse than applying none of it.
+ *
+ * Activated Abilities are tried at the *line* level, before any sentence
+ * splitting — "Deal 3 to a unit. Use this ability only while I'm at a
+ * battlefield." is one printed line, and `parseInstructionChain` correctly
+ * refuses the whole thing when the trailing restriction can't be read, same
+ * as "If I'm Empowered, ... instead." modifying the same effect. Splitting
+ * into sentences first (as the rest of this reader does) would silently
+ * automate just the first sentence and drop the modifier that changes what
+ * it does — worse than not automating it.
  */
 export function parseCard(card: Card): ParsedCard {
   const abilities: ParsedAbility[] = [];
+  const activatedAbilities: ActivatedAbility[] = [];
+  const activatedRaw: string[] = [];
   const unparsed: string[] = [];
 
-  for (const sentence of sentences(card.text ?? '')) {
-    // Lines that are only keyword markers are handled elsewhere entirely.
-    if (/^(\[[^\]]*\]\s*)+$/.test(sentence)) continue;
-    if (sentence === '[NO TEXT]') continue;
+  for (const rawLine of (card.text ?? '').split('\n')) {
+    const line = normalise(rawLine);
+    if (line === '') continue;
+    if (/^(\[[^\]]*\]\s*)+$/.test(line)) continue;
+    if (line === '[NO TEXT]') continue;
 
-    const { condition, rest } = leadingCondition(sentence);
-    const withoutMarkers = rest.replace(/\[[^\]]*\]/g, '').trim();
-    /*
-     * What is left may be nothing but cost symbols — "[Empower] :rb_energy_3:"
-     * is a keyword and its cost, not an instruction. This has to run *after* the
-     * markers come off, or the leading keyword hides the fact. Counting these as
-     * missed effects overstates what the parser cannot read.
-     */
-    if (/^[\s.:,—-]*(?::rb_[a-z_0-9]+:[\s.:,—-]*)+$/i.test(withoutMarkers)) continue;
-    if (withoutMarkers === '' || /^[\s.,:—-]+$/.test(withoutMarkers)) continue;
-
-    const { trigger, body } = splitTrigger(withoutMarkers);
-    const text = body.trim();
-    if (!text) {
-      unparsed.push(sentence);
+    const activated = parseActivatedAbilityLine(line);
+    if (activated) {
+      activatedAbilities.push(activated);
+      activatedRaw.push(line);
       continue;
     }
 
-    /*
-     * A sentence can chain instructions: "Discard 1, then draw 2." Each part
-     * has to parse, or the whole sentence is unparsed — half an effect is not
-     * something to apply quietly.
-     *
-     * The `and(?=\s+channel\s)` branch is deliberately narrow — "Draw 1 and
-     * channel 1 rune exhausted." is the only real shape that joins two
-     * instructions with a bare "and" rather than ", then". A general "and"
-     * split would also cut selector phrases like "a unit and an enemy unit".
-     */
-    const parts = text
-      .split(/,\s*then\s+|\.\s+|\s+and(?=\s+channel\s)/)
-      .map((p) => p.trim())
-      .filter(Boolean);
-    const instructions: Instruction[] = [];
-    let ok = true;
-    for (const part of parts) {
-      const instruction = parseInstruction(part);
-      if (!instruction) {
-        ok = false;
-        break;
-      }
-      instructions.push(instruction);
-    }
+    for (const sentence of sentences(rawLine)) {
+      // Lines that are only keyword markers are handled elsewhere entirely.
+      if (/^(\[[^\]]*\]\s*)+$/.test(sentence)) continue;
+      if (sentence === '[NO TEXT]') continue;
 
-    if (ok && instructions.length > 0) abilities.push({ trigger, instructions, condition });
-    else unparsed.push(sentence);
+      const { condition, rest } = leadingCondition(sentence);
+      const withoutMarkers = rest.replace(/\[[^\]]*\]/g, '').trim();
+      /*
+       * What is left may be nothing but cost symbols — "[Empower] :rb_energy_3:"
+       * is a keyword and its cost, not an instruction. This has to run *after*
+       * the markers come off, or the leading keyword hides the fact. Counting
+       * these as missed effects overstates what the parser cannot read.
+       */
+      if (/^[\s.:,—-]*(?::rb_[a-z_0-9]+:[\s.:,—-]*)+$/i.test(withoutMarkers)) continue;
+      if (withoutMarkers === '' || /^[\s.,:—-]+$/.test(withoutMarkers)) continue;
+
+      const { trigger, body } = splitTrigger(withoutMarkers);
+      const text = body.trim();
+      if (!text) {
+        unparsed.push(sentence);
+        continue;
+      }
+
+      const instructions = parseInstructionChain(text);
+      if (instructions) abilities.push({ trigger, instructions, condition });
+      else unparsed.push(sentence);
+    }
   }
 
-  return { abilities, unparsed };
+  /*
+   * 145.1/151.1 — a restriction clause ("Use this ability only while I'm at a
+   * battlefield.", "Use my abilities only while...") is not itself part of
+   * the cost-colon-effect line, so it never blocks a *single* line's own
+   * parse. But it still means the engine cannot safely offer the ability
+   * at all — it has no way to enforce a restriction it never read. Safer to
+   * fall back to fully manual for every Activated Ability on the card than to
+   * offer one with a silently-unenforced condition.
+   */
+  if (activatedAbilities.length > 0 && /\buse (?:this|my) abilit(?:y|ies)\b/i.test(card.text ?? '')) {
+    unparsed.push(...activatedRaw);
+    activatedAbilities.length = 0;
+  }
+
+  return { abilities, activatedAbilities, unparsed };
 }
 
 /**
@@ -407,22 +503,32 @@ export function clearParseCache(): void {
 /**
  * Drops lines from an already-computed "apply by hand" text that the engine
  * now handles itself — `combat.ts` for `staticMight`, `reducer.ts` for
- * `entersReady`/`entersExhausted` — so the panel does not ask a player to do
- * by hand what already happened. `unautomatedText` (engine/keywords.ts) has
+ * `entersReady`/`entersExhausted`/Equip/Activated Abilities — so the panel
+ * does not ask a player to do by hand what already happened, or what a real
+ * board action already offers. `unautomatedText` (engine/keywords.ts) has
  * already dropped an *inactive* Dependent Keyword's line and stripped the
  * keyword markers off an active one, which is what lets the plain-text
  * regexes below still match here.
+ *
+ * A line drops only when it is *entirely* covered — an Equip or Activated
+ * Ability line with a trailing restriction clause this reader does not model
+ * ("Use this ability only while I'm at a battlefield") fails
+ * `parseActivatedAbilityLine`'s whole-line parse and is correctly left
+ * visible, because the engine genuinely does not enforce that part.
  */
-export function stripAutomatedEffectLines(text: string): string {
+export function stripAutomatedLines(text: string): string {
   return text
     .split('\n')
     .filter((line) => {
       const trimmed = line.trim();
-      return (
-        !STATIC_MIGHT_RE.test(trimmed) &&
-        !ENTERS_READY_RE.test(trimmed) &&
-        !ENTERS_EXHAUSTED_RE.test(trimmed)
-      );
+      if (STATIC_MIGHT_RE.test(trimmed)) return false;
+      if (ENTERS_READY_RE.test(trimmed)) return false;
+      if (ENTERS_EXHAUSTED_RE.test(trimmed)) return false;
+      if (/^\[Equip\]/i.test(trimmed) && readResourceSymbols(trimmed.replace(/^\[Equip\]/i, ''))) {
+        return false;
+      }
+      if (parseActivatedAbilityLine(trimmed)) return false;
+      return true;
     })
     .join('\n')
     .trim();

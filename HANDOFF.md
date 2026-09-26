@@ -263,6 +263,23 @@ coverage is always safe.
 Start with the ~40 cards in the two decks the user actually plays, not
 alphabetically.
 
+**Activated Abilities (145.1/151.1) are now automated, narrowly.** A printed
+`<cost>: <effect>` line (`":rb_exhaust:: Give a unit +3 Might this turn."`)
+is read by `effects/parse.ts`'s `parseActivatedAbilityLine` when the cost is
+pure Energy/Power/self-exhaust and the effect already parses; a new
+`ACTIVATE_ABILITY` reducer action pays it and puts it on the chain like a
+spell (`engine/chain.ts`'s `kind: 'ability'` branch). It refuses — leaves the
+card's text as manual — rather than guesses whenever: the ability carries its
+own `[Action]`/`[Reaction]` marker (338.1.a.2's extended timing isn't modeled);
+a same-line clause modifies or restricts the effect ("... instead.", "Use this
+ability only while..."); or any other line on the card restricts "this/my
+ability" generally. This is a different mechanism from `[Empower]`/
+`[Weaponmaster]`, which print their cost inside the keyword bracket rather
+than as a bare line — those keywords are still unautomated, per the table
+above. Currently covers 8 distinct cards; board affordance is a bare
+"Activate" button next to the unit/gear (`GameBoard.tsx`'s `UnitRow`/
+`GearRow`), reachable at base and at a battlefield.
+
 ### B. A greedy bot
 
 The user asked for this. `reduce()` is pure and returns a reason instead of

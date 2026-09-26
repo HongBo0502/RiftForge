@@ -293,6 +293,12 @@ export type GameAction =
   /** Attach Equipment to one of your units. 818 */
   | { type: 'EQUIP_GEAR'; uid: string; unitUid: string }
   /**
+   * Pay for and use a Unit's or Gear's Activated Ability. 145.1, 151.1
+   * `uid` is the source permanent; which ability fires is read off its text,
+   * so this only succeeds while exactly one candidate is unambiguous.
+   */
+  | { type: 'ACTIVATE_ABILITY'; uid: string }
+  /**
    * Resolve this player's mulligan: set aside up to two cards, draw that many,
    * and recycle the set-aside to the bottom of the Main Deck. 117
    */

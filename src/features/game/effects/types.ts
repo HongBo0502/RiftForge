@@ -105,8 +105,37 @@ export interface ParsedAbility {
   condition: Condition | null;
 }
 
+/**
+ * What an Activated Ability's cost actually is. 145.1/151.1/818.1.c
+ *
+ * Same resource grammar as Equip's cost (energy/power/anyPower), plus
+ * `exhaustSelf` for the `:rb_exhaust:` token that means "exhaust the
+ * permanent this ability is printed on" — the source, not a rune.
+ */
+export interface ActivatedCost {
+  energy: number;
+  power: Partial<Record<import('@/types').Domain, number>>;
+  anyPower: number;
+  exhaustSelf: boolean;
+}
+
+/**
+ * A parsed "<cost>: <effect>" line. 145.1, 151.1
+ *
+ * Only ever built from a cost this reader fully understands and an effect
+ * every instruction of which already parses — anything else is refused, not
+ * guessed, and the line stays in `unparsed`.
+ */
+export interface ActivatedAbility {
+  cost: ActivatedCost;
+  instructions: Instruction[];
+  condition: Condition | null;
+}
+
 export interface ParsedCard {
   abilities: ParsedAbility[];
+  /** "<cost>: <effect>" lines this card carries. 145.1, 151.1 */
+  activatedAbilities: ActivatedAbility[];
   /**
    * Sentences the parser could not read. These are what still reaches the
    * "apply by hand" panel — the honesty mechanism survives the parser.

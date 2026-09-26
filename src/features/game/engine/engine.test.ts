@@ -235,6 +235,53 @@ describe('playing cards', () => {
     expect(played.unautomated).toEqual([]);
   });
 
+  it('pays and resolves an Activated Ability without double-reporting it as manual (145.1)', () => {
+    // Treasure Trove: "When this leaves the board, draw 1 and channel 1 rune
+    // exhausted.\n:rb_rune_chaos:, :rb_exhaust:: Kill this." The death-trigger
+    // line stays a real manual entry (no trigger for "leaves the board" yet);
+    // the Activated Ability line should not also show up there.
+    const trove = BY_ID.get('69bc5bd1d308c64675ca8782')!;
+    const game = grantResources(newGame(), 'p1');
+    game.instances['trove-1'] = { uid: 'trove-1', cardId: trove.id, owner: 'p1' };
+    game.players.p1.hand.push('trove-1');
+
+    const played = apply(game, { type: 'PLAY_CARD', uid: 'trove-1' });
+    expect(played.gear['trove-1']).toBeDefined();
+    expect(played.unautomated).toHaveLength(1);
+    expect(played.unautomated[0]).not.toMatch(/kill this/i);
+
+    const beforeChaos = played.players.p1.power.Chaos ?? 0;
+    const activated = apply(played, { type: 'ACTIVATE_ABILITY', uid: 'trove-1' });
+    expect(activated.players.p1.power.Chaos).toBe(beforeChaos - 1);
+    expect(activated.gear['trove-1'].ready).toBe(false);
+    expect(activated.chain).toHaveLength(1);
+
+    const pass1 = reduce(activated, { type: 'PASS_PRIORITY' }, lookup);
+    expect(pass1.ok).toBe(true);
+    if (!pass1.ok) return;
+    const pass2 = reduce(pass1.state, { type: 'PASS_PRIORITY' }, lookup);
+    expect(pass2.ok).toBe(true);
+    if (!pass2.ok) return;
+
+    expect(pass2.state.gear['trove-1']).toBeUndefined();
+    expect(pass2.state.players.p1.trash).toContain('trove-1');
+    // Resolving a fully-automatic effect adds nothing new to the panel.
+    expect(pass2.state.unautomated).toHaveLength(1);
+  });
+
+  it('refuses an Activated Ability outside your own Main Phase, Open State (145.2)', () => {
+    const trove = BY_ID.get('69bc5bd1d308c64675ca8782')!;
+    const game = grantResources(newGame(), 'p1');
+    game.instances['trove-1'] = { uid: 'trove-1', cardId: trove.id, owner: 'p1' };
+    game.players.p1.hand.push('trove-1');
+    const played = apply(game, { type: 'PLAY_CARD', uid: 'trove-1' });
+
+    const notMain = { ...played, phase: 'awaken' as GameState['phase'] };
+    const result = reduce(notMain, { type: 'ACTIVATE_ABILITY', uid: 'trove-1' }, lookup);
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.rule).toBe('145.2');
+  });
+
   it('flags card text it does not automate rather than pretending it resolved', () => {
     const game = grantResources(newGame(), 'p1');
     const spellUid = game.players.p1.hand.find((uid) => {

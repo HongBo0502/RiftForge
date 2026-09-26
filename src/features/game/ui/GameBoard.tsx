@@ -176,6 +176,8 @@ export default function GameBoard({
                 })
               }
               onAmbushHere={() => considering && play(considering, { kind: 'battlefield', index })}
+              canActivate={(uid) => canDo({ type: 'ACTIVATE_ABILITY', uid })}
+              onActivate={(uid) => onAction({ type: 'ACTIVATE_ABILITY', uid })}
             />
           ))}
         </div>
@@ -189,6 +191,8 @@ export default function GameBoard({
             bind={bind}
             selected={selected}
             onSelect={(uid) => setSelected(selected === uid ? null : uid)}
+            canActivate={(uid) => canDo({ type: 'ACTIVATE_ABILITY', uid })}
+            onActivate={(uid) => onAction({ type: 'ACTIVATE_ABILITY', uid })}
           />
           <GearRow
             state={state}
@@ -198,6 +202,8 @@ export default function GameBoard({
             equipTarget={selected && state.units[selected] ? selected : null}
             canEquip={(uid) => Boolean(selected) && canDo({ type: 'EQUIP_GEAR', uid, unitUid: selected! })}
             onEquip={(uid) => selected && onAction({ type: 'EQUIP_GEAR', uid, unitUid: selected })}
+            canActivate={(uid) => canDo({ type: 'ACTIVATE_ABILITY', uid })}
+            onActivate={(uid) => onAction({ type: 'ACTIVATE_ABILITY', uid })}
           />
           {selected && state.units[selected]?.location.kind === 'battlefield' && (
             <button
@@ -479,6 +485,8 @@ function UnitRow({
   bind,
   selected,
   onSelect,
+  canActivate,
+  onActivate,
 }: {
   units: UnitState[];
   state: GameState;
@@ -487,22 +495,35 @@ function UnitRow({
   bind: Bind;
   selected?: string | null;
   onSelect?: (uid: string) => void;
+  /** Whether this unit has an Activated Ability the engine can offer. 145.1 */
+  canActivate?: (uid: string) => boolean;
+  onActivate?: (uid: string) => void;
 }) {
   if (units.length === 0) {
     return <p className="py-2 text-[11px] text-muted opacity-60">Empty</p>;
   }
   return (
-    <div className="flex flex-wrap gap-1.5">
+    <div className="flex flex-wrap items-end gap-1.5">
       {units.map((unit) => (
-        <MatCard
-          key={unit.uid}
-          card={cardFor(unit.uid)}
-          unit={unit}
-          might={unitMight(state, unit.uid, lookup)}
-          selected={selected === unit.uid}
-          onClick={onSelect ? () => onSelect(unit.uid) : undefined}
-          bind={bind}
-        />
+        <span key={unit.uid} className="flex flex-col items-center gap-0.5">
+          <MatCard
+            card={cardFor(unit.uid)}
+            unit={unit}
+            might={unitMight(state, unit.uid, lookup)}
+            selected={selected === unit.uid}
+            onClick={onSelect ? () => onSelect(unit.uid) : undefined}
+            bind={bind}
+          />
+          {canActivate?.(unit.uid) && (
+            <button
+              type="button"
+              onClick={() => onActivate?.(unit.uid)}
+              className="rounded border border-calm px-1 py-0.5 text-[9px] text-calm"
+            >
+              Activate
+            </button>
+          )}
+        </span>
       ))}
     </div>
   );
@@ -520,6 +541,8 @@ function GearRow({
   equipTarget,
   canEquip,
   onEquip,
+  canActivate,
+  onActivate,
 }: {
   state: GameState;
   owner: PlayerId;
@@ -528,6 +551,9 @@ function GearRow({
   equipTarget?: string | null;
   canEquip?: (uid: string) => boolean;
   onEquip?: (uid: string) => void;
+  /** Whether this gear has an Activated Ability the engine can offer. 151.1 */
+  canActivate?: (uid: string) => boolean;
+  onActivate?: (uid: string) => void;
 }) {
   const gear = Object.values(state.gear).filter(
     (g) => g.controller === owner && g.location.kind === 'base',
@@ -540,6 +566,7 @@ function GearRow({
       {gear.map((g) => {
         const card = cardFor(g.uid);
         const attachable = Boolean(equipTarget && canEquip?.(g.uid));
+        const activatable = Boolean(canActivate?.(g.uid));
         return (
           <span key={g.uid} className="flex items-center gap-1">
             <span
@@ -560,6 +587,15 @@ function GearRow({
                 className="rounded border border-calm px-1.5 py-0.5 text-[10px] text-calm"
               >
                 Equip
+              </button>
+            )}
+            {activatable && (
+              <button
+                type="button"
+                onClick={() => onActivate?.(g.uid)}
+                className="rounded border border-calm px-1.5 py-0.5 text-[10px] text-calm"
+              >
+                Activate
               </button>
             )}
           </span>
@@ -686,6 +722,8 @@ function BattlefieldZone({
   onPlayHidden,
   canAmbushHere,
   onAmbushHere,
+  canActivate,
+  onActivate,
 }: {
   index: number;
   state: GameState;
@@ -700,6 +738,9 @@ function BattlefieldZone({
   onMoveHere: () => void;
   canPlayHidden: (uid: string) => boolean;
   onPlayHidden: (uid: string) => void;
+  /** Whether this unit of yours has an Activated Ability the engine can offer. 145.1 */
+  canActivate: (uid: string) => boolean;
+  onActivate: (uid: string) => void;
   /** Ambush (822): playing the hand card under consideration to this battlefield. */
   canAmbushHere: boolean;
   onAmbushHere: () => void;
@@ -805,6 +846,8 @@ function BattlefieldZone({
             bind={bind}
             selected={selected}
             onSelect={onSelectUnit}
+            canActivate={canActivate}
+            onActivate={onActivate}
           />
         </Side>
 
