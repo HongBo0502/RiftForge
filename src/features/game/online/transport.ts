@@ -14,7 +14,8 @@ import type { GameAction } from '../engine/types';
  */
 
 /** Bumped when the message shape changes, so mismatched clients fail loudly. */
-export const PROTOCOL_VERSION = 1;
+// 2 — adds the free board's MANUAL action, which a version-1 peer would reject.
+export const PROTOCOL_VERSION = 2;
 
 export type Seat = 'host' | 'guest';
 

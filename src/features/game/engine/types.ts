@@ -1,4 +1,5 @@
 import type { Domain } from '@/types';
+import type { ManualOp } from './manual';
 import type { PaymentPlan } from './payment';
 
 /**
@@ -308,7 +309,12 @@ export type GameAction =
   /** Pass focus during a showdown. 347.2 */
   | { type: 'SHOWDOWN_PASS' }
   | { type: 'END_TURN' }
-  | { type: 'CONCEDE'; player: PlayerId };
+  | { type: 'CONCEDE'; player: PlayerId }
+  /**
+   * A change made by hand on the free board — no cost, no timing, no rules
+   * check beyond fairness. Logged, so the other player sees it. manual.ts
+   */
+  | { type: 'MANUAL'; op: ManualOp };
 
 /** Why an action was rejected, for the UI to explain rather than ignore. */
 export interface Rejection {

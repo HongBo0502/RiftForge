@@ -23,11 +23,16 @@ import OnlinePanel from './OnlinePanel';
  */
 type Mode = 'choose' | 'hotseat' | 'online';
 
+/** How many actions undo can step back through. */
+const UNDO_LIMIT = 50;
+
 export default function PlayPage() {
   const [mode, setMode] = useState<Mode>('choose');
   const [dataset, setDataset] = useState<Dataset | null>(null);
   const [decks, setDecks] = useState<Deck[]>([]);
   const [game, setGame] = useState<GameState | null>(null);
+  /** States before each hotseat action, newest last, for undo. */
+  const [history, setHistory] = useState<GameState[]>([]);
   const [rejection, setRejection] = useState<{ reason: string; rule?: string } | null>(null);
   const [handoffPending, setHandoffPending] = useState(false);
   const lastTurnPlayer = useRef<PlayerId | null>(null);
@@ -66,7 +71,29 @@ export default function PlayPage() {
     if ((actorChanged || mulliganPassed) && !result.state.winner) {
       setHandoffPending(true);
     }
+    setHistory((h) => [...h.slice(-(UNDO_LIMIT - 1)), game]);
     setGame(result.state);
+  }
+
+  /*
+   * Undo only steps back within the current player's own actions. Reaching
+   * back past a hand-over would put the other player's hand on screen.
+   */
+  const previous = history[history.length - 1];
+  const canUndo = Boolean(
+    game && previous && previous.phase !== 'mulligan' && activePlayer(previous) === activePlayer(game),
+  );
+  function undo() {
+    if (!canUndo || !previous) return;
+    setHistory((h) => h.slice(0, -1));
+    setGame(previous);
+    setRejection(null);
+  }
+
+  function newGame(state: GameState | null) {
+    setGame(state);
+    setHistory([]);
+    setRejection(null);
   }
 
   useEffect(() => {
@@ -137,12 +164,11 @@ export default function PlayPage() {
         dataset={dataset}
         decks={decks}
         onStart={(p1, p2, seed) => {
-          setGame(
+          newGame(
             startGame(setupGame({ decks: { p1, p2 }, byId: dataset.byId, seed }), lookup, {
               mulligan: true,
             }),
           );
-          setRejection(null);
         }}
       />
     );
@@ -157,13 +183,28 @@ export default function PlayPage() {
         <p className="mt-2 text-muted">
           {game.players.p1.points} – {game.players.p2.points} after {game.turn} turns.
         </p>
-        <button
-          type="button"
-          onClick={() => setGame(null)}
-          className="mt-6 rounded-lg bg-accent px-4 py-2 font-semibold text-ink"
-        >
-          New game
-        </button>
+        <div className="mt-6 flex justify-center gap-2">
+          {/* A by-hand point can end the game by mistake, so the win is undoable. */}
+          {history.length > 0 && (
+            <button
+              type="button"
+              onClick={() => {
+                setGame(history[history.length - 1]);
+                setHistory((h) => h.slice(0, -1));
+              }}
+              className="rounded-lg border border-line px-4 py-2 font-semibold"
+            >
+              Undo
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={() => newGame(null)}
+            className="rounded-lg bg-accent px-4 py-2 font-semibold text-ink"
+          >
+            New game
+          </button>
+        </div>
       </div>
     );
   }
@@ -216,7 +257,9 @@ export default function PlayPage() {
       lookup={lookup}
       onAction={dispatch}
       rejection={rejection}
-      onExit={() => setGame(null)}
+      onExit={() => newGame(null)}
+      onUndo={undo}
+      canUndo={canUndo}
     />
   );
 }

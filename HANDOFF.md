@@ -115,6 +115,7 @@ src/
       statuses.ts          Stun, Buff, Empowered, XP
       cleanup.ts           cleanups, zone changes, Temporary
       redact.ts            hidden-information enforcement
+      manual.ts            FREE BOARD: by-hand moves, counters, draw/shuffle (MANUAL action)
       rng.ts               seeded RNG
     game/effects/        per-card scripts -> instructions -> execution
       cards/*.json         ONE SCRIPT PER CARD NAME — the only source of card effects at runtime
@@ -125,6 +126,7 @@ src/
       run.ts               bridge used by chain resolution
     game/online/         transport, Supabase adapter, match hook
     game/ui/             playmat board, card preview, deck select, handoff
+      FreeTools.tsx        action tray, table tools, "Do it anyway" warning
 DESIGN.md                board design contract — read before UI work
 ```
 

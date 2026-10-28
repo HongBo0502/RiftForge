@@ -259,10 +259,42 @@ Non-negotiable, from the engine's constraints:
 1. **The board only ever renders `redact(state, viewer)`.** No component takes
    raw state. Hidden information cannot leak through the UI because the UI never
    receives it.
-2. **Affordances come from the engine, not from duplicated logic.** A control is
-   enabled if dry-running its action through `reduce()` returns ok. Never
-   re-implement a rule in a component.
-3. **A refusal shows the engine's own reason and rule number.** Illegal actions
-   teach.
+2. **Rules judgements come from the engine, not from duplicated logic.** Whether
+   an action is legal is the answer from dry-running it through `reduce()`.
+   Never re-implement a rule in a component.
+3. **A refusal is a warning, not a wall.** It shows the engine's own reason and
+   rule number, and offers **Do it anyway** — the by-hand version of the same
+   action (see Free board). Illegal actions still teach; they no longer stop play.
 4. **Un-automated card text is always visible as such.** Never let the board
-   imply an ability resolved when the engine did not apply it.
+   imply an ability resolved when the engine did not apply it. A card played by
+   hand puts all of its text in the "apply by hand" panel.
+
+---
+
+## 9. Free board
+
+Most card text is not automated, so the board works like a table first and a
+rules engine second. Built in `ui/FreeTools.tsx` on `engine/manual.ts`.
+
+- **Tap any card to pick it up.** The action tray slides up from the bottom
+  edge — thumb-reachable on a phone, and it prints the card's text, since touch
+  has no hover. It offers what makes sense for where the card is: Play, send it
+  to a base, a battlefield, hand, trash, top or bottom of the deck; ready or
+  exhaust; damage and buff steppers; stun; empower; detach.
+- **Rules first, by hand second.** Playing from hand and moving your own unit go
+  through the engine, so a scripted card still pays its cost and resolves itself.
+  When the engine refuses, the warning bar offers **Do it anyway**. Everything
+  else in the tray is done by hand directly.
+- **Drag and drop** on desktop does the same as the tray: drop on a base, a
+  battlefield or the hand.
+- **Tap a battlefield's header** to set who holds it.
+- **Table tools** under the hand: Undo (same device only), Draw, Shuffle,
+  + Rune, Clear chain (only while a chain or showdown is up — the way out of a
+  stuck card), Counters (points, XP, Energy for both players), Trash (both
+  trashes, each card pickable).
+- **Fairness still holds.** Nobody takes cards from the other player's hand or
+  deck, and every by-hand change is logged as "By hand: …", so the other player
+  sees it. A card moved between hidden zones (hand to deck) is not named.
+- **Undo** steps back within the current player's own actions only — reaching
+  past a hand-over would show the other player's hand. Online has no undo: an
+  action already sent cannot be taken back.

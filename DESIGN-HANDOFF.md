@@ -69,11 +69,15 @@ the answer — it is not supposed to see it. Do not pass the real state in "just
 for convenience"; you would leak the opponent's hand into the DOM, where anyone
 can read it.
 
-**2. The engine decides what is legal, never the component.**
-Every affordance on the board is decided by dry-running the action through
-`reduce()` — see `canDo` in `GameBoard.tsx`. Do not re-implement a rule in a
-component to decide whether to show a button. If the engine says no, the control
-is disabled, and the refusal carries its own reason and rule number.
+**2. The engine judges what is legal, never the component — but it no longer
+gets the last word.**
+Whether an action is legal is decided by dry-running it through `reduce()` — see
+`canDo` and `attempt` in `GameBoard.tsx`. Do not re-implement a rule in a
+component. Since the free board (DESIGN.md §9), a refusal is a warning carrying
+its own reason and rule number plus **Do it anyway**, which dispatches the
+by-hand `MANUAL` version of the action (`fallbackFor` in `ui/FreeTools.tsx`).
+By-hand changes are logged so the other player sees them, and they never reach
+into the other player's hand or deck — keep both of those true.
 
 **3. The mat flips to whoever may act, which is not always the turn player.**
 With a chain up it is the priority holder; during a showdown it is the player
@@ -112,7 +116,7 @@ Designing this well is the highest-value thing available:
 Constraint: legality comes from the engine. Ask `reduce()` whether a given
 target is acceptable; do not filter the list yourself.
 
-### 2. `GameBoard.tsx` is 1098 lines
+### 2. `GameBoard.tsx` is over 1200 lines
 
 Over the project's 800-line soft ceiling, and hard to work in. It holds the mat,
 status bar, chain strip, showdown bar, battlefields, unit rows, gear rows, the

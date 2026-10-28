@@ -10,6 +10,7 @@ import { cleanup, expireTemporary } from './cleanup';
 import { shuffle } from './rng';
 import { closeShowdown, openShowdown, type CardLookup } from './combat';
 import { conditionActive, dependencyContext, equipCost, hasKeyword, unautomatedText } from './keywords';
+import { applyManual } from './manual';
 import { activatableAbility } from '../effects/run';
 import { manualText, scriptFor } from '../effects/scripts';
 import { type PaymentPlan, planEquipCost, planPayment } from './payment';
@@ -324,6 +325,8 @@ const CHAIN_SAFE = new Set<GameAction['type']>([
   'EXHAUST_RUNE',
   'RECYCLE_RUNE',
   'CONCEDE',
+  // The free board is the way out of a stuck chain, so it must work during one.
+  'MANUAL',
 ]);
 
 export function reduce(state: GameState, action: GameAction, lookup: CardLookup): ActionResult {
@@ -839,6 +842,13 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
       // 651.1 — with one opponent left, that opponent wins.
       draft.winner = OPPONENT[action.player];
       log(draft, action.player, 'Conceded.', '651');
+      return { ok: true, state: draft };
+    }
+
+    // -----------------------------------------------------------------
+    case 'MANUAL': {
+      const refused = applyManual(draft, actor, action.op, lookup);
+      if (refused) return refused;
       return { ok: true, state: draft };
     }
   }

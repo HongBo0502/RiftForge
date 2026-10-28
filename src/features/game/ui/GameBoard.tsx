@@ -1,13 +1,34 @@
-import { useMemo, useState } from 'react';
+import { createContext, useContext, useMemo, useState } from 'react';
 import type { Card } from '@/types';
 import { cardImage } from '@/data/cards';
 import { CardText, DOMAIN_COLOR, EnergyGlyph, MightGlyph, RuneGlyph } from '@/data/symbols';
 import { unitMight } from '../engine/combat';
+import type { ManualOp, ManualZone } from '../engine/manual';
 import { planPayment } from '../engine/payment';
 import { reduce } from '../engine/reducer';
 import type { GameAction, GameState, Location, PlayerId, UnitState } from '../engine/types';
-import { OPPONENT } from '../engine/types';
+import { OPPONENT, sameLocation } from '../engine/types';
 import { useCardPreview } from './CardPreview';
+import { ActionTray, type Pick, ToolBar, type Warning, WarningBar, fallbackFor } from './FreeTools';
+
+/** Drag-and-drop on the mat. Desktop only — touch uses the action tray. */
+interface Dnd {
+  drag: (uid: string) => {
+    draggable: boolean;
+    onDragStart: (e: React.DragEvent<HTMLElement>) => void;
+  };
+  drop: (to: ManualZone) => {
+    onDragOver: (e: React.DragEvent<HTMLElement>) => void;
+    onDrop: (e: React.DragEvent<HTMLElement>) => void;
+  };
+}
+
+const DRAG_TYPE = 'text/x-riftforge-uid';
+const noDnd: Dnd = {
+  drag: () => ({ draggable: false, onDragStart: () => {} }),
+  drop: () => ({ onDragOver: () => {}, onDrop: () => {} }),
+};
+const DndContext = createContext<Dnd>(noDnd);
 
 interface Props {
   state: GameState;
@@ -26,15 +47,19 @@ interface Props {
   canAct?: boolean;
   /** Shown in place of the end-turn button while waiting. */
   waitingLabel?: string | null;
+  /** Hotseat only: step back one action. */
+  onUndo?: () => void;
+  canUndo?: boolean;
 }
 
 /**
  * The playmat. Built to DESIGN.md: a felt surface with printed zones, mirrored
  * across a centre line, with cards as the only pieces that lift off it.
  *
- * Every affordance is decided by dry-running the action through `reduce()`
- * rather than re-implementing rules here — the engine is the single authority
- * on what is legal, and a refusal carries its own reason and rule number.
+ * A free board (DESIGN.md "Free board"). Every action that has a rules form is
+ * dry-run through `reduce()` first, so scripted cards still pay and resolve
+ * themselves — but a refusal is a warning with its reason and rule number and
+ * a "Do it anyway", never a dead end. Anything else is done by hand.
  */
 export default function GameBoard({
   state,
@@ -45,19 +70,95 @@ export default function GameBoard({
   viewer,
   canAct = true,
   waitingLabel = null,
+  onUndo,
+  canUndo = false,
 }: Props) {
-  const [selected, setSelected] = useState<string | null>(null);
-  /** Hand card being considered — drives the rune payment highlight. */
-  const [considering, setConsidering] = useState<string | null>(null);
+  const [pick, setPick] = useState<Pick | null>(null);
+  const [warning, setWarning] = useState<Warning | null>(null);
+  /** Hand card being hovered — drives the rune payment highlight. */
+  const [hovering, setHovering] = useState<string | null>(null);
   const { bind, clear, preview } = useCardPreview();
 
   const me = viewer ?? state.turnPlayer;
   const them = OPPONENT[me];
   const cardFor = (uid: string) => lookup(state.instances[uid]?.cardId ?? '');
+  const selected = pick?.kind === 'card' ? pick.uid : null;
+  const select = (uid: string) => setPick(selected === uid ? null : { kind: 'card', uid });
+  const inHand = (uid: string) =>
+    state.players[me].hand.includes(uid) || state.players[me].championZone === uid;
+  /** The hand card being weighed up: hovered, or picked up. */
+  const considering = hovering ?? (selected && inHand(selected) ? selected : null);
 
   const canDo = useMemo(
     () => (a: GameAction) => canAct && reduce(state, a, lookup).ok,
     [state, lookup, canAct],
+  );
+
+  /** Runs a rules action, or explains the refusal and offers the by-hand version. */
+  const attempt = (action: GameAction) => {
+    const result = reduce(state, action, lookup);
+    if (result.ok || !canAct) {
+      setWarning(null);
+      onAction(action);
+      return;
+    }
+    setWarning({ reason: result.reason, rule: result.rule, fallback: fallbackFor(action) });
+  };
+
+  const manual = (op: ManualOp) => {
+    if (!canAct) return;
+    setWarning(null);
+    onAction({ type: 'MANUAL', op });
+  };
+
+  /**
+   * Puts a card somewhere. Playing from hand and moving your own unit go
+   * through the rules (costs, exhausting, showdowns); everything else — and
+   * anything the rules refuse, once confirmed — is done by hand.
+   */
+  const send = (uid: string, to: ManualZone) => {
+    setPick(null);
+    clear();
+    const onMySide = to.kind === 'battlefield' || (to.kind === 'base' && to.player === me);
+    if (inHand(uid) && onMySide) {
+      attempt({ type: 'PLAY_CARD', uid, to: to.kind === 'battlefield' ? to : undefined });
+      return;
+    }
+    const unit = state.units[uid];
+    if (unit && unit.controller === me && onMySide && !sameLocation(unit.location, to as Location)) {
+      attempt({ type: 'MOVE_UNIT', uid, to: to as Location });
+      return;
+    }
+    manual({ op: 'move', uid, to });
+  };
+
+  const dnd = useMemo<Dnd>(
+    () =>
+      canAct
+        ? {
+            drag: (uid) => ({
+              draggable: true,
+              onDragStart: (e) => {
+                e.dataTransfer.setData(DRAG_TYPE, uid);
+                e.dataTransfer.effectAllowed = 'move';
+              },
+            }),
+            drop: (to) => ({
+              onDragOver: (e) => {
+                if (e.dataTransfer.types.includes(DRAG_TYPE)) e.preventDefault();
+              },
+              onDrop: (e) => {
+                const uid = e.dataTransfer.getData(DRAG_TYPE);
+                if (!uid) return;
+                e.preventDefault();
+                send(uid, to);
+              },
+            }),
+          }
+        : noDnd,
+    // `send` closes over the same state these depend on.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [canAct, state, me],
   );
 
   const unitsAt = (test: (l: Location) => boolean, who: PlayerId) =>
@@ -77,28 +178,41 @@ export default function GameBoard({
   }, [considering, state, me, lookup]);
 
   const play = (uid: string, to?: Location) => {
-    onAction({ type: 'PLAY_CARD', uid, to });
-    setConsidering(null);
+    attempt({ type: 'PLAY_CARD', uid, to });
+    setHovering(null);
+    setPick(null);
     clear();
   };
 
   const moveTo = (to: Location) => {
     if (!selected) return;
-    onAction({ type: 'MOVE_UNIT', uid: selected, to });
-    setSelected(null);
+    attempt({ type: 'MOVE_UNIT', uid: selected, to });
+    setPick(null);
   };
 
   return (
-    <div className="min-h-dvh bg-table px-2 pb-2 pt-2 sm:px-4">
+    <DndContext.Provider value={dnd}>
+    <div className={`min-h-dvh bg-table px-2 pt-2 sm:px-4 ${pick ? 'pb-56' : 'pb-2'}`}>
       {preview}
 
       <StatusBar state={state} me={me} them={them} onExit={onExit} />
 
-      {rejection && (
-        <p className="mx-auto mt-2 max-w-6xl rounded-lg border border-fury/50 bg-fury/10 px-3 py-2 text-sm text-fury">
-          {rejection.reason}
-          {rejection.rule && <span className="ml-1 opacity-70">({rejection.rule})</span>}
-        </p>
+      {warning ? (
+        <WarningBar
+          warning={warning}
+          onForce={(action) => {
+            setWarning(null);
+            onAction(action);
+          }}
+          onDismiss={() => setWarning(null)}
+        />
+      ) : (
+        rejection && (
+          <p className="mx-auto mt-2 max-w-6xl rounded-lg border border-fury/50 bg-fury/10 px-3 py-2 text-sm text-fury">
+            {rejection.reason}
+            {rejection.rule && <span className="ml-1 opacity-70">({rejection.rule})</span>}
+          </p>
+        )
       )}
 
       {state.chain.length > 0 && (
@@ -138,15 +252,24 @@ export default function GameBoard({
           </span>
         </div>
 
-        <Zone label="Their base">
+        <Zone label="Their base" to={{ kind: 'base', player: them }}>
           <UnitRow
             units={unitsAt((l) => l.kind === 'base', them)}
             state={state}
             lookup={lookup}
             cardFor={cardFor}
             bind={bind}
+            selected={selected}
+            onSelect={select}
           />
-          <GearRow state={state} owner={them} cardFor={cardFor} bind={bind} />
+          <GearRow
+            state={state}
+            owner={them}
+            cardFor={cardFor}
+            bind={bind}
+            selected={selected}
+            onSelect={select}
+          />
         </Zone>
 
         {/* ---- centre line: battlefields, contested from both sides ---- */}
@@ -162,11 +285,17 @@ export default function GameBoard({
               cardFor={cardFor}
               bind={bind}
               selected={selected}
-              onSelectUnit={(uid) => setSelected(selected === uid ? null : uid)}
+              onSelectUnit={select}
+              picked={pick?.kind === 'battlefield' && pick.index === index}
+              onPickBattlefield={() =>
+                setPick(
+                  pick?.kind === 'battlefield' && pick.index === index ? null : { kind: 'battlefield', index },
+                )
+              }
               canMoveHere={selected !== null && canDo({ type: 'MOVE_UNIT', uid: selected, to: { kind: 'battlefield', index } })}
               onMoveHere={() => moveTo({ kind: 'battlefield', index })}
               canPlayHidden={(uid) => canDo({ type: 'PLAY_CARD', uid })}
-              onPlayHidden={(uid) => onAction({ type: 'PLAY_CARD', uid })}
+              onPlayHidden={(uid) => attempt({ type: 'PLAY_CARD', uid })}
               canAmbushHere={
                 considering !== null &&
                 canDo({
@@ -182,7 +311,7 @@ export default function GameBoard({
           ))}
         </div>
 
-        <Zone label="Your base">
+        <Zone label="Your base" to={{ kind: 'base', player: me }}>
           <UnitRow
             units={unitsAt((l) => l.kind === 'base', me)}
             state={state}
@@ -190,7 +319,7 @@ export default function GameBoard({
             cardFor={cardFor}
             bind={bind}
             selected={selected}
-            onSelect={(uid) => setSelected(selected === uid ? null : uid)}
+            onSelect={select}
             canActivate={(uid) => canDo({ type: 'ACTIVATE_ABILITY', uid })}
             onActivate={(uid) => onAction({ type: 'ACTIVATE_ABILITY', uid })}
           />
@@ -199,9 +328,16 @@ export default function GameBoard({
             owner={me}
             cardFor={cardFor}
             bind={bind}
-            equipTarget={selected && state.units[selected] ? selected : null}
-            canEquip={(uid) => Boolean(selected) && canDo({ type: 'EQUIP_GEAR', uid, unitUid: selected! })}
-            onEquip={(uid) => selected && onAction({ type: 'EQUIP_GEAR', uid, unitUid: selected })}
+            selected={selected}
+            onSelect={select}
+            // Equip is offered for any unit you control; the engine judges the cost.
+            equipTarget={selected && state.units[selected]?.controller === me ? selected : null}
+            canEquip={(uid) => !state.gear[uid]?.attachedTo}
+            onEquip={(uid) => {
+              if (!selected) return;
+              attempt({ type: 'EQUIP_GEAR', uid, unitUid: selected });
+              setPick(null);
+            }}
             canActivate={(uid) => canDo({ type: 'ACTIVATE_ABILITY', uid })}
             onActivate={(uid) => onAction({ type: 'ACTIVATE_ABILITY', uid })}
           />
@@ -253,10 +389,22 @@ export default function GameBoard({
         lookup={lookup}
         cardFor={cardFor}
         bind={bind}
-        onConsider={setConsidering}
-        onPlay={play}
+        selected={selected}
+        onConsider={setHovering}
+        onSelect={select}
         onHide={(uid, battlefield) => onAction({ type: 'HIDE_CARD', uid, battlefield })}
         canAct={canAct}
+      />
+
+      <ToolBar
+        state={state}
+        me={me}
+        disabled={!canAct}
+        canUndo={canUndo}
+        onUndo={onUndo}
+        onManual={manual}
+        cardFor={cardFor}
+        onPickCard={select}
       />
 
       <div className="mx-auto mt-2 flex max-w-6xl gap-2">
@@ -292,7 +440,21 @@ export default function GameBoard({
       )}
 
       <LogPanel state={state} />
+
+      {pick && canAct && (
+        <ActionTray
+          pick={pick}
+          state={state}
+          me={me}
+          cardFor={cardFor}
+          onPlay={(uid) => play(uid)}
+          onSend={send}
+          onManual={manual}
+          onClose={() => setPick(null)}
+        />
+      )}
     </div>
+    </DndContext.Provider>
   );
 }
 
@@ -464,9 +626,19 @@ function ChainBar({
   );
 }
 
-function Zone({ label, children }: { label: string; children: React.ReactNode }) {
+function Zone({
+  label,
+  to,
+  children,
+}: {
+  label: string;
+  /** Where a card dropped here goes. */
+  to: ManualZone;
+  children: React.ReactNode;
+}) {
+  const { drop } = useContext(DndContext);
   return (
-    <div className="px-2 py-2">
+    <div className="px-2 py-2" {...drop(to)}>
       <div className="mat-zone px-2 py-1.5">
         <div className="mat-zone-label mb-1">{label}</div>
         {children}
@@ -538,6 +710,8 @@ function GearRow({
   owner,
   cardFor,
   bind,
+  selected,
+  onSelect,
   equipTarget,
   canEquip,
   onEquip,
@@ -548,6 +722,8 @@ function GearRow({
   owner: PlayerId;
   cardFor: (uid: string) => Card | undefined;
   bind: Bind;
+  selected: string | null;
+  onSelect: (uid: string) => void;
   equipTarget?: string | null;
   canEquip?: (uid: string) => boolean;
   onEquip?: (uid: string) => void;
@@ -555,8 +731,10 @@ function GearRow({
   canActivate?: (uid: string) => boolean;
   onActivate?: (uid: string) => void;
 }) {
+  const { drag } = useContext(DndContext);
+  // Attached gear is listed with the base too: it is the one place to find it.
   const gear = Object.values(state.gear).filter(
-    (g) => g.controller === owner && g.location.kind === 'base',
+    (g) => g.controller === owner && (g.location.kind === 'base' || g.attachedTo),
   );
   if (gear.length === 0) return null;
 
@@ -567,19 +745,29 @@ function GearRow({
         const card = cardFor(g.uid);
         const attachable = Boolean(equipTarget && canEquip?.(g.uid));
         const activatable = Boolean(canActivate?.(g.uid));
+        const host = g.attachedTo ? cardFor(g.attachedTo) : undefined;
         return (
           <span key={g.uid} className="flex items-center gap-1">
-            <span
+            <button
+              type="button"
               {...bind(card)}
-              title={card?.name}
-              className="grid h-9 w-7 place-items-center overflow-hidden rounded border border-line piece"
+              {...drag(g.uid)}
+              onClick={() => onSelect(g.uid)}
+              title={[card?.name, host ? `on ${host.baseName}` : null, g.ready ? null : 'exhausted']
+                .filter(Boolean)
+                .join(' · ')}
+              aria-label={card?.name}
+              className={`grid h-9 w-7 place-items-center overflow-hidden rounded border border-line piece ${
+                g.ready ? '' : 'opacity-60'
+              } ${selected === g.uid ? 'ring-2 ring-calm' : ''}`}
             >
               {card && cardImage(card, 'thumb') ? (
                 <img src={cardImage(card, 'thumb')!} alt="" className="h-full w-full object-cover" />
               ) : (
                 <span className="text-[8px]">{card?.baseName}</span>
               )}
-            </span>
+            </button>
+            {host && <span className="text-[9px] text-muted">on {host.baseName}</span>}
             {attachable && (
               <button
                 type="button"
@@ -621,6 +809,7 @@ function MatCard({
   onClick?: () => void;
   bind: Bind;
 }) {
+  const { drag } = useContext(DndContext);
   const src = card ? cardImage(card, 'thumb') : null;
   const accent = DOMAIN_COLOR[card?.domains[0] ?? 'Colorless'];
   const boosted = might !== (card?.might ?? 0);
@@ -640,6 +829,7 @@ function MatCard({
       type="button"
       onClick={onClick}
       {...bind(card)}
+      {...drag(unit.uid)}
       title={[card?.name, ...statuses].filter(Boolean).join(' · ')}
       aria-label={[`${card?.name ?? 'Unit'}, ${might} might`, ...statuses].join(', ')}
       className={`relative shrink-0 overflow-hidden rounded-md piece ${
@@ -716,6 +906,8 @@ function BattlefieldZone({
   bind,
   selected,
   onSelectUnit,
+  picked,
+  onPickBattlefield,
   canMoveHere,
   onMoveHere,
   canPlayHidden,
@@ -734,6 +926,9 @@ function BattlefieldZone({
   bind: Bind;
   selected: string | null;
   onSelectUnit: (uid: string) => void;
+  /** Whether the battlefield itself is selected — for setting control by hand. */
+  picked: boolean;
+  onPickBattlefield: () => void;
   canMoveHere: boolean;
   onMoveHere: () => void;
   canPlayHidden: (uid: string) => boolean;
@@ -764,13 +959,30 @@ function BattlefieldZone({
         ? { text: 'They hold', colour: 'var(--color-fury)' }
         : { text: 'Uncontrolled', colour: 'var(--color-muted)' };
 
+  const { drop } = useContext(DndContext);
+
   return (
     <section
       className={`mat-zone overflow-hidden ${bf.contested ? 'mat-contested' : ''}`}
-      style={canMoveHere ? { borderColor: 'var(--color-calm)' } : undefined}
+      style={canMoveHere || picked ? { borderColor: 'var(--color-calm)' } : undefined}
+      {...drop({ kind: 'battlefield', index })}
     >
-      {/* Printed battlefield header — name, control state, rules text */}
-      <div className="relative" {...bind(card)}>
+      {/* Printed battlefield header — name, control state, rules text. Tap to set control. */}
+      <div
+        className="relative cursor-pointer"
+        role="button"
+        tabIndex={0}
+        aria-pressed={picked}
+        aria-label={`${card?.baseName ?? `Battlefield ${index + 1}`}: set who holds it`}
+        onClick={onPickBattlefield}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onPickBattlefield();
+          }
+        }}
+        {...bind(card)}
+      >
         {card && cardImage(card, 'card') && (
           <img
             src={cardImage(card, 'card')!}
@@ -802,7 +1014,15 @@ function BattlefieldZone({
 
       <div className="space-y-1.5 p-2">
         <Side label="Them" units={theirs} might={mightOf(theirs)} colour="var(--color-seat-them)">
-          <UnitRow units={theirs} state={state} lookup={lookup} cardFor={cardFor} bind={bind} />
+          <UnitRow
+            units={theirs}
+            state={state}
+            lookup={lookup}
+            cardFor={cardFor}
+            bind={bind}
+            selected={selected}
+            onSelect={onSelectUnit}
+          />
         </Side>
 
         {hidden.length > 0 && (
@@ -1026,8 +1246,9 @@ function Hand({
   lookup,
   cardFor,
   bind,
+  selected,
   onConsider,
-  onPlay,
+  onSelect,
   onHide,
   canAct,
 }: {
@@ -1036,11 +1257,14 @@ function Hand({
   lookup: (id: string) => Card | undefined;
   cardFor: (uid: string) => Card | undefined;
   bind: Bind;
+  selected: string | null;
   onConsider: (uid: string | null) => void;
-  onPlay: (uid: string) => void;
+  /** Picks the card up; the action tray then offers Play and the rest. */
+  onSelect: (uid: string) => void;
   onHide: (uid: string, battlefield: number) => void;
   canAct: boolean;
 }) {
+  const { drag, drop } = useContext(DndContext);
   const p = state.players[me];
   const slots = [
     ...(p.championZone ? [{ uid: p.championZone, champion: true }] : []),
@@ -1048,12 +1272,13 @@ function Hand({
   ];
 
   return (
-    <div className="mx-auto -mt-3 max-w-6xl">
+    <div className="mx-auto -mt-3 max-w-6xl" {...drop({ kind: 'hand' })}>
       <div className="flex items-end gap-1.5 overflow-x-auto px-2 pb-1 pt-4">
         {slots.length === 0 && <span className="py-8 text-xs text-muted">Hand empty</span>}
         {slots.map(({ uid, champion }) => {
           const card = cardFor(uid);
           const result = reduce(state, { type: 'PLAY_CARD', uid }, lookup);
+          // Only a hint now: a card the rules refuse can still be played by hand.
           const playable = canAct && result.ok;
           const src = card ? cardImage(card, 'thumb') : null;
 
@@ -1061,8 +1286,9 @@ function Hand({
             <div key={uid} className="shrink-0">
               <button
                 type="button"
-                disabled={!playable}
-                onClick={() => onPlay(uid)}
+                disabled={!canAct}
+                onClick={() => onSelect(uid)}
+                {...drag(uid)}
                 onPointerEnter={(e) => {
                   onConsider(uid);
                   bind(card).onPointerEnter(e);
@@ -1074,11 +1300,10 @@ function Hand({
                 onContextMenu={bind(card).onContextMenu}
                 title={playable ? `Play ${card?.name}` : (result as { reason: string }).reason}
                 aria-label={card?.name}
-                className={`relative block overflow-hidden rounded-lg piece transition-transform ${
-                  playable
-                    ? 'hover:-translate-y-2 hover:ring-2 hover:ring-calm'
-                    : 'opacity-45 saturate-50'
-                }`}
+                aria-pressed={selected === uid}
+                className={`relative block overflow-hidden rounded-lg piece transition-transform hover:-translate-y-2 ${
+                  playable ? 'hover:ring-2 hover:ring-calm' : 'opacity-70'
+                } ${selected === uid ? '-translate-y-2 ring-2 ring-calm' : ''}`}
                 style={{ width: 74, height: 103 }}
               >
                 {src ? (
