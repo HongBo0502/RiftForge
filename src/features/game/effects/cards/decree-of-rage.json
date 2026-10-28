@@ -3,27 +3,9 @@
   "texts": [
     "[Action] This can't be countered. Deal 4 to an enemy Calm unit."
   ],
-  "abilities": [
-    {
-      "trigger": null,
-      "instructions": [
-        {
-          "verb": "deal",
-          "amount": 4,
-          "target": {
-            "kind": "unit",
-            "side": "enemy",
-            "where": "anywhere",
-            "chosen": true,
-            "count": 1
-          }
-        }
-      ],
-      "condition": null
-    }
-  ],
+  "abilities": [],
   "activated": [],
   "manual": [
-    "This can't be countered."
+    "[Action] This can't be countered. Deal 4 to an enemy Calm unit."
   ]
 }

@@ -6,8 +6,9 @@ import {
   type DependentKeyword,
   unautomatedText,
 } from '../engine/keywords';
+import { BOARD_STATE_VERBS } from './parse';
 import { scriptText } from './scriptText';
-import type { CardScript, ParsedCard } from './types';
+import type { CardScript, ParsedAbility, ParsedCard } from './types';
 
 export { scriptText };
 
@@ -49,6 +50,43 @@ export function scriptFor(card: Card): ParsedCard {
   return { abilities: script.abilities, activatedAbilities: script.activated, unparsed: script.manual };
 }
 
+/** Abilities that describe board state; combat.ts and reducer.ts read them directly. */
+export const isBoardState = (ability: ParsedAbility): boolean =>
+  ability.instructions.every((i) => (BOARD_STATE_VERBS as readonly string[]).includes(i.verb));
+
+/**
+ * Whether the engine actually runs this ability. A scripted ability it does
+ * not run must never look automated — see `manualText`.
+ *
+ * Run today: board state (continuously); a spell's own text (as it resolves);
+ * a permanent's "When you play me" (as it enters). Each choice must be a
+ * single unit or gear — "up to N" choices and "here" outside a trigger that
+ * knows where "here" is are not run yet. Every other trigger (attack, death,
+ * conquer…) waits for the trigger system.
+ */
+export function isRunnable(ability: ParsedAbility, card: Card): boolean {
+  if (isBoardState(ability)) return true;
+  // "Discard 1" is the player's choice of card; the executor would pick for them.
+  if (ability.instructions.some((i) => i.verb === 'discard')) return false;
+  const onPlay = card.type === 'Spell' ? ability.trigger === null : ability.trigger?.on === 'play';
+  if (!onPlay) return false;
+  return ability.instructions.every((instruction) => {
+    const selector =
+      'target' in instruction ? instruction.target : 'who' in instruction ? instruction.who : null;
+    if (!selector || selector.kind === 'player' || selector.kind === 'self') return true;
+    if (!selector.chosen) return selector.where !== 'here' || card.type !== 'Spell';
+    return selector.count === 1 && selector.where !== 'here';
+  });
+}
+
+/**
+ * The abilities that run as this card is played: a spell's text on
+ * resolution, or a permanent's "When you play me". Board state excluded.
+ */
+export function onPlayAbilities(card: Card): ParsedAbility[] {
+  return scriptFor(card).abilities.filter((a) => !isBoardState(a) && isRunnable(a, card));
+}
+
 const AUTOMATED = new Set<string>(AUTOMATED_KEYWORDS.map((k) => k.toLowerCase()));
 const DEPENDENT = /^\[(Legion|Level|Empowered)(?:\s+(\d+))?\]\[>\]/i;
 
@@ -69,11 +107,16 @@ function forDisplay(sentence: string): string {
  * A scripted card shows exactly its `manual` sentences — minus any whose
  * Dependent Keyword is currently inactive (824.1.d / 828.1.c), when the
  * caller knows the context. An unscripted card shows its whole remaining
- * text, as before scripts existed.
+ * text, as before scripts existed — and so does a scripted card with any
+ * ability the engine does not run yet (`isRunnable`), because a script only
+ * records *what* an ability does, not which printed sentence it came from.
  */
 export function manualText(card: Card, context?: DependencyContext): string | null {
   const script = cardScript(card);
   if (!script) return unautomatedText(card, context);
+  if (script.abilities.some((ability) => !isRunnable(ability, card))) {
+    return unautomatedText(card, context);
+  }
 
   const lines = script.manual
     .filter((sentence) => {

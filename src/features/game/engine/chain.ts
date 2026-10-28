@@ -202,17 +202,24 @@ export function resolveTop(state: GameState, lookup: CardLookup): Resolution | n
    * condition changed between activation and resolution, the effect is
    * reported as manual text rather than silently skipped.
    */
-  if (card && outcome.executed.length > 0) {
+  /*
+   * A card's own text runs even when a chosen target has gone: each
+   * instruction fizzles on its own (359.3.e.1), which `execute` handles. Only
+   * the "apply by hand" note is skipped when nothing at all survived.
+   */
+  if (card) {
+    const chosen = item.chosen ?? [];
     const ran =
-      item.kind === 'ability'
-        ? (() => {
+      item.kind === 'spell' || item.trigger === 'play'
+        ? runCardEffects(state, card, item.controller, item.uid, lookup, chosen)
+        : (() => {
             const ability = activatableAbility(state, item.controller, item.uid, card);
             return ability
               ? runActivatedAbility(state, ability, item.controller, item.uid, lookup)
               : { ran: 0, leftover: manualText(card) ?? unautomatedText(card) };
-          })()
-        : runCardEffects(state, card, item.controller, item.uid, lookup);
-    const manual = ran.leftover ?? null;
+          })();
+    // A permanent's leftover text was already flagged as it entered play.
+    const manual = item.trigger === 'play' || outcome.executed.length === 0 ? null : ran.leftover;
     if (manual) {
       state.unautomated.push(`${card.baseName}: ${manual.replace(/\n/g, ' ')}`);
       log(state, item.controller, `${card.baseName}'s text is not automated — apply it by hand.`);
@@ -306,11 +313,13 @@ export function spellItem(
   controller: PlayerId,
   card: Card,
   targets: string[] = [],
+  chosen: string[] = [],
 ): ChainItem {
   return {
     uid,
     controller,
     kind: 'spell',
+    chosen,
     /*
      * The timing marker and its reminder text are dropped: the engine enforces
      * those itself now, so what is left is the part a player still has to read.

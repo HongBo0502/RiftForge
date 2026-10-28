@@ -6,6 +6,7 @@ import { reduce } from '../engine/reducer';
 import type { GameState, PlayerId } from '../engine/types';
 import { execute, needsNoChoices, resolve } from './execute';
 import { parseActivatedAbilityLine, parseCard, parseInstruction, parseSelector } from './parse';
+import { manualText, onPlayAbilities } from './scripts';
 
 const lookup = (cardId: string): Card | undefined => BY_ID.get(cardId);
 
@@ -394,15 +395,16 @@ describe('end to end, through the chain', () => {
      * real, and check the game did what the card says — with nothing left in the
      * "apply by hand" panel.
      */
+    // Chosen through the card's script — what the engine actually runs.
     const self = CARDS.find((c) => {
       if (c.type !== 'Spell' || !c.text) return false;
       if ((c.energy ?? 0) > 3 || (c.power ?? 0) > 3) return false;
-      const parsed = parseCard(c);
+      const abilities = onPlayAbilities(c);
       return (
-        parsed.unparsed.length === 0 &&
-        parsed.abilities.length > 0 &&
-        parsed.abilities.every((a) => a.trigger === null && needsNoChoices(a.instructions)) &&
-        parsed.abilities.some((a) => a.instructions.some((i) => i.verb === 'draw'))
+        manualText(c) === null &&
+        abilities.length > 0 &&
+        abilities.every((a) => needsNoChoices(a.instructions)) &&
+        abilities.some((a) => a.instructions.some((i) => i.verb === 'draw'))
       );
     });
     expect(self, 'dataset should contain a self-contained draw spell').toBeDefined();

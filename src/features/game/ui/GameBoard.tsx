@@ -2,7 +2,15 @@ import { createContext, useContext, useMemo, useState } from 'react';
 import type { Card } from '@/types';
 import { cardImage } from '@/data/cards';
 import { CardText, DOMAIN_COLOR, EnergyGlyph, MightGlyph, RuneGlyph } from '@/data/symbols';
+import {
+  type TargetRequest,
+  anyTargets,
+  describeRequest,
+  legalTargets,
+  targetRequests,
+} from '../effects/targets';
 import { unitMight } from '../engine/combat';
+import { dependencyContext } from '../engine/keywords';
 import type { ManualOp, ManualZone } from '../engine/manual';
 import { planPayment } from '../engine/payment';
 import { reduce } from '../engine/reducer';
@@ -29,6 +37,25 @@ const noDnd: Dnd = {
   drop: () => ({ onDragOver: () => {}, onDrop: () => {} }),
 };
 const DndContext = createContext<Dnd>(noDnd);
+
+/**
+ * Choosing targets. While a card that chooses is being played, the pieces the
+ * engine says are legal light up and a tap picks one, instead of selecting.
+ */
+interface Targeting {
+  /** Legal picks for the current question; empty when not choosing. */
+  targetable: ReadonlySet<string>;
+  onTarget: (uid: string) => void;
+}
+const TargetContext = createContext<Targeting>({ targetable: new Set(), onTarget: () => {} });
+
+/** A card being played that is still asking its questions. */
+interface Choosing {
+  uid: string;
+  to?: Location;
+  requests: TargetRequest[];
+  chosen: string[];
+}
 
 interface Props {
   state: GameState;
@@ -121,7 +148,7 @@ export default function GameBoard({
     clear();
     const onMySide = to.kind === 'battlefield' || (to.kind === 'base' && to.player === me);
     if (inHand(uid) && onMySide) {
-      attempt({ type: 'PLAY_CARD', uid, to: to.kind === 'battlefield' ? to : undefined });
+      play(uid, to.kind === 'battlefield' ? to : undefined);
       return;
     }
     const unit = state.units[uid];
@@ -177,12 +204,51 @@ export default function GameBoard({
     return result.ok ? result.plan : null;
   }, [considering, state, me, lookup]);
 
+  const [choosing, setChoosing] = useState<Choosing | null>(null);
+  const optionsFor = (c: Choosing): string[] =>
+    legalTargets(state, me, c.requests[c.chosen.length].selector, c.uid);
+
+  /**
+   * Steps a play through its questions. A permanent's trigger with nothing
+   * legal to pick is skipped (''), as the engine expects; a spell with nothing
+   * legal goes to the engine as-is, which explains the refusal (355.8).
+   */
+  const advance = (c: Choosing) => {
+    const next = { ...c, chosen: [...c.chosen] };
+    const isSpell = cardFor(c.uid)?.type === 'Spell';
+    while (next.chosen.length < next.requests.length && optionsFor(next).length === 0 && !isSpell) {
+      next.chosen.push('');
+    }
+    const done = next.chosen.length === next.requests.length || optionsFor(next).length === 0;
+    if (done) {
+      setChoosing(null);
+      attempt({ type: 'PLAY_CARD', uid: c.uid, to: c.to, targets: next.chosen });
+      return;
+    }
+    setChoosing(next);
+  };
+
   const play = (uid: string, to?: Location) => {
-    attempt({ type: 'PLAY_CARD', uid, to });
     setHovering(null);
     setPick(null);
     clear();
+    const card = cardFor(uid);
+    const requests = card ? targetRequests(card, dependencyContext(state, me, uid)) : [];
+    if (requests.length === 0) {
+      attempt({ type: 'PLAY_CARD', uid, to });
+      return;
+    }
+    advance({ uid, to, requests, chosen: [] });
   };
+
+  const targeting = useMemo<Targeting>(() => {
+    if (!choosing) return { targetable: new Set(), onTarget: () => {} };
+    return {
+      targetable: new Set(optionsFor(choosing)),
+      onTarget: (uid) => advance({ ...choosing, chosen: [...choosing.chosen, uid] }),
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [choosing, state]);
 
   const moveTo = (to: Location) => {
     if (!selected) return;
@@ -192,12 +258,21 @@ export default function GameBoard({
 
   return (
     <DndContext.Provider value={dnd}>
+    <TargetContext.Provider value={targeting}>
     <div className={`min-h-dvh bg-table px-2 pt-2 sm:px-4 ${pick ? 'pb-56' : 'pb-2'}`}>
       {preview}
 
       <StatusBar state={state} me={me} them={them} onExit={onExit} />
 
-      {warning ? (
+      {choosing ? (
+        <ChoosingBar
+          card={cardFor(choosing.uid)}
+          request={choosing.requests[choosing.chosen.length]}
+          step={choosing.chosen.length + 1}
+          of={choosing.requests.length}
+          onCancel={() => setChoosing(null)}
+        />
+      ) : warning ? (
         <WarningBar
           warning={warning}
           onForce={(action) => {
@@ -441,7 +516,7 @@ export default function GameBoard({
 
       <LogPanel state={state} />
 
-      {pick && canAct && (
+      {pick && canAct && !choosing && (
         <ActionTray
           pick={pick}
           state={state}
@@ -454,7 +529,43 @@ export default function GameBoard({
         />
       )}
     </div>
+    </TargetContext.Provider>
     </DndContext.Provider>
+  );
+}
+
+/** The question a card is asking while it is played. 355.6 */
+function ChoosingBar({
+  card,
+  request,
+  step,
+  of,
+  onCancel,
+}: {
+  card: Card | undefined;
+  request: TargetRequest;
+  step: number;
+  of: number;
+  onCancel: () => void;
+}) {
+  return (
+    <div
+      role="status"
+      className="sticky top-2 z-30 mx-auto mt-2 flex max-w-6xl flex-wrap items-center gap-2 rounded-lg border border-order bg-order/15 px-3 py-2 text-sm shadow-lg backdrop-blur"
+    >
+      <span className="font-semibold text-order">{card?.baseName ?? 'Card'}</span>
+      <span className="min-w-0 flex-1">
+        {describeRequest(request)} — tap a glowing card.
+        {of > 1 && <span className="ml-1 text-muted">({step} of {of})</span>}
+      </span>
+      <button
+        type="button"
+        onClick={onCancel}
+        className="rounded-md border border-line px-2 py-1 text-xs text-muted"
+      >
+        Cancel
+      </button>
+    </div>
   );
 }
 
@@ -732,6 +843,7 @@ function GearRow({
   onActivate?: (uid: string) => void;
 }) {
   const { drag } = useContext(DndContext);
+  const { targetable, onTarget } = useContext(TargetContext);
   // Attached gear is listed with the base too: it is the one place to find it.
   const gear = Object.values(state.gear).filter(
     (g) => g.controller === owner && (g.location.kind === 'base' || g.attachedTo),
@@ -752,14 +864,18 @@ function GearRow({
               type="button"
               {...bind(card)}
               {...drag(g.uid)}
-              onClick={() => onSelect(g.uid)}
+              onClick={() =>
+                targetable.has(g.uid) ? onTarget(g.uid) : targetable.size === 0 && onSelect(g.uid)
+              }
               title={[card?.name, host ? `on ${host.baseName}` : null, g.ready ? null : 'exhausted']
                 .filter(Boolean)
                 .join(' · ')}
               aria-label={card?.name}
               className={`grid h-9 w-7 place-items-center overflow-hidden rounded border border-line piece ${
                 g.ready ? '' : 'opacity-60'
-              } ${selected === g.uid ? 'ring-2 ring-calm' : ''}`}
+              } ${selected === g.uid ? 'ring-2 ring-calm' : ''} ${
+                targetable.has(g.uid) ? 'ring-2 ring-order animate-pulse' : ''
+              }`}
             >
               {card && cardImage(card, 'thumb') ? (
                 <img src={cardImage(card, 'thumb')!} alt="" className="h-full w-full object-cover" />
@@ -810,6 +926,9 @@ function MatCard({
   bind: Bind;
 }) {
   const { drag } = useContext(DndContext);
+  const { targetable, onTarget } = useContext(TargetContext);
+  const choosing = targetable.size > 0;
+  const isTarget = targetable.has(unit.uid);
   const src = card ? cardImage(card, 'thumb') : null;
   const accent = DOMAIN_COLOR[card?.domains[0] ?? 'Colorless'];
   const boosted = might !== (card?.might ?? 0);
@@ -827,14 +946,19 @@ function MatCard({
   return (
     <button
       type="button"
-      onClick={onClick}
+      // While a card is choosing, a tap picks a legal target and nothing else.
+      onClick={isTarget ? () => onTarget(unit.uid) : choosing ? undefined : onClick}
       {...bind(card)}
       {...drag(unit.uid)}
       title={[card?.name, ...statuses].filter(Boolean).join(' · ')}
-      aria-label={[`${card?.name ?? 'Unit'}, ${might} might`, ...statuses].join(', ')}
+      aria-label={[`${card?.name ?? 'Unit'}, ${might} might`, ...statuses, isTarget ? 'can be chosen' : null]
+        .filter(Boolean)
+        .join(', ')}
       className={`relative shrink-0 overflow-hidden rounded-md piece ${
         unit.ready ? '' : 'piece-exhausted'
-      } ${selected ? 'ring-2 ring-calm' : ''}`}
+      } ${selected && !choosing ? 'ring-2 ring-calm' : ''} ${
+        isTarget ? 'ring-2 ring-order animate-pulse' : choosing ? 'opacity-40' : ''
+      }`}
       style={{
         width: 48,
         height: 67,
@@ -1277,7 +1401,9 @@ function Hand({
         {slots.length === 0 && <span className="py-8 text-xs text-muted">Hand empty</span>}
         {slots.map(({ uid, champion }) => {
           const card = cardFor(uid);
-          const result = reduce(state, { type: 'PLAY_CARD', uid }, lookup);
+          // A card that chooses is tried with any legal choice, just for the hint.
+          const targets = card ? anyTargets(state, me, card, dependencyContext(state, me, uid)) : [];
+          const result = reduce(state, { type: 'PLAY_CARD', uid, targets }, lookup);
           // Only a hint now: a card the rules refuse can still be played by hand.
           const playable = canAct && result.ok;
           const src = card ? cardImage(card, 'thumb') : null;

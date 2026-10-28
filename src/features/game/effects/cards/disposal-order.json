@@ -3,25 +3,9 @@
   "texts": [
     "[Reaction] Choose one —Choose up to 3 cards from opponents' trashes. Their owners recycle them. Draw 1."
   ],
-  "abilities": [
-    {
-      "trigger": null,
-      "instructions": [
-        {
-          "verb": "draw",
-          "amount": 1,
-          "who": {
-            "kind": "player",
-            "side": "you"
-          }
-        }
-      ],
-      "condition": null
-    }
-  ],
+  "abilities": [],
   "activated": [],
   "manual": [
-    "Choose one —Choose up to 3 cards from opponents' trashes.",
-    "Their owners recycle them."
+    "[Reaction] Choose one —Choose up to 3 cards from opponents' trashes. Their owners recycle them. Draw 1."
   ]
 }

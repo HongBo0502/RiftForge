@@ -23,7 +23,7 @@
           "target": {
             "kind": "unit",
             "side": "any",
-            "where": "anywhere",
+            "where": "battlefield",
             "chosen": false,
             "count": null
           }

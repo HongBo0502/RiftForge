@@ -3,24 +3,9 @@
   "texts": [
     "Ready up to 4 units, gear, and/or runes."
   ],
-  "abilities": [
-    {
-      "trigger": null,
-      "instructions": [
-        {
-          "verb": "ready",
-          "target": {
-            "kind": "unit",
-            "side": "any",
-            "where": "anywhere",
-            "chosen": true,
-            "count": 4
-          }
-        }
-      ],
-      "condition": null
-    }
-  ],
+  "abilities": [],
   "activated": [],
-  "manual": []
+  "manual": [
+    "Ready up to 4 units, gear, and/or runes."
+  ]
 }

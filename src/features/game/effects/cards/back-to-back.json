@@ -3,26 +3,9 @@
   "texts": [
     "[Reaction] Give two friendly units each +2 :rb_might: this turn."
   ],
-  "abilities": [
-    {
-      "trigger": null,
-      "instructions": [
-        {
-          "verb": "might",
-          "amount": 2,
-          "target": {
-            "kind": "unit",
-            "side": "friendly",
-            "where": "anywhere",
-            "chosen": false,
-            "count": null
-          },
-          "duration": "thisTurn"
-        }
-      ],
-      "condition": null
-    }
-  ],
+  "abilities": [],
   "activated": [],
-  "manual": []
+  "manual": [
+    "[Reaction] Give two friendly units each +2 :rb_might: this turn."
+  ]
 }

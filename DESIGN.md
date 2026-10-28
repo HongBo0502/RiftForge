@@ -288,6 +288,14 @@ rules engine second. Built in `ui/FreeTools.tsx` on `engine/manual.ts`.
 - **Drag and drop** on desktop does the same as the tray: drop on a base, a
   battlefield or the hand.
 - **Tap a battlefield's header** to set who holds it.
+- **Choosing targets.** Playing a card whose script chooses ("Deal 6 to a unit
+  at a battlefield") opens a question bar in Order across the top — the card's
+  name, "Choose a unit at a battlefield to deal damage to — tap a glowing
+  card", a step count when it asks more than once, and Cancel. Legal targets
+  pulse with an Order ring; everything else dims and ignores taps. The legal
+  set is the engine's (`legalTargets`), never the board's own filter. A card
+  with no legal target says so in its hand hint, and playing it anyway offers
+  Do it anyway.
 - **Table tools** under the hand: Undo (same device only), Draw, Shuffle,
   + Rune, Clear chain (only while a chain or showdown is up — the way out of a
   stuck card), Counters (points, XP, Energy for both players), Trash (both

@@ -3,26 +3,9 @@
   "texts": [
     "When you play me, buff up to two other friendly units."
   ],
-  "abilities": [
-    {
-      "trigger": {
-        "on": "play"
-      },
-      "instructions": [
-        {
-          "verb": "buff",
-          "target": {
-            "kind": "unit",
-            "side": "friendly",
-            "where": "anywhere",
-            "chosen": false,
-            "count": null
-          }
-        }
-      ],
-      "condition": null
-    }
-  ],
+  "abilities": [],
   "activated": [],
-  "manual": []
+  "manual": [
+    "When you play me, buff up to two other friendly units."
+  ]
 }

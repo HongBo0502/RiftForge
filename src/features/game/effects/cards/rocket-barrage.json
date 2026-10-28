@@ -3,27 +3,9 @@
   "texts": [
     "[Repeat] :rb_energy_4::rb_rune_mind: Choose one —Deal 4 to a unit in a base. Kill a gear."
   ],
-  "abilities": [
-    {
-      "trigger": null,
-      "instructions": [
-        {
-          "verb": "kill",
-          "target": {
-            "kind": "gear",
-            "side": "any",
-            "where": "anywhere",
-            "chosen": true,
-            "count": 1
-          }
-        }
-      ],
-      "condition": null
-    }
-  ],
+  "abilities": [],
   "activated": [],
   "manual": [
-    "[Repeat] :rb_energy_4::rb_rune_mind:",
-    "Choose one —Deal 4 to a unit in a base."
+    "[Repeat] :rb_energy_4::rb_rune_mind: Choose one —Deal 4 to a unit in a base. Kill a gear."
   ]
 }

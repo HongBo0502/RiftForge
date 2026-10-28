@@ -3,63 +3,9 @@
   "texts": [
     "[Repeat] — :rb_energy_1: / :rb_rune_rainbow: / :rb_energy_1::rb_rune_rainbow: Choose one you haven't already chosen —Draw 1. Deal 2 to a unit at a battlefield. Deal 3 to a unit at a base. Give a unit at a battlefield -4 :rb_might: this turn."
   ],
-  "abilities": [
-    {
-      "trigger": null,
-      "instructions": [
-        {
-          "verb": "deal",
-          "amount": 2,
-          "target": {
-            "kind": "unit",
-            "side": "any",
-            "where": "battlefield",
-            "chosen": true,
-            "count": 1
-          }
-        }
-      ],
-      "condition": null
-    },
-    {
-      "trigger": null,
-      "instructions": [
-        {
-          "verb": "deal",
-          "amount": 3,
-          "target": {
-            "kind": "unit",
-            "side": "any",
-            "where": "anywhere",
-            "chosen": true,
-            "count": 1
-          }
-        }
-      ],
-      "condition": null
-    },
-    {
-      "trigger": null,
-      "instructions": [
-        {
-          "verb": "might",
-          "amount": -4,
-          "target": {
-            "kind": "unit",
-            "side": "any",
-            "where": "battlefield",
-            "chosen": true,
-            "count": 1
-          },
-          "duration": "thisTurn"
-        }
-      ],
-      "condition": null
-    }
-  ],
+  "abilities": [],
   "activated": [],
   "manual": [
-    "[Repeat] — :rb_energy_1: / :rb_rune_rainbow: / :rb_energy_1::rb_rune_rainbow:",
-    "Choose one you haven't already chosen —Draw 1."
+    "[Repeat] — :rb_energy_1: / :rb_rune_rainbow: / :rb_energy_1::rb_rune_rainbow: Choose one you haven't already chosen —Draw 1. Deal 2 to a unit at a battlefield. Deal 3 to a unit at a base. Give a unit at a battlefield -4 :rb_might: this turn."
   ]
 }

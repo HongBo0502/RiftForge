@@ -3,24 +3,9 @@
   "texts": [
     "When I attack, give me +2 :rb_might: this turn if there is a ready enemy unit here."
   ],
-  "abilities": [
-    {
-      "trigger": {
-        "on": "attack"
-      },
-      "instructions": [
-        {
-          "verb": "might",
-          "amount": 2,
-          "target": {
-            "kind": "self"
-          },
-          "duration": "thisTurn"
-        }
-      ],
-      "condition": null
-    }
-  ],
+  "abilities": [],
   "activated": [],
-  "manual": []
+  "manual": [
+    "When I attack, give me +2 :rb_might: this turn if there is a ready enemy unit here."
+  ]
 }

@@ -3,16 +3,12 @@ import { unitMight } from '../engine/combat';
 import { conditionActive, dependencyContext } from '../engine/keywords';
 import type { GameState, PlayerId } from '../engine/types';
 import { execute, needsNoChoices } from './execute';
-import { BOARD_STATE_VERBS } from './parse';
-import { manualText, scriptFor } from './scripts';
+import { manualText, onPlayAbilities, scriptFor } from './scripts';
+import { selectorOf } from './targets';
 import type { ActivatedAbility } from './types';
 
 /** A card's effects come from its script, never from its printed text. */
 const parsedFor = scriptFor;
-
-/** Whether every instruction in an ability is one `execute()` never runs. */
-const isBoardState = (instructions: { verb: string }[]): boolean =>
-  instructions.every((i) => (BOARD_STATE_VERBS as readonly string[]).includes(i.verb));
 
 export interface RunResult {
   /** How many instructions the engine actually carried out. */
@@ -22,19 +18,16 @@ export interface RunResult {
 }
 
 /**
- * Runs whatever of a card's text the engine understands, and reports the rest.
+ * Runs the abilities a card carries out as it is played — a spell's text as it
+ * resolves, or a permanent's "When you play me" — and reports the rest.
  *
- * Two things are deliberately conservative here:
+ * `chosen` holds the targets picked when the card was played, aligned to
+ * `targetRequests(card)`; each ability takes its share in order. A target that
+ * has gone, or a slot left empty because nothing was legal, skips only its own
+ * instruction (359.3.e.7) — "Deal 4 to a unit. Draw 1." still draws.
  *
- * 1. An ability with a **trigger** is not run. "When I die, draw 1" must fire on
- *    death, not when the card resolves, and triggered abilities do not reach the
- *    chain yet (383).
- * 2. An ability needing the player to **choose** a target is not run, because
- *    nothing in the board asks them to choose yet. Picking one for them would be
- *    the engine making a play decision.
- *
- * Everything not run is reported as leftover, so the "apply by hand" panel still
- * accounts for all of it.
+ * Abilities the engine does not run (`isRunnable`) are not attempted here;
+ * `manualText` then hands the player the whole card, so none of it is lost.
  */
 export function runCardEffects(
   state: GameState,
@@ -42,44 +35,34 @@ export function runCardEffects(
   controller: PlayerId,
   source: string,
   lookup: (cardId: string) => Card | undefined,
+  chosen: string[] = [],
 ): RunResult {
-  const parsed = parsedFor(card);
   const might = (uid: string) => unitMight(state, uid, lookup);
-
-  const here =
-    state.units[source]?.location.kind === 'battlefield'
-      ? (state.units[source].location as { kind: 'battlefield'; index: number }).index
-      : undefined;
+  const location = state.units[source]?.location;
+  const here = location?.kind === 'battlefield' ? location.index : undefined;
+  const context = dependencyContext(state, controller, source);
 
   let ran = 0;
-  const deferred: string[] = [];
-
-  for (const ability of parsed.abilities) {
-    // Board-state abilities (staticMight, entersReady, entersExhausted) are
-    // read directly by combat.ts/reducer.ts, not run here — see BOARD_STATE_VERBS.
-    if (isBoardState(ability.instructions)) continue;
-    if (ability.trigger !== null) {
-      deferred.push('a triggered ability');
-      continue;
+  let next = 0;
+  for (const ability of onPlayAbilities(card)) {
+    // Choices were asked for with the same condition check at play time; no
+    // ability that chooses carries a condition today, so the two cannot split.
+    if (ability.condition) {
+      const { keyword, value } = ability.condition;
+      if (!conditionActive(keyword, value, context)) continue;
     }
-    if (!needsNoChoices(ability.instructions)) {
-      deferred.push('an ability that needs a target');
-      continue;
-    }
-
-    const report = execute(state, ability.instructions, { controller, source, here }, might);
+    const needs = ability.instructions.filter((i) => {
+      const selector = selectorOf(i);
+      return selector !== null && selector.kind !== 'player' && selector.kind !== 'self' && selector.chosen;
+    }).length;
+    const mine = chosen.slice(next, next + needs);
+    next += needs;
+    const report = execute(state, ability.instructions, { controller, source, here, chosen: mine }, might);
     ran += report.done.length;
   }
 
-  /*
-   * What the player is told: the text the card's script leaves to them (all
-   * of it, for an unscripted card), plus a summary of scripted abilities that
-   * were not run — quoting those would suggest the engine did not know them.
-   */
-  const manual = manualText(card, dependencyContext(state, controller, source));
-  const held = deferred.length > 0 ? `Not applied automatically: ${deferred.join(', ')}.` : '';
-  const leftover = [manual?.replace(/\n/g, ' '), held].filter(Boolean).join(' ').trim();
-  return { ran, leftover: leftover || null };
+  const manual = manualText(card, context);
+  return { ran, leftover: manual ? manual.replace(/\n/g, ' ') : null };
 }
 
 /**

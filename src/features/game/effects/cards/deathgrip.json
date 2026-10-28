@@ -3,38 +3,9 @@
   "texts": [
     "[Reaction] Kill a friendly unit to give +:rb_might: equal to its Might to another friendly unit this turn. Draw 1."
   ],
-  "abilities": [
-    {
-      "trigger": null,
-      "instructions": [
-        {
-          "verb": "kill",
-          "target": {
-            "kind": "unit",
-            "side": "friendly",
-            "where": "anywhere",
-            "chosen": true,
-            "count": 1
-          }
-        }
-      ],
-      "condition": null
-    },
-    {
-      "trigger": null,
-      "instructions": [
-        {
-          "verb": "draw",
-          "amount": 1,
-          "who": {
-            "kind": "player",
-            "side": "you"
-          }
-        }
-      ],
-      "condition": null
-    }
-  ],
+  "abilities": [],
   "activated": [],
-  "manual": []
+  "manual": [
+    "[Reaction] Kill a friendly unit to give +:rb_might: equal to its Might to another friendly unit this turn. Draw 1."
+  ]
 }

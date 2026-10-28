@@ -98,12 +98,13 @@ built. Assume something there is wrong.
 
 ## The open work, most valuable first
 
-### 1. Targeting — the biggest gap, and it is a design problem
+### 1. Targeting — first version built, design still open
 
-The engine accepts targets (`PLAY_CARD` takes a `targets` array) and the card
-effect parser already reads what a card chooses. **Nothing in the board ever
-asks the player to choose.** So every card reading "Deal 4 to a unit at a
-battlefield" is stuck, even though the engine could resolve it.
+A first version exists (DESIGN.md §9 "Choosing targets"): a question bar plus
+pulsing legal targets, driven by `effects/targets.ts`. It covers one unit or
+gear per question. Still to design: "up to N" choices, choosing a battlefield
+or a player, multi-target cards on a phone, and how a triggered ability's
+question is asked of the *opponent* when it is their card.
 
 Designing this well is the highest-value thing available:
 

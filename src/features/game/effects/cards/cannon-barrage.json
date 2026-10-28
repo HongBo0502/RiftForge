@@ -3,25 +3,9 @@
   "texts": [
     "[Reaction] Deal 2 to all enemy units in combat."
   ],
-  "abilities": [
-    {
-      "trigger": null,
-      "instructions": [
-        {
-          "verb": "deal",
-          "amount": 2,
-          "target": {
-            "kind": "unit",
-            "side": "enemy",
-            "where": "anywhere",
-            "chosen": false,
-            "count": null
-          }
-        }
-      ],
-      "condition": null
-    }
-  ],
+  "abilities": [],
   "activated": [],
-  "manual": []
+  "manual": [
+    "[Reaction] Deal 2 to all enemy units in combat."
+  ]
 }

@@ -3,24 +3,9 @@
   "texts": [
     "Kill an enemy Chaos unit or gear."
   ],
-  "abilities": [
-    {
-      "trigger": null,
-      "instructions": [
-        {
-          "verb": "kill",
-          "target": {
-            "kind": "unit",
-            "side": "enemy",
-            "where": "anywhere",
-            "chosen": true,
-            "count": 1
-          }
-        }
-      ],
-      "condition": null
-    }
-  ],
+  "abilities": [],
   "activated": [],
-  "manual": []
+  "manual": [
+    "Kill an enemy Chaos unit or gear."
+  ]
 }

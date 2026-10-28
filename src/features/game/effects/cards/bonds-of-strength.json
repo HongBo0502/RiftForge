@@ -3,28 +3,9 @@
   "texts": [
     "[Reaction] [Repeat] :rb_energy_2: Give two friendly units each +1 :rb_might: this turn."
   ],
-  "abilities": [
-    {
-      "trigger": null,
-      "instructions": [
-        {
-          "verb": "might",
-          "amount": 1,
-          "target": {
-            "kind": "unit",
-            "side": "friendly",
-            "where": "anywhere",
-            "chosen": false,
-            "count": null
-          },
-          "duration": "thisTurn"
-        }
-      ],
-      "condition": null
-    }
-  ],
+  "abilities": [],
   "activated": [],
   "manual": [
-    "[Repeat] :rb_energy_2:"
+    "[Reaction] [Repeat] :rb_energy_2: Give two friendly units each +1 :rb_might: this turn."
   ]
 }

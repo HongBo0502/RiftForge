@@ -200,6 +200,16 @@ export interface ChainItem {
   instructions: ChainInstruction[];
   /** Display name for an ability that has no card of its own. */
   label?: string;
+  /**
+   * The targets chosen as it was played, aligned to the card script's
+   * requests (`effects/targets.ts`). '' marks a choice with no legal option.
+   */
+  chosen?: string[];
+  /**
+   * Set on a permanent's "When you play me" ability (a triggered ability, not
+   * an Activated one), so resolution runs the right part of the card.
+   */
+  trigger?: 'play';
 }
 
 export interface LogEntry {

@@ -14,8 +14,8 @@
             "kind": "unit",
             "side": "friendly",
             "where": "anywhere",
-            "chosen": true,
-            "count": 1
+            "chosen": false,
+            "count": null
           },
           "duration": "thisTurn"
         }

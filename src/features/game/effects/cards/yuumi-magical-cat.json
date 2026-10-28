@@ -3,28 +3,9 @@
   "texts": [
     "When I attack or defend, give one of your other units here +3 :rb_might: and [Tank] this turn."
   ],
-  "abilities": [
-    {
-      "trigger": {
-        "on": "attackOrDefend"
-      },
-      "instructions": [
-        {
-          "verb": "might",
-          "amount": 3,
-          "target": {
-            "kind": "unit",
-            "side": "friendly",
-            "where": "here",
-            "chosen": false,
-            "count": null
-          },
-          "duration": "thisTurn"
-        }
-      ],
-      "condition": null
-    }
-  ],
+  "abilities": [],
   "activated": [],
-  "manual": []
+  "manual": [
+    "When I attack or defend, give one of your other units here +3 :rb_might: and [Tank] this turn."
+  ]
 }

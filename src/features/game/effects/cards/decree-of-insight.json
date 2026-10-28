@@ -3,28 +3,9 @@
   "texts": [
     "[Reaction] Ignore [Deflect] while paying this spell's cost. Give an enemy Body unit -5 :rb_might: this turn."
   ],
-  "abilities": [
-    {
-      "trigger": null,
-      "instructions": [
-        {
-          "verb": "might",
-          "amount": -5,
-          "target": {
-            "kind": "unit",
-            "side": "enemy",
-            "where": "anywhere",
-            "chosen": true,
-            "count": 1
-          },
-          "duration": "thisTurn"
-        }
-      ],
-      "condition": null
-    }
-  ],
+  "abilities": [],
   "activated": [],
   "manual": [
-    "Ignore [Deflect] while paying this spell's cost."
+    "[Reaction] Ignore [Deflect] while paying this spell's cost. Give an enemy Body unit -5 :rb_might: this turn."
   ]
 }

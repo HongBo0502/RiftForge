@@ -3,26 +3,9 @@
   "texts": [
     "Starting with the next player, each other player chooses a unit you don't control that hasn't been chosen for this spell. Kill those units."
   ],
-  "abilities": [
-    {
-      "trigger": null,
-      "instructions": [
-        {
-          "verb": "kill",
-          "target": {
-            "kind": "unit",
-            "side": "any",
-            "where": "anywhere",
-            "chosen": true,
-            "count": 1
-          }
-        }
-      ],
-      "condition": null
-    }
-  ],
+  "abilities": [],
   "activated": [],
   "manual": [
-    "Starting with the next player, each other player chooses a unit you don't control that hasn't been chosen for this spell."
+    "Starting with the next player, each other player chooses a unit you don't control that hasn't been chosen for this spell. Kill those units."
   ]
 }

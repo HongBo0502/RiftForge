@@ -119,7 +119,8 @@ src/
       rng.ts               seeded RNG
     game/effects/        per-card scripts -> instructions -> execution
       cards/*.json         ONE SCRIPT PER CARD NAME — the only source of card effects at runtime
-      scripts.ts           loads cards/*.json; scriptFor(card), manualText(card)
+      scripts.ts           loads cards/*.json; scriptFor(card), manualText(card), isRunnable
+      targets.ts           what a card chooses, what is legal to choose (355.6-355.8)
       types.ts             the effect vocabulary (verbs, selectors, triggers, CardScript)
       parse.ts             AUTHORING AID: printed text -> draft script (strict; refuses rather than guesses)
       execute.ts           runs instructions through the engine primitives
@@ -280,8 +281,30 @@ The engine reads only these; it never parses card text at runtime. A file:
   rejects unknown verbs and wordings no card prints.
 - `npm run gen-scripts` drafts files with the parser; it never overwrites an
   existing file without `--force`, because files are hand-edited from here on.
-- Coverage: 174 printings play with nothing manual (`scripts.test.ts` floor);
-  802 card files, 584 still entirely manual.
+- Coverage: 141 printings play with nothing manual (`scripts.test.ts` floor);
+  802 card files.
+- **What actually runs** is decided in one place, `isRunnable` in
+  `effects/scripts.ts`: board state; a spell's text on resolution; a
+  permanent's "When you play me" (put on the chain as a triggered ability,
+  `ChainItem.trigger: 'play'`). Every other trigger (attack, death,
+  conquer…), "up to N" choices and "discard" (the player picks the card) are
+  not run, and a card with any such ability shows its **whole** text as
+  manual — a script records what an ability does, not which sentence it came
+  from, so partial display would hide the unrun part.
+- **Targeting** (`effects/targets.ts`): `targetRequests(card)` lists what a
+  card chooses; `legalTargets` is the engine's answer to what may be picked
+  (it reuses the executor's own filter); `checkTargets` runs in PLAY_CARD
+  (355.8 — a spell with no legal target cannot be played; a permanent's
+  trigger with none just does nothing, marked ''). The chosen list rides on
+  the chain item (`ChainItem.chosen`) and is handed out to each ability in
+  order on resolution.
+- **2026-10-28 audit — the parser misread cards.** Once targeted effects ran,
+  27 scripts turned out wrong: dropped qualifiers ("an enemy *Chaos* unit"),
+  "two friendly units each" read as all of them, "choose one" cards running
+  every mode, half-effects. They were fixed or sent back to manual, and
+  `scripts.test.ts` now fails on any *running* script whose text has wording
+  the vocabulary cannot express unless a person has reviewed it (`REVIEWED`).
+  Re-running `gen-scripts --force` would reintroduce these misreads — don't.
 
 ### A (old). Card effects registry — the main long-term axis
 

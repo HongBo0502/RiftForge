@@ -3,28 +3,9 @@
   "texts": [
     "[Reaction] Choose one —Return a friendly unit to its owner's hand. Give an enemy unit -2 :rb_might: this turn."
   ],
-  "abilities": [
-    {
-      "trigger": null,
-      "instructions": [
-        {
-          "verb": "might",
-          "amount": -2,
-          "target": {
-            "kind": "unit",
-            "side": "enemy",
-            "where": "anywhere",
-            "chosen": true,
-            "count": 1
-          },
-          "duration": "thisTurn"
-        }
-      ],
-      "condition": null
-    }
-  ],
+  "abilities": [],
   "activated": [],
   "manual": [
-    "Choose one —Return a friendly unit to its owner's hand."
+    "[Reaction] Choose one —Return a friendly unit to its owner's hand. Give an enemy unit -2 :rb_might: this turn."
   ]
 }

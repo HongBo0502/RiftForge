@@ -12,7 +12,8 @@ import { closeShowdown, openShowdown, type CardLookup } from './combat';
 import { conditionActive, dependencyContext, equipCost, hasKeyword, unautomatedText } from './keywords';
 import { applyManual } from './manual';
 import { activatableAbility } from '../effects/run';
-import { manualText, scriptFor } from '../effects/scripts';
+import { manualText, onPlayAbilities, scriptFor } from '../effects/scripts';
+import { checkTargets, targetRequests } from '../effects/targets';
 import { type PaymentPlan, planEquipCost, planPayment } from './payment';
 import { channelRunes, checkVictory, drawCard, score } from './scoring';
 import { expireStatuses } from './statuses';
@@ -502,6 +503,11 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
         return reject(`${card.baseName} does not have Accelerate.`, '805.1');
       }
 
+      // 355.8 — every choice the card makes is made, and legal, before it is paid for.
+      const requests = targetRequests(card, dependencyContext(draft, actor, action.uid));
+      const checked = checkTargets(draft, actor, card, requests, action.targets ?? [], action.uid);
+      if (!checked.ok) return reject(checked.reason, checked.rule);
+
       // 811.1.b — playing from Hidden ignores the card's base cost.
       if (!fromHidden) {
         // Auto-pay: work out which runes cover the cost, then spend them.
@@ -599,7 +605,7 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
          * chain as a Finalized Item, both players get a window to answer it,
          * and only then does it resolve and go to the trash.
          */
-        pushChainItem(draft, spellItem(action.uid, actor, card, action.targets ?? []));
+        pushChainItem(draft, spellItem(action.uid, actor, card, action.targets ?? [], checked.chosen));
         log(
           draft,
           actor,
@@ -623,6 +629,32 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
         if (manual) {
           draft.unautomated.push(`${card.baseName}: ${manual.replace(/\n/g, ' ')}`);
           log(draft, actor, `${card.baseName}'s text is not automated — apply it by hand.`);
+        }
+
+        /*
+         * "When you play me" is a triggered ability (383): it goes on the chain
+         * above nothing, with the targets chosen as the card was played, and
+         * both players get a window to answer it before it resolves.
+         */
+        const onPlay = onPlayAbilities(card).filter(
+          (a) => !a.condition || conditionActive(a.condition.keyword, a.condition.value, entryContext),
+        );
+        if (onPlay.length > 0) {
+          pushChainItem(draft, {
+            uid: action.uid,
+            controller: actor,
+            kind: 'ability',
+            trigger: 'play',
+            chosen: checked.chosen,
+            label: `${card.baseName} — when played`,
+            instructions: [
+              {
+                text: (unautomatedText(card) ?? card.baseName).replace(/\n/g, ' '),
+                targets: checked.chosen.filter(Boolean),
+              },
+            ],
+          });
+          log(draft, actor, `${card.baseName}'s "when you play me" ability went on the chain.`, '383');
         }
       }
 
