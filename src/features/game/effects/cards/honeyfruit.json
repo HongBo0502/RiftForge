@@ -1,0 +1,22 @@
+{
+  "name": "Honeyfruit",
+  "texts": [
+    "This enters exhausted. [Reaction][>] :rb_exhaust:: [Add] :rb_rune_rainbow:. [Level 6][>] [>>][Reaction][>] :rb_exhaust:: [Add] :rb_energy_1::rb_rune_rainbow:."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "entersExhausted"
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "[Reaction][>] :rb_exhaust:: [Add] :rb_rune_rainbow:.",
+    "[Level 6][>] [>>][Reaction][>] :rb_exhaust:: [Add] :rb_energy_1::rb_rune_rainbow:."
+  ]
+}

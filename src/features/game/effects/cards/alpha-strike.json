@@ -1,0 +1,13 @@
+{
+  "name": "Alpha Strike",
+  "texts": [
+    "[Action] Choose a friendly unit. It deals damage equal to its Might split among enemy units at battlefields. Then for each unit this kills, do this: Gain 1 XP."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Choose a friendly unit.",
+    "It deals damage equal to its Might split among enemy units at battlefields.",
+    "Then for each unit this kills, do this: Gain 1 XP."
+  ]
+}

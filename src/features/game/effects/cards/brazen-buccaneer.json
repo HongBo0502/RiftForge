@@ -1,0 +1,12 @@
+{
+  "name": "Brazen Buccaneer",
+  "texts": [
+    "As you play me, you may discard 1 as an additional cost. If you do, reduce my cost by :rb_energy_2:."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "As you play me, you may discard 1 as an additional cost.",
+    "If you do, reduce my cost by :rb_energy_2:."
+  ]
+}

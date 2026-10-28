@@ -1,0 +1,29 @@
+{
+  "name": "Wallop",
+  "texts": [
+    "[Action] As you play this, you may spend a buff as an additional cost. If you do, ignore this spell's cost. Ready a unit."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "ready",
+          "target": {
+            "kind": "unit",
+            "side": "any",
+            "where": "anywhere",
+            "chosen": true,
+            "count": 1
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "As you play this, you may spend a buff as an additional cost.",
+    "If you do, ignore this spell's cost."
+  ]
+}

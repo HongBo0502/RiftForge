@@ -1,0 +1,30 @@
+{
+  "name": "Field Musicians",
+  "texts": [
+    "When you play me, give a unit +3 :rb_might: this turn."
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "on": "play"
+      },
+      "instructions": [
+        {
+          "verb": "might",
+          "amount": 3,
+          "target": {
+            "kind": "unit",
+            "side": "any",
+            "where": "anywhere",
+            "chosen": true,
+            "count": 1
+          },
+          "duration": "thisTurn"
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": []
+}

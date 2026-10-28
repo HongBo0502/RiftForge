@@ -1,0 +1,11 @@
+{
+  "name": "Forgotten Signpost",
+  "texts": [
+    "[Action][>] Exhaust a unit you control, :rb_exhaust:: Move a different unit you control to the location of the unit you exhausted to pay for this ability."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Action][>] Exhaust a unit you control, :rb_exhaust:: Move a different unit you control to the location of the unit you exhausted to pay for this ability."
+  ]
+}

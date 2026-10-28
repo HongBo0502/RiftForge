@@ -1,0 +1,12 @@
+{
+  "name": "Kennen, Storm of Shuriken",
+  "texts": [
+    "When you play me, [Burn 2]. When I conquer, give a spell in your trash [Flow] equal to its cost this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me, [Burn 2].",
+    "When I conquer, give a spell in your trash [Flow] equal to its cost this turn."
+  ]
+}

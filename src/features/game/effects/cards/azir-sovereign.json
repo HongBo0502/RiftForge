@@ -1,0 +1,11 @@
+{
+  "name": "Azir - Sovereign",
+  "texts": [
+    "[Accelerate] When I attack, you may move any number of your token units to this battlefield."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I attack, you may move any number of your token units to this battlefield."
+  ]
+}

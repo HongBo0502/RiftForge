@@ -1,0 +1,28 @@
+{
+  "name": "Stand United",
+  "texts": [
+    "[Hidden] [Action] Buff a friendly unit. Buffs give an additional +1 :rb_might: to friendly units this turn."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "buff",
+          "target": {
+            "kind": "unit",
+            "side": "friendly",
+            "where": "anywhere",
+            "chosen": true,
+            "count": 1
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "Buffs give an additional +1 :rb_might: to friendly units this turn."
+  ]
+}

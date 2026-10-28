@@ -1,0 +1,12 @@
+{
+  "name": "Commander Ledros",
+  "texts": [
+    "As you play me, you may kill any number of friendly units as an additional cost. Reduce my cost by :rb_rune_order: for each killed this way. [Deflect] [Ganking]"
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "As you play me, you may kill any number of friendly units as an additional cost.",
+    "Reduce my cost by :rb_rune_order: for each killed this way."
+  ]
+}

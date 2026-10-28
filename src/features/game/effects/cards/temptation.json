@@ -1,0 +1,12 @@
+{
+  "name": "Temptation",
+  "texts": [
+    "[Repeat] :rb_energy_2: Move an enemy unit to a location where there's a unit with the same controller."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Repeat] :rb_energy_2:",
+    "Move an enemy unit to a location where there's a unit with the same controller."
+  ]
+}

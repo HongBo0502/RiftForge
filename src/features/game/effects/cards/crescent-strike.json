@@ -1,0 +1,12 @@
+{
+  "name": "Crescent Strike",
+  "texts": [
+    "[Action] Choose a battlefield and an enemy unit there. Deal 4 to that unit and 1 to each other enemy unit there."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Choose a battlefield and an enemy unit there.",
+    "Deal 4 to that unit and 1 to each other enemy unit there."
+  ]
+}

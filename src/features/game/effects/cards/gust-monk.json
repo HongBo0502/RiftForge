@@ -1,0 +1,12 @@
+{
+  "name": "Gust Monk",
+  "texts": [
+    "You may pay :rb_energy_1: as an additional cost to play me. When you play me, if you paid the additional cost, banish a card from any trash to give a unit [Assault 2] this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "You may pay :rb_energy_1: as an additional cost to play me.",
+    "When you play me, if you paid the additional cost, banish a card from any trash to give a unit [Assault 2] this turn."
+  ]
+}

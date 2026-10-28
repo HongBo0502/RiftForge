@@ -1,0 +1,12 @@
+{
+  "name": "Swain, Visionary",
+  "texts": [
+    "[Vision] When I conquer, if you've played a non-token unit, a non-token gear, and a spell this turn, you score 1 point."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Vision]",
+    "When I conquer, if you've played a non-token unit, a non-token gear, and a spell this turn, you score 1 point."
+  ]
+}

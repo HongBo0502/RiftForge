@@ -1,0 +1,11 @@
+{
+  "name": "Mistfall",
+  "texts": [
+    "When you buff a friendly unit, you may pay :rb_rune_body: and exhaust this to ready it."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you buff a friendly unit, you may pay :rb_rune_body: and exhaust this to ready it."
+  ]
+}

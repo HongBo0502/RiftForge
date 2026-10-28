@@ -1,0 +1,13 @@
+{
+  "name": "Void Hatchling",
+  "texts": [
+    "If you would reveal cards from a deck, look at the top card first. You may recycle it. Then reveal those cards."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "If you would reveal cards from a deck, look at the top card first.",
+    "You may recycle it.",
+    "Then reveal those cards."
+  ]
+}

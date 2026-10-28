@@ -1,0 +1,11 @@
+{
+  "name": "Sivir - Mercenary",
+  "texts": [
+    "[Accelerate] If you've spent at least :rb_rune_rainbow::rb_rune_rainbow: this turn, I have +2 :rb_might: and [Ganking]."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "If you've spent at least :rb_rune_rainbow::rb_rune_rainbow: this turn, I have +2 :rb_might: and [Ganking]."
+  ]
+}

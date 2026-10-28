@@ -1,0 +1,11 @@
+{
+  "name": "Symbol of the Solari",
+  "texts": [
+    "If a combat where you are the attacker ends in a tie, recall ALL units instead."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "If a combat where you are the attacker ends in a tie, recall ALL units instead."
+  ]
+}

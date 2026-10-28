@@ -1,0 +1,12 @@
+{
+  "name": "Danger Zone",
+  "texts": [
+    "[Reaction] [Repeat] :rb_energy_1::rb_rune_rainbow: Give your Mechs +1 :rb_might: this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Repeat] :rb_energy_1::rb_rune_rainbow:",
+    "Give your Mechs +1 :rb_might: this turn."
+  ]
+}

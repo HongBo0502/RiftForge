@@ -1,0 +1,11 @@
+{
+  "name": "Volibear - Imposing",
+  "texts": [
+    "[Shield 3] [Tank] When an opponent moves to a battlefield other than mine, draw 1."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When an opponent moves to a battlefield other than mine, draw 1."
+  ]
+}

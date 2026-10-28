@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import type { Card } from '@/types';
 import { cardImage } from '@/data/cards';
 import { CardText, CostLine, DOMAIN_COLOR, MightGlyph, renderCardText } from '@/data/symbols';
-import { allMarkers, unautomatedText } from '../engine/keywords';
+import { allMarkers } from '../engine/keywords';
+import { manualText } from '../effects/scripts';
 import { AUTOMATED_KEYWORDS } from '../engine/keywords';
 
 /** Reminder text for the keywords the engine acts on, so hover explains them. */
@@ -31,7 +32,7 @@ export default function CardPreview({
 }) {
   const src = cardImage(card, 'full');
   const accent = DOMAIN_COLOR[card.domains[0] ?? 'Colorless'];
-  const manual = unautomatedText(card);
+  const manual = manualText(card);
 
   const keywords = allMarkers(card)
     .map((m) => m.replace(/\s+\d+$/, ''))

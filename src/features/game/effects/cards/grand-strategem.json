@@ -1,0 +1,28 @@
+{
+  "name": "Grand Strategem",
+  "texts": [
+    "[Action] Give friendly units +5 :rb_might: this turn."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "might",
+          "amount": 5,
+          "target": {
+            "kind": "unit",
+            "side": "friendly",
+            "where": "anywhere",
+            "chosen": true,
+            "count": 1
+          },
+          "duration": "thisTurn"
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": []
+}

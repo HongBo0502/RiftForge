@@ -1,0 +1,12 @@
+{
+  "name": "Retreat",
+  "texts": [
+    "[Reaction] Return a friendly unit to its owner's hand. Its owner channels 1 rune exhausted."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Return a friendly unit to its owner's hand.",
+    "Its owner channels 1 rune exhausted."
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "name": "Cannon Barrage",
+  "texts": [
+    "[Reaction] Deal 2 to all enemy units in combat."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "deal",
+          "amount": 2,
+          "target": {
+            "kind": "unit",
+            "side": "enemy",
+            "where": "anywhere",
+            "chosen": false,
+            "count": null
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": []
+}

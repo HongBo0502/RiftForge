@@ -1,0 +1,35 @@
+{
+  "name": "Scryer's Bloom",
+  "texts": [
+    "This enters exhausted. Kill this, :rb_energy_1:, :rb_exhaust:: [Predict 2], then draw 1. Gain 1 XP."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "entersExhausted"
+        }
+      ],
+      "condition": null
+    },
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "gainXp",
+          "amount": 1,
+          "who": {
+            "kind": "player",
+            "side": "you"
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "Kill this, :rb_energy_1:, :rb_exhaust:: [Predict 2], then draw 1."
+  ]
+}

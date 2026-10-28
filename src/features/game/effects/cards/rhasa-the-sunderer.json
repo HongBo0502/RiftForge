@@ -1,0 +1,11 @@
+{
+  "name": "Rhasa the Sunderer",
+  "texts": [
+    "I cost :rb_energy_1: less for each card in your trash."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "I cost :rb_energy_1: less for each card in your trash."
+  ]
+}

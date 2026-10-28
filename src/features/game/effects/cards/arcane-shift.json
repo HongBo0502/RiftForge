@@ -1,0 +1,30 @@
+{
+  "name": "Arcane Shift",
+  "texts": [
+    "[Action] Banish a friendly unit, then its owner plays it, ignoring its cost. Deal 3 to an enemy unit at a battlefield. Banish this."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "deal",
+          "amount": 3,
+          "target": {
+            "kind": "unit",
+            "side": "enemy",
+            "where": "battlefield",
+            "chosen": true,
+            "count": 1
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "Banish a friendly unit, then its owner plays it, ignoring its cost.",
+    "Banish this."
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Albus Ferros",
+  "texts": [
+    "When you play me, spend any number of buffs. For each buff spent, channel 1 rune exhausted."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me, spend any number of buffs.",
+    "For each buff spent, channel 1 rune exhausted."
+  ]
+}

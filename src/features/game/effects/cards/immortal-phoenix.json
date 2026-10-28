@@ -1,0 +1,11 @@
+{
+  "name": "Immortal Phoenix",
+  "texts": [
+    "[Assault 2] When you kill a unit with a spell, you may pay :rb_energy_1::rb_rune_fury: to play me from your trash."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you kill a unit with a spell, you may pay :rb_energy_1::rb_rune_fury: to play me from your trash."
+  ]
+}

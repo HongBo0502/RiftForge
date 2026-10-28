@@ -1,0 +1,11 @@
+{
+  "name": "Repair Specialist",
+  "texts": [
+    "I have [Assault] equal to the number of gear you control."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "I have [Assault] equal to the number of gear you control."
+  ]
+}

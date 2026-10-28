@@ -1,0 +1,12 @@
+{
+  "name": "Siphon Power",
+  "texts": [
+    "[Reaction] Choose a battlefield. Give friendly units there +1 :rb_might: this turn and enemy units there -1 :rb_might: this turn, to a minimum of 1 :rb_might:."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Choose a battlefield.",
+    "Give friendly units there +1 :rb_might: this turn and enemy units there -1 :rb_might: this turn, to a minimum of 1 :rb_might:."
+  ]
+}

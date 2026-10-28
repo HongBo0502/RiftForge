@@ -1,0 +1,12 @@
+{
+  "name": "Cataclysmic Duel",
+  "texts": [
+    "Each player chooses a unit they control. Kill the rest."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Each player chooses a unit they control.",
+    "Kill the rest."
+  ]
+}

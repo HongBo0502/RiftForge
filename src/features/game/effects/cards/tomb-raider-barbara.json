@@ -1,0 +1,13 @@
+{
+  "name": "Tomb-Raider Barbara",
+  "texts": [
+    "When you play me, if you control 7 or more runes, choose an enemy gear. If it's [Empowered], disempower it. Otherwise, kill it."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me, if you control 7 or more runes, choose an enemy gear.",
+    "If it's [Empowered], disempower it.",
+    "Otherwise, kill it."
+  ]
+}

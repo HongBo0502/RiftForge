@@ -1,0 +1,12 @@
+{
+  "name": "Dr. Mundo - Expert",
+  "texts": [
+    "My Might is increased by the number of cards in your trash. At the start of your Beginning Phase, recycle 3 from your trash."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "My Might is increased by the number of cards in your trash.",
+    "At the start of your Beginning Phase, recycle 3 from your trash."
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Baited Hook",
+  "texts": [
+    ":rb_energy_1::rb_rune_order:, :rb_exhaust:: Kill a friendly unit. Look at the top 5 cards of your Main Deck. You may banish a unit from among them that has Might up to 1 more than the killed unit and play it, ignoring its cost. Then recycle the rest."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    ":rb_energy_1::rb_rune_order:, :rb_exhaust:: Kill a friendly unit.",
+    "Look at the top 5 cards of your Main Deck.",
+    "You may banish a unit from among them that has Might up to 1 more than the killed unit and play it, ignoring its cost.",
+    "Then recycle the rest."
+  ]
+}

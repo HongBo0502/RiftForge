@@ -1,0 +1,14 @@
+{
+  "name": "Hwei - Brooding Painter",
+  "texts": [
+    "When I move, draw 1, then discard 1. Then, do the following based on the discarded card's type:Spell — Draw 1. Gear — Ready up to 2 runes. Unit — Give me +3 :rb_might: this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I move, draw 1, then discard 1.",
+    "Then, do the following based on the discarded card's type:Spell — Draw 1.",
+    "Gear — Ready up to 2 runes.",
+    "Unit — Give me +3 :rb_might: this turn."
+  ]
+}

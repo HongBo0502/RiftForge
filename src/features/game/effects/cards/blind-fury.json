@@ -1,0 +1,13 @@
+{
+  "name": "Blind Fury",
+  "texts": [
+    "[Action] Each opponent reveals the top card of their Main Deck. Choose one and banish it, then play it, ignoring its cost. Then recycle the rest."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Each opponent reveals the top card of their Main Deck.",
+    "Choose one and banish it, then play it, ignoring its cost.",
+    "Then recycle the rest."
+  ]
+}

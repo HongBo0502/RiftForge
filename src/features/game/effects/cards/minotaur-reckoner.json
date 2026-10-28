@@ -1,0 +1,11 @@
+{
+  "name": "Minotaur Reckoner",
+  "texts": [
+    "Units can't move to base."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Units can't move to base."
+  ]
+}

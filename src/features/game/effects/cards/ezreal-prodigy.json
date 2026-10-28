@@ -1,0 +1,36 @@
+{
+  "name": "Ezreal - Prodigy",
+  "texts": [
+    "When you play me, discard 1, then draw 2. Optional additional costs you pay cost :rb_energy_1: or :rb_rune_rainbow: less."
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "on": "play"
+      },
+      "instructions": [
+        {
+          "verb": "discard",
+          "amount": 1,
+          "who": {
+            "kind": "player",
+            "side": "you"
+          }
+        },
+        {
+          "verb": "draw",
+          "amount": 2,
+          "who": {
+            "kind": "player",
+            "side": "you"
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "Optional additional costs you pay cost :rb_energy_1: or :rb_rune_rainbow: less."
+  ]
+}

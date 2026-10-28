@@ -1,0 +1,26 @@
+{
+  "name": "Teemo - Scout",
+  "texts": [
+    "[Hidden] When you play me, give me +3 :rb_might: this turn."
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "on": "play"
+      },
+      "instructions": [
+        {
+          "verb": "might",
+          "amount": 3,
+          "target": {
+            "kind": "self"
+          },
+          "duration": "thisTurn"
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": []
+}

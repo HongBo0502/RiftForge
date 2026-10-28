@@ -1,0 +1,11 @@
+{
+  "name": "Defy",
+  "texts": [
+    "[Reaction] Counter a spell that costs no more than :rb_energy_4: and no more than :rb_rune_rainbow:."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Counter a spell that costs no more than :rb_energy_4: and no more than :rb_rune_rainbow:."
+  ]
+}

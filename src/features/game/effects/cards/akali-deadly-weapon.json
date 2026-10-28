@@ -1,0 +1,14 @@
+{
+  "name": "Akali, Deadly Weapon",
+  "texts": [
+    "[Empower] :rb_energy_2::rb_rune_fury: When I move, you may deal 1 to a unit at a battlefield I moved to or from. If I'm [Empowered], deal 2 instead. [Empowered][>] I have +1 :rb_might:.."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Empower] :rb_energy_2::rb_rune_fury:",
+    "When I move, you may deal 1 to a unit at a battlefield I moved to or from.",
+    "If I'm [Empowered], deal 2 instead.",
+    "[Empowered][>] I have +1 :rb_might:.."
+  ]
+}

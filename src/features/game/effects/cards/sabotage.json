@@ -1,0 +1,13 @@
+{
+  "name": "Sabotage",
+  "texts": [
+    "Choose an opponent. They reveal their hand. Choose a non-unit card from it, and recycle that card."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Choose an opponent.",
+    "They reveal their hand.",
+    "Choose a non-unit card from it, and recycle that card."
+  ]
+}

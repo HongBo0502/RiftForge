@@ -1,0 +1,11 @@
+{
+  "name": "Svellsongur",
+  "texts": [
+    "[Equip] :rb_energy_1::rb_rune_calm: As this is attached to a unit, copy that unit's text to this Equipment's effect text for as long as this is attached to it."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "As this is attached to a unit, copy that unit's text to this Equipment's effect text for as long as this is attached to it."
+  ]
+}

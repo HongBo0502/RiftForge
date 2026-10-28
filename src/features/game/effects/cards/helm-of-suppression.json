@@ -1,0 +1,13 @@
+{
+  "name": "Helm of Suppression",
+  "texts": [
+    "[Empower] :rb_energy_4::rb_rune_calm: Opponents' spells cost :rb_energy_1: more. If this is [Empowered], they cost :rb_energy_1::rb_rune_rainbow: more instead."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Empower] :rb_energy_4::rb_rune_calm:",
+    "Opponents' spells cost :rb_energy_1: more.",
+    "If this is [Empowered], they cost :rb_energy_1::rb_rune_rainbow: more instead."
+  ]
+}

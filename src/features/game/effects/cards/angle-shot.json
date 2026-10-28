@@ -1,0 +1,27 @@
+{
+  "name": "Angle Shot",
+  "texts": [
+    "[Reaction] Choose a unit and an Equipment with the same controller. Attach that Equipment to that unit or detach that Equipment from that unit. Draw 1."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "draw",
+          "amount": 1,
+          "who": {
+            "kind": "player",
+            "side": "you"
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "Choose a unit and an Equipment with the same controller.",
+    "Attach that Equipment to that unit or detach that Equipment from that unit."
+  ]
+}

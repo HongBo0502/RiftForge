@@ -1,0 +1,12 @@
+{
+  "name": "Lillia - Protector of Dreams",
+  "texts": [
+    "When you play a token unit, give me +1 :rb_might: this turn. Your token units have [Tank]."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play a token unit, give me +1 :rb_might: this turn.",
+    "Your token units have [Tank]."
+  ]
+}

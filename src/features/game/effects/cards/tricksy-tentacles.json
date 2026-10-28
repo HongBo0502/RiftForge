@@ -1,0 +1,11 @@
+{
+  "name": "Tricksy Tentacles",
+  "texts": [
+    "Move any number of enemy units with the same controller and a total Might of 8 or less to a single location."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Move any number of enemy units with the same controller and a total Might of 8 or less to a single location."
+  ]
+}

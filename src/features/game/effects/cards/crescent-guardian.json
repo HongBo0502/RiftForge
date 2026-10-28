@@ -1,0 +1,12 @@
+{
+  "name": "Crescent Guardian",
+  "texts": [
+    "If you've played a spell this turn, you may pay :rb_rune_chaos: as an additional cost to play me. If you do, I enter ready."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "If you've played a spell this turn, you may pay :rb_rune_chaos: as an additional cost to play me.",
+    "If you do, I enter ready."
+  ]
+}

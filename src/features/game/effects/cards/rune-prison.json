@@ -1,0 +1,26 @@
+{
+  "name": "Rune Prison",
+  "texts": [
+    "[Action] Stun a unit."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "stun",
+          "target": {
+            "kind": "unit",
+            "side": "any",
+            "where": "anywhere",
+            "chosen": true,
+            "count": 1
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": []
+}

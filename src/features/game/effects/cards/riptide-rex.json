@@ -1,0 +1,29 @@
+{
+  "name": "Riptide Rex",
+  "texts": [
+    "When you play me, deal 6 to an enemy unit at a battlefield."
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "on": "play"
+      },
+      "instructions": [
+        {
+          "verb": "deal",
+          "amount": 6,
+          "target": {
+            "kind": "unit",
+            "side": "enemy",
+            "where": "battlefield",
+            "chosen": true,
+            "count": 1
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": []
+}

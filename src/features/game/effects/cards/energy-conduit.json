@@ -1,0 +1,11 @@
+{
+  "name": "Energy Conduit",
+  "texts": [
+    ":rb_exhaust:: [Reaction] — [Add] :rb_energy_1:."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    ":rb_exhaust:: [Reaction] — [Add] :rb_energy_1:."
+  ]
+}

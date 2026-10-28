@@ -1,0 +1,13 @@
+{
+  "name": "Fate Weaver",
+  "texts": [
+    "When you play me, look at the top 4 cards of your Main Deck. You may reveal a spell with Energy cost :rb_energy_4: or more from among them and draw it. Recycle the rest."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me, look at the top 4 cards of your Main Deck.",
+    "You may reveal a spell with Energy cost :rb_energy_4: or more from among them and draw it.",
+    "Recycle the rest."
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Shakedown",
+  "texts": [
+    "[Reaction] Choose an enemy unit. Deal 6 to it unless its controller has you draw 2."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Choose an enemy unit.",
+    "Deal 6 to it unless its controller has you draw 2."
+  ]
+}

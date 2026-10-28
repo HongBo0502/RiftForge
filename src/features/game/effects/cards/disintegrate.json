@@ -1,0 +1,29 @@
+{
+  "name": "Disintegrate",
+  "texts": [
+    "[Action] Deal 3 to a unit at a battlefield. If this kills it, draw 1."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "deal",
+          "amount": 3,
+          "target": {
+            "kind": "unit",
+            "side": "any",
+            "where": "battlefield",
+            "chosen": true,
+            "count": 1
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "If this kills it, draw 1."
+  ]
+}

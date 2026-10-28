@@ -1,0 +1,11 @@
+{
+  "name": "Ancient Warmonger",
+  "texts": [
+    "[Accelerate] I have [Assault] equal to the number of enemy units here."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "I have [Assault] equal to the number of enemy units here."
+  ]
+}

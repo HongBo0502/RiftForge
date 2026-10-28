@@ -1,0 +1,11 @@
+{
+  "name": "Sprite Queen",
+  "texts": [
+    "When you play me or at the start of your Beginning Phase, play a ready 3 :rb_might: Sprite unit token with [Temporary] to your base."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me or at the start of your Beginning Phase, play a ready 3 :rb_might: Sprite unit token with [Temporary] to your base."
+  ]
+}

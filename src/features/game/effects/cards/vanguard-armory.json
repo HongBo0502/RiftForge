@@ -1,0 +1,11 @@
+{
+  "name": "Vanguard Armory",
+  "texts": [
+    ":rb_exhaust:: Play three 1 :rb_might: Recruit unit tokens."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    ":rb_exhaust:: Play three 1 :rb_might: Recruit unit tokens."
+  ]
+}

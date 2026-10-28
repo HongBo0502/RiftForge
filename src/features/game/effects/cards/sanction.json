@@ -1,0 +1,14 @@
+{
+  "name": "Sanction",
+  "texts": [
+    "[Reaction] Choose one —Empower a unit. Disempower it at end of turn. Disempower a unit that's [Empowered]. Empower it at end of turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Choose one —Empower a unit.",
+    "Disempower it at end of turn.",
+    "Disempower a unit that's [Empowered].",
+    "Empower it at end of turn."
+  ]
+}

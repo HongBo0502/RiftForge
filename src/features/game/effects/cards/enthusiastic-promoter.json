@@ -1,0 +1,11 @@
+{
+  "name": "Enthusiastic Promoter",
+  "texts": [
+    "[Backline] When I hold, [Buff] all units here."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I hold, [Buff] all units here."
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "name": "Flurry of Blades",
+  "texts": [
+    "[Reaction] Deal 1 to all units at battlefields."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "deal",
+          "amount": 1,
+          "target": {
+            "kind": "unit",
+            "side": "any",
+            "where": "anywhere",
+            "chosen": false,
+            "count": null
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": []
+}

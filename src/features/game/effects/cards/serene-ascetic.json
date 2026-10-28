@@ -1,0 +1,12 @@
+{
+  "name": "Serene Ascetic",
+  "texts": [
+    "[Empower] :rb_energy_3: [Empowered][>] I have [Deflect] and [Shield 3]."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Empower] :rb_energy_3:",
+    "[Empowered][>] I have [Deflect] and [Shield 3]."
+  ]
+}

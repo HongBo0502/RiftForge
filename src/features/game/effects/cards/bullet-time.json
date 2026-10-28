@@ -1,0 +1,11 @@
+{
+  "name": "Bullet Time",
+  "texts": [
+    "[Action] Pay any amount of :rb_rune_rainbow: to deal that much damage to all enemy units at a battlefield."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Pay any amount of :rb_rune_rainbow: to deal that much damage to all enemy units at a battlefield."
+  ]
+}

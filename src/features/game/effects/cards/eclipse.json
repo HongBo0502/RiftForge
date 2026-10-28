@@ -1,0 +1,30 @@
+{
+  "name": "Eclipse",
+  "texts": [
+    "[Reaction] Give a unit -4 :rb_might: this turn. [Predict]."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "might",
+          "amount": -4,
+          "target": {
+            "kind": "unit",
+            "side": "any",
+            "where": "anywhere",
+            "chosen": true,
+            "count": 1
+          },
+          "duration": "thisTurn"
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "[Predict]."
+  ]
+}

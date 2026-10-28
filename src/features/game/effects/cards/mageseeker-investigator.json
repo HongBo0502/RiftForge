@@ -1,0 +1,11 @@
+{
+  "name": "Mageseeker Investigator",
+  "texts": [
+    "Opponents must pay :rb_rune_rainbow: for each unit beyond the first to move multiple units to my battlefield at the same time."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Opponents must pay :rb_rune_rainbow: for each unit beyond the first to move multiple units to my battlefield at the same time."
+  ]
+}

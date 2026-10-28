@@ -1,0 +1,12 @@
+{
+  "name": "Frostcoat Cub",
+  "texts": [
+    "You may pay :rb_rune_mind: as an additional cost to play me. When you play me, if you paid the additional cost, give a unit -2 :rb_might: this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "You may pay :rb_rune_mind: as an additional cost to play me.",
+    "When you play me, if you paid the additional cost, give a unit -2 :rb_might: this turn."
+  ]
+}

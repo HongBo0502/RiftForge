@@ -1,0 +1,11 @@
+{
+  "name": "Vicious Snapjaws",
+  "texts": [
+    "When another friendly unit dies, gain 1 XP."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When another friendly unit dies, gain 1 XP."
+  ]
+}

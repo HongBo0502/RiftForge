@@ -1,0 +1,11 @@
+{
+  "name": "Sprite Call",
+  "texts": [
+    "[Hidden] [Action] Play a ready 3 :rb_might: Sprite unit token with [Temporary]."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Play a ready 3 :rb_might: Sprite unit token with [Temporary]."
+  ]
+}

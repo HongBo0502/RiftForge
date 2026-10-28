@@ -1,0 +1,11 @@
+{
+  "name": "Reluctant Leader",
+  "texts": [
+    "When you play another unit, give me +2 :rb_might: this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play another unit, give me +2 :rb_might: this turn."
+  ]
+}

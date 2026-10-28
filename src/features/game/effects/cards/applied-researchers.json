@@ -1,0 +1,12 @@
+{
+  "name": "Applied Researchers",
+  "texts": [
+    "[Empower] :rb_energy_3: [Empowered][>] Your spells cost :rb_energy_1::rb_rune_rainbow: less, to a minimum of :rb_energy_1:."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Empower] :rb_energy_3:",
+    "[Empowered][>] Your spells cost :rb_energy_1::rb_rune_rainbow: less, to a minimum of :rb_energy_1:."
+  ]
+}

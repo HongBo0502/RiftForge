@@ -1,0 +1,11 @@
+{
+  "name": "Patched Porobot",
+  "texts": [
+    "When you play me, if you control 3 or more other gear, draw 1."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me, if you control 3 or more other gear, draw 1."
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Azir - Ascendant",
+  "texts": [
+    ":rb_rune_calm:: [Action] — Choose a unit you control. Move me to its location and it to my original location. If it's equipped, you may attach one of its Equipment to me. Use only once per turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    ":rb_rune_calm:: [Action] — Choose a unit you control.",
+    "Move me to its location and it to my original location.",
+    "If it's equipped, you may attach one of its Equipment to me.",
+    "Use only once per turn."
+  ]
+}

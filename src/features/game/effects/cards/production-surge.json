@@ -1,0 +1,27 @@
+{
+  "name": "Production Surge",
+  "texts": [
+    "This costs :rb_energy_2: less if you control a Mech. Play a 3 :rb_might: Mech unit token to your base. Draw 1."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "draw",
+          "amount": 1,
+          "who": {
+            "kind": "player",
+            "side": "you"
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "This costs :rb_energy_2: less if you control a Mech.",
+    "Play a 3 :rb_might: Mech unit token to your base."
+  ]
+}

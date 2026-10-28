@@ -1,0 +1,11 @@
+{
+  "name": "Flash",
+  "texts": [
+    "[Reaction] Move up to 2 friendly units to base."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Move up to 2 friendly units to base."
+  ]
+}

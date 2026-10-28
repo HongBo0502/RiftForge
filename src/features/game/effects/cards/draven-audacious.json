@@ -1,0 +1,13 @@
+{
+  "name": "Draven - Audacious",
+  "texts": [
+    "[Deflect] The first time I win a combat each turn, you score 1 point. When I die in combat, choose an opponent. They score 1 point."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "The first time I win a combat each turn, you score 1 point.",
+    "When I die in combat, choose an opponent.",
+    "They score 1 point."
+  ]
+}

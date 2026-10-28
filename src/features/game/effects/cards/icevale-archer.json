@@ -1,0 +1,11 @@
+{
+  "name": "Icevale Archer",
+  "texts": [
+    "When I attack, you may pay :rb_energy_1: to give a unit here -1 :rb_might: this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I attack, you may pay :rb_energy_1: to give a unit here -1 :rb_might: this turn."
+  ]
+}

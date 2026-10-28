@@ -1,0 +1,12 @@
+{
+  "name": "Promising Future",
+  "texts": [
+    "Each player looks at the top 5 cards of their Main Deck, chooses one, then recycles the rest. Starting with the next player, each player plays those cards, ignoring Energy costs."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Each player looks at the top 5 cards of their Main Deck, chooses one, then recycles the rest.",
+    "Starting with the next player, each player plays those cards, ignoring Energy costs."
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Stealthy Pursuer",
+  "texts": [
+    "When a friendly unit moves from my location, I may be moved with it."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When a friendly unit moves from my location, I may be moved with it."
+  ]
+}

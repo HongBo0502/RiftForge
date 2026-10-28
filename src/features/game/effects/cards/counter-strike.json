@@ -1,0 +1,27 @@
+{
+  "name": "Counter Strike",
+  "texts": [
+    "[Reaction] Choose a unit. The next time that unit would be dealt damage this turn, prevent it. Draw 1."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "draw",
+          "amount": 1,
+          "who": {
+            "kind": "player",
+            "side": "you"
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "Choose a unit.",
+    "The next time that unit would be dealt damage this turn, prevent it."
+  ]
+}

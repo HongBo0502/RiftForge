@@ -1,0 +1,13 @@
+{
+  "name": "Moonfall",
+  "texts": [
+    "[Action] Choose a battlefield where you have units. You may move up to one enemy unit to that battlefield. Then give enemy units there -2 :rb_might: this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Choose a battlefield where you have units.",
+    "You may move up to one enemy unit to that battlefield.",
+    "Then give enemy units there -2 :rb_might: this turn."
+  ]
+}

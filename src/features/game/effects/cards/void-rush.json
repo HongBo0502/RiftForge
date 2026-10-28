@@ -1,0 +1,13 @@
+{
+  "name": "Void Rush",
+  "texts": [
+    "Reveal the top 2 cards of your Main Deck. You may play one of them, reducing its cost by :rb_energy_2:. Draw any you did not play this way."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Reveal the top 2 cards of your Main Deck.",
+    "You may play one of them, reducing its cost by :rb_energy_2:.",
+    "Draw any you did not play this way."
+  ]
+}

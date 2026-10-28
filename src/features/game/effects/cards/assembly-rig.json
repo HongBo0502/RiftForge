@@ -1,0 +1,11 @@
+{
+  "name": "Assembly Rig",
+  "texts": [
+    ":rb_energy_1::rb_rune_fury:, Recycle a unit from your trash, :rb_exhaust:: Play a 3 :rb_might: Mech unit token to your base."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    ":rb_energy_1::rb_rune_fury:, Recycle a unit from your trash, :rb_exhaust:: Play a 3 :rb_might: Mech unit token to your base."
+  ]
+}

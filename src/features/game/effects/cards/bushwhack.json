@@ -1,0 +1,12 @@
+{
+  "name": "Bushwhack",
+  "texts": [
+    "[Hidden] Friendly units enter ready this turn. Play a Gold gear token exhausted."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Friendly units enter ready this turn.",
+    "Play a Gold gear token exhausted."
+  ]
+}

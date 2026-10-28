@@ -1,0 +1,11 @@
+{
+  "name": "Petricite Monument",
+  "texts": [
+    "[Temporary] Friendly units have [Deflect]."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Friendly units have [Deflect]."
+  ]
+}

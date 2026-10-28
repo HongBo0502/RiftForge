@@ -1,0 +1,22 @@
+{
+  "name": "Daisy!",
+  "texts": [
+    "I enter ready. Reduce my cost by :rb_energy_1: for each of the following tags among your units — Bird, Cat, Dog, and Poro. When I attack while your units have all 4 tags, [Stun] an enemy unit here."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "entersReady"
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "Reduce my cost by :rb_energy_1: for each of the following tags among your units — Bird, Cat, Dog, and Poro.",
+    "When I attack while your units have all 4 tags, [Stun] an enemy unit here."
+  ]
+}

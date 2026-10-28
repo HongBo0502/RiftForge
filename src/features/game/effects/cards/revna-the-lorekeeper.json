@@ -1,0 +1,11 @@
+{
+  "name": "Revna the Lorekeeper",
+  "texts": [
+    "[Ganking] When you play a spell, if you spent :rb_energy_4: or more, ready me."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play a spell, if you spent :rb_energy_4: or more, ready me."
+  ]
+}

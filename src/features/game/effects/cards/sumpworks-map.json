@@ -1,0 +1,11 @@
+{
+  "name": "Sumpworks Map",
+  "texts": [
+    "[Reaction] [Temporary] When an opponent scores, draw 1."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When an opponent scores, draw 1."
+  ]
+}

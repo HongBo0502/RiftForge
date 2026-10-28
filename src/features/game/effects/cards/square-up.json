@@ -1,0 +1,12 @@
+{
+  "name": "Square Up",
+  "texts": [
+    "[Repeat] — Discard 1 Give a unit [Assault 4] this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Repeat] — Discard 1",
+    "Give a unit [Assault 4] this turn."
+  ]
+}

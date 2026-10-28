@@ -1,0 +1,12 @@
+{
+  "name": "The List",
+  "texts": [
+    "As you play this, name a tag. :rb_exhaust:: Give a unit with the named tag -2 :rb_might: this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "As you play this, name a tag.",
+    ":rb_exhaust:: Give a unit with the named tag -2 :rb_might: this turn."
+  ]
+}

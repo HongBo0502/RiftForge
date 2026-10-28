@@ -1,0 +1,41 @@
+{
+  "name": "Udyr - Wildman",
+  "texts": [
+    "Spend my buff: Choose one you've not chosen this turn —Deal 2 to a unit at a battlefield. Stun a unit at a battlefield. Ready me. Give me [Ganking] this turn."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "stun",
+          "target": {
+            "kind": "unit",
+            "side": "any",
+            "where": "battlefield",
+            "chosen": true,
+            "count": 1
+          }
+        }
+      ],
+      "condition": null
+    },
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "ready",
+          "target": {
+            "kind": "self"
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "Spend my buff: Choose one you've not chosen this turn —Deal 2 to a unit at a battlefield.",
+    "Give me [Ganking] this turn."
+  ]
+}

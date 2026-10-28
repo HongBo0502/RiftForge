@@ -1,0 +1,11 @@
+{
+  "name": "Eclipse Dragon",
+  "texts": [
+    "[Accelerate] When I move, if you control 4 or fewer runes, draw 1."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I move, if you control 4 or fewer runes, draw 1."
+  ]
+}

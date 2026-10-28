@@ -1,0 +1,25 @@
+{
+  "name": "Mournful Witness",
+  "texts": [
+    "When a combat that I was in ends, empower me. [Empowered][>] I have +2 :rb_might:."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "staticMight",
+          "amount": 2
+        }
+      ],
+      "condition": {
+        "keyword": "Empowered",
+        "value": null
+      }
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "When a combat that I was in ends, empower me."
+  ]
+}

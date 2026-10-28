@@ -1,0 +1,11 @@
+{
+  "name": "Renekton, Rage Fueled",
+  "texts": [
+    "[Accelerate] When I attack, if you control 4 or fewer runes, deal 2 to all enemy units here."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I attack, if you control 4 or fewer runes, deal 2 to all enemy units here."
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Zhonya's Hourglass",
+  "texts": [
+    "[Hidden] The next time a friendly unit would die, kill this instead. Recall that unit exhausted."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "The next time a friendly unit would die, kill this instead.",
+    "Recall that unit exhausted."
+  ]
+}

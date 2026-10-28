@@ -1,0 +1,11 @@
+{
+  "name": "Frigid Jewel",
+  "texts": [
+    "When you draw your second card each turn, give a friendly unit +2 :rb_might: this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you draw your second card each turn, give a friendly unit +2 :rb_might: this turn."
+  ]
+}

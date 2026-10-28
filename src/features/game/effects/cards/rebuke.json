@@ -1,0 +1,11 @@
+{
+  "name": "Rebuke",
+  "texts": [
+    "[Action] Return a unit at a battlefield to its owner's hand."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Return a unit at a battlefield to its owner's hand."
+  ]
+}

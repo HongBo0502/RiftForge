@@ -1,0 +1,30 @@
+{
+  "name": "Ruthless Strike",
+  "texts": [
+    "[Action] As an additional cost to play this, you may discard 1. Deal 3 to a unit at a battlefield. If you paid the additional cost, deal 5 to it instead."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "deal",
+          "amount": 3,
+          "target": {
+            "kind": "unit",
+            "side": "any",
+            "where": "battlefield",
+            "chosen": true,
+            "count": 1
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "As an additional cost to play this, you may discard 1.",
+    "If you paid the additional cost, deal 5 to it instead."
+  ]
+}

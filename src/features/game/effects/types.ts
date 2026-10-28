@@ -143,5 +143,25 @@ export interface ParsedCard {
   unparsed: string[];
 }
 
+/**
+ * One card's effects, as reviewed data. Lives in `effects/cards/<slug>.json`,
+ * one file per card name.
+ *
+ * The engine never reads card text at runtime — it reads this. A script was
+ * written against specific printed wording (`texts`); a printing whose text
+ * is not listed falls back to fully manual, so a script can never silently
+ * apply to wording it was not written for (an erratum, a new set).
+ */
+export interface CardScript {
+  /** The card's name as printed, for humans; lookup uses `nameKey()`. */
+  name: string;
+  /** Normalised printed texts this script was written against. */
+  texts: string[];
+  abilities: ParsedAbility[];
+  activated: ActivatedAbility[];
+  /** Sentences this script does not cover — they stay "apply by hand". */
+  manual: string[];
+}
+
 /** True when every sentence on the card was understood. */
 export const fullyParsed = (parsed: ParsedCard): boolean => parsed.unparsed.length === 0;

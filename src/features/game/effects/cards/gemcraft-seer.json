@@ -1,0 +1,12 @@
+{
+  "name": "Gemcraft Seer",
+  "texts": [
+    "[Vision] Other friendly units have [Vision]."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Vision]",
+    "Other friendly units have [Vision]."
+  ]
+}

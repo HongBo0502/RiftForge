@@ -1,0 +1,15 @@
+{
+  "name": "Bone Skewer",
+  "texts": [
+    "[Hidden] Choose a battlefield. An opponent reveals their hand. You may choose a unit from it. They play that unit to that battlefield, ignoring any and all costs. When they do, [Stun] it."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Choose a battlefield.",
+    "An opponent reveals their hand.",
+    "You may choose a unit from it.",
+    "They play that unit to that battlefield, ignoring any and all costs.",
+    "When they do, [Stun] it."
+  ]
+}

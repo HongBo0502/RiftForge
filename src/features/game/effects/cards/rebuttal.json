@@ -1,0 +1,14 @@
+{
+  "name": "Rebuttal",
+  "texts": [
+    "[Reaction] Choose a spell with Energy cost no more than :rb_energy_4:. You may pay :rb_rune_rainbow:. If you do, gain control of it and you may make new choices for it. Otherwise, counter it."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Choose a spell with Energy cost no more than :rb_energy_4:.",
+    "You may pay :rb_rune_rainbow:.",
+    "If you do, gain control of it and you may make new choices for it.",
+    "Otherwise, counter it."
+  ]
+}

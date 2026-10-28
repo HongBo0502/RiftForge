@@ -1,0 +1,12 @@
+{
+  "name": "Isolate",
+  "texts": [
+    "Move an enemy unit from a battlefield to its base. Then, if there's an enemy unit alone at that battlefield, draw 1."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Move an enemy unit from a battlefield to its base.",
+    "Then, if there's an enemy unit alone at that battlefield, draw 1."
+  ]
+}

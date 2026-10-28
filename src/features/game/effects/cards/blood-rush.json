@@ -1,0 +1,12 @@
+{
+  "name": "Blood Rush",
+  "texts": [
+    "[Action] [Repeat] :rb_energy_1: Give a unit [Assault 2]."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Repeat] :rb_energy_1:",
+    "Give a unit [Assault 2]."
+  ]
+}

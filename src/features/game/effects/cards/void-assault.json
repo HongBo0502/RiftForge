@@ -1,0 +1,11 @@
+{
+  "name": "Void Assault",
+  "texts": [
+    "Move a friendly unit, then move an enemy unit."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Move a friendly unit, then move an enemy unit."
+  ]
+}

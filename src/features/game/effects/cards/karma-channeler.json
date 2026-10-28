@@ -1,0 +1,12 @@
+{
+  "name": "Karma - Channeler",
+  "texts": [
+    "[Vision] When you recycle one or more cards, buff a friendly unit."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Vision]",
+    "When you recycle one or more cards, buff a friendly unit."
+  ]
+}

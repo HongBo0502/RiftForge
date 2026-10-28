@@ -1,0 +1,14 @@
+{
+  "name": "Insightful Investigator",
+  "texts": [
+    "When you play me, choose an opponent. They reveal their hand. You may pay 2 XP to choose a card from their hand. If you do, they discard that card and draw 1."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me, choose an opponent.",
+    "They reveal their hand.",
+    "You may pay 2 XP to choose a card from their hand.",
+    "If you do, they discard that card and draw 1."
+  ]
+}

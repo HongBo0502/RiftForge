@@ -1,0 +1,12 @@
+{
+  "name": "Darius - Executioner",
+  "texts": [
+    "[Legion] — When you play me, ready me. Other friendly units have +1 :rb_might: here."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Legion] — When you play me, ready me.",
+    "Other friendly units have +1 :rb_might: here."
+  ]
+}

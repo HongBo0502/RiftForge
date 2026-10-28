@@ -1,0 +1,27 @@
+{
+  "name": "Smoke and Mirrors",
+  "texts": [
+    "[Hidden] [Action] Choose a unit you control and another unit you control at a different location. If at least one of them has [Temporary], move each to the other's location. Draw 1."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "draw",
+          "amount": 1,
+          "who": {
+            "kind": "player",
+            "side": "you"
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "Choose a unit you control and another unit you control at a different location.",
+    "If at least one of them has [Temporary], move each to the other's location."
+  ]
+}

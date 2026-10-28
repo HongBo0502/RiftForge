@@ -1,0 +1,12 @@
+{
+  "name": "Spiderling",
+  "texts": [
+    "[Hidden] I have +1 :rb_might: for each other unit you control here with my name. Your deck can have any number of cards named Spiderling."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "I have +1 :rb_might: for each other unit you control here with my name.",
+    "Your deck can have any number of cards named Spiderling."
+  ]
+}

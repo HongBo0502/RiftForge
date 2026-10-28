@@ -1,0 +1,12 @@
+{
+  "name": "Stacked Deck",
+  "texts": [
+    "[Action] Look at the top 3 cards of your Main Deck. Put 1 into your hand and recycle the rest."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Look at the top 3 cards of your Main Deck.",
+    "Put 1 into your hand and recycle the rest."
+  ]
+}

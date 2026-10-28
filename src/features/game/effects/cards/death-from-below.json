@@ -1,0 +1,28 @@
+{
+  "name": "Death from Below",
+  "texts": [
+    "Kill a unit at a battlefield. Then, if it had 3 :rb_might: or less, you may play this from your trash for :rb_rune_rainbow:."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "kill",
+          "target": {
+            "kind": "unit",
+            "side": "any",
+            "where": "battlefield",
+            "chosen": true,
+            "count": 1
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "Then, if it had 3 :rb_might: or less, you may play this from your trash for :rb_rune_rainbow:."
+  ]
+}

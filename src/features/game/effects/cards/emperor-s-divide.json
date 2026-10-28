@@ -1,0 +1,11 @@
+{
+  "name": "Emperor's Divide",
+  "texts": [
+    "[Hidden] [Action] Move any number of friendly units at a battlefield to their base."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Move any number of friendly units at a battlefield to their base."
+  ]
+}

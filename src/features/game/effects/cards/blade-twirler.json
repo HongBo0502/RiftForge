@@ -1,0 +1,12 @@
+{
+  "name": "Blade Twirler",
+  "texts": [
+    "The first time I move each turn, choose a player. They [Burn 1]."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "The first time I move each turn, choose a player.",
+    "They [Burn 1]."
+  ]
+}

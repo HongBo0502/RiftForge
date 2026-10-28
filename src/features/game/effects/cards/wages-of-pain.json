@@ -1,0 +1,29 @@
+{
+  "name": "Wages of Pain",
+  "texts": [
+    "[Hidden] [Action] Deal 3 to a unit at a battlefield. Play a Gold gear token exhausted."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "deal",
+          "amount": 3,
+          "target": {
+            "kind": "unit",
+            "side": "any",
+            "where": "battlefield",
+            "chosen": true,
+            "count": 1
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "Play a Gold gear token exhausted."
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Strike Down",
+  "texts": [
+    "Choose an equipped friendly unit. It deals damage equal to its Might to an enemy unit. Then detach an Equipment from it."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Choose an equipped friendly unit.",
+    "It deals damage equal to its Might to an enemy unit.",
+    "Then detach an Equipment from it."
+  ]
+}

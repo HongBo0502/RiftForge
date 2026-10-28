@@ -1,0 +1,11 @@
+{
+  "name": "Miss Fortune - Captain",
+  "texts": [
+    "[Accelerate] [Ganking] The first time I move each turn, you may ready something else that's exhausted."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "The first time I move each turn, you may ready something else that's exhausted."
+  ]
+}

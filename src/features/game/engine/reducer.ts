@@ -11,7 +11,7 @@ import { shuffle } from './rng';
 import { closeShowdown, openShowdown, type CardLookup } from './combat';
 import { conditionActive, dependencyContext, equipCost, hasKeyword, unautomatedText } from './keywords';
 import { activatableAbility } from '../effects/run';
-import { parseCardCached, stripAutomatedLines } from '../effects/parse';
+import { manualText, scriptFor } from '../effects/scripts';
 import { type PaymentPlan, planEquipCost, planPayment } from './payment';
 import { channelRunes, checkVictory, drawCard, score } from './scoring';
 import { expireStatuses } from './statuses';
@@ -534,7 +534,7 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
        */
       const entryContext = dependencyContext(draft, actor, action.uid);
       const entryHas = (verb: 'entersReady' | 'entersExhausted'): boolean =>
-        parseCardCached(card).abilities.some(
+        scriptFor(card).abilities.some(
           (a) =>
             (!a.condition || conditionActive(a.condition.keyword, a.condition.value, entryContext)) &&
             a.instructions.some((i) => i.verb === verb),
@@ -614,11 +614,9 @@ export function reduce(state: GameState, action: GameAction, lookup: CardLookup)
       p.finalizedThisTurn.push(action.uid);
 
       if (card.type === 'Unit' || card.type === 'Gear') {
-        const raw = unautomatedText(card, dependencyContext(draft, actor, action.uid));
-        // Drop lines the engine already applied itself: staticMight (unitMight,
-        // recomputed live), entersReady/entersExhausted (set just above), Equip
-        // and Activated Abilities (real board actions, not manual text).
-        const manual = raw ? stripAutomatedLines(raw) || null : raw;
+        // The card's script says what it leaves for the player; an unscripted
+        // card leaves all of its text.
+        const manual = manualText(card, dependencyContext(draft, actor, action.uid));
         if (manual) {
           draft.unautomated.push(`${card.baseName}: ${manual.replace(/\n/g, ' ')}`);
           log(draft, actor, `${card.baseName}'s text is not automated — apply it by hand.`);

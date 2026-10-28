@@ -1,0 +1,11 @@
+{
+  "name": "The Zero Drive",
+  "texts": [
+    "[Equip] :rb_energy_1::rb_rune_mind: :rb_energy_3::rb_rune_mind:, Banish this: Play all units banished with this, ignoring their costs."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    ":rb_energy_3::rb_rune_mind:, Banish this: Play all units banished with this, ignoring their costs."
+  ]
+}

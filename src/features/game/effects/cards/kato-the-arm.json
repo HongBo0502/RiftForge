@@ -1,0 +1,11 @@
+{
+  "name": "Kato the Arm",
+  "texts": [
+    "[Deflect] When I move to a battlefield, give a friendly unit my keywords and +:rb_might: equal to my Might this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I move to a battlefield, give a friendly unit my keywords and +:rb_might: equal to my Might this turn."
+  ]
+}

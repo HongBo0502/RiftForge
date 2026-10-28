@@ -1,0 +1,30 @@
+{
+  "name": "Siphoning Strike",
+  "texts": [
+    "Deal 4 to a unit at a battlefield. If you control 7 or more runes, deal 7 to it instead. When it dies this turn, channel 1 rune exhausted."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "deal",
+          "amount": 4,
+          "target": {
+            "kind": "unit",
+            "side": "any",
+            "where": "battlefield",
+            "chosen": true,
+            "count": 1
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "If you control 7 or more runes, deal 7 to it instead.",
+    "When it dies this turn, channel 1 rune exhausted."
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Flurry of Feathers",
+  "texts": [
+    "[Reaction] Choose one —Counter a spell. Play four 1 :rb_might: Bird unit tokens with [Deflect]."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Choose one —Counter a spell.",
+    "Play four 1 :rb_might: Bird unit tokens with [Deflect]."
+  ]
+}

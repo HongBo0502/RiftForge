@@ -1,0 +1,12 @@
+{
+  "name": "Divining Shells",
+  "texts": [
+    "[Vision] [Action][>] Kill this, :rb_exhaust:: Give a unit +2 :rb_might: this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Vision]",
+    "[Action][>] Kill this, :rb_exhaust:: Give a unit +2 :rb_might: this turn."
+  ]
+}

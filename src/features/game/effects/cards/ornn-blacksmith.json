@@ -1,0 +1,13 @@
+{
+  "name": "Ornn - Blacksmith",
+  "texts": [
+    "When you play me or when I hold, look at the top 4 cards of your Main Deck. You may reveal a gear from among them and draw it. Then recycle the rest."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me or when I hold, look at the top 4 cards of your Main Deck.",
+    "You may reveal a gear from among them and draw it.",
+    "Then recycle the rest."
+  ]
+}

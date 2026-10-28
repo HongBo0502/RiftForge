@@ -1,0 +1,14 @@
+{
+  "name": "Ivern - Nurturer",
+  "texts": [
+    "When you play me or when I hold, look at the top 3 cards of your Main Deck. You may reveal a unit from among them and draw it. Recycle the rest. Then if you revealed a Bird, Cat, Dog, or Poro, do this: [Buff] a friendly unit."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me or when I hold, look at the top 3 cards of your Main Deck.",
+    "You may reveal a unit from among them and draw it.",
+    "Recycle the rest.",
+    "Then if you revealed a Bird, Cat, Dog, or Poro, do this: [Buff] a friendly unit."
+  ]
+}

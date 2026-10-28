@@ -1,0 +1,12 @@
+{
+  "name": "Adaptatron",
+  "texts": [
+    "When I conquer, you may kill a gear. If you do, buff me."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I conquer, you may kill a gear.",
+    "If you do, buff me."
+  ]
+}

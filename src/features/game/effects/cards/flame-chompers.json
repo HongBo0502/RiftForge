@@ -1,0 +1,11 @@
+{
+  "name": "Flame Chompers",
+  "texts": [
+    "When you discard me, you may pay :rb_rune_fury: to play me."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you discard me, you may pay :rb_rune_fury: to play me."
+  ]
+}

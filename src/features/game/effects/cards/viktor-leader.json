@@ -1,0 +1,11 @@
+{
+  "name": "Viktor - Leader",
+  "texts": [
+    "When another non-Recruit unit you control dies, play a 1 :rb_might: Recruit unit token into your base."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When another non-Recruit unit you control dies, play a 1 :rb_might: Recruit unit token into your base."
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Rift Herald",
+  "texts": [
+    "When I move to a battlefield, look at the top 3 cards of your Main Deck. You may reveal a unit from among them and draw it. Recycle the rest. [Deathknell][>] Play a unit from your hand to your base, ignoring its Energy cost."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I move to a battlefield, look at the top 3 cards of your Main Deck.",
+    "You may reveal a unit from among them and draw it.",
+    "Recycle the rest.",
+    "[Deathknell][>] Play a unit from your hand to your base, ignoring its Energy cost."
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "name": "Chemtech Enforcer",
+  "texts": [
+    "[Assault 2] When you play me, discard 1."
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "on": "play"
+      },
+      "instructions": [
+        {
+          "verb": "discard",
+          "amount": 1,
+          "who": {
+            "kind": "player",
+            "side": "you"
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": []
+}

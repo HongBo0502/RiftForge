@@ -1,0 +1,11 @@
+{
+  "name": "Scrapheap",
+  "texts": [
+    "When this is played, discarded, or killed, draw 1."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When this is played, discarded, or killed, draw 1."
+  ]
+}

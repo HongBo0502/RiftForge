@@ -1,0 +1,12 @@
+{
+  "name": "Possession",
+  "texts": [
+    "[Action] Choose an enemy unit at a battlefield. Take control of it and recall it."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Choose an enemy unit at a battlefield.",
+    "Take control of it and recall it."
+  ]
+}

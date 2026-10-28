@@ -1,0 +1,11 @@
+{
+  "name": "Imperial Decree",
+  "texts": [
+    "[Action] When any unit takes damage this turn, kill it."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When any unit takes damage this turn, kill it."
+  ]
+}

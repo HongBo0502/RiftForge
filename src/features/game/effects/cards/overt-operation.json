@@ -1,0 +1,12 @@
+{
+  "name": "Overt Operation",
+  "texts": [
+    "[Action] For each friendly unit, you may spend its buff to ready it. Then buff all friendly units."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "For each friendly unit, you may spend its buff to ready it.",
+    "Then buff all friendly units."
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Grim Apothecary",
+  "texts": [
+    "[Ambush] When you play me, you may return a friendly unit at a battlefield to its owner's hand."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me, you may return a friendly unit at a battlefield to its owner's hand."
+  ]
+}

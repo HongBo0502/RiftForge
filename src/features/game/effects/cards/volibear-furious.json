@@ -1,0 +1,11 @@
+{
+  "name": "Volibear - Furious",
+  "texts": [
+    "[Deflect 2] When I attack, deal 5 damage split among any number of enemy units here."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I attack, deal 5 damage split among any number of enemy units here."
+  ]
+}

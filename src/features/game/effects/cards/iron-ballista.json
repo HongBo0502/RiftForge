@@ -1,0 +1,42 @@
+{
+  "name": "Iron Ballista",
+  "texts": [
+    "This enters exhausted. :rb_exhaust:: Deal 2 to a unit at a battlefield."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "entersExhausted"
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [
+    {
+      "cost": {
+        "energy": 0,
+        "power": {},
+        "anyPower": 0,
+        "exhaustSelf": true
+      },
+      "instructions": [
+        {
+          "verb": "deal",
+          "amount": 2,
+          "target": {
+            "kind": "unit",
+            "side": "any",
+            "where": "battlefield",
+            "chosen": true,
+            "count": 1
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "manual": []
+}

@@ -1,0 +1,28 @@
+{
+  "name": "Hidden Blade",
+  "texts": [
+    "[Hidden] [Action] Kill a unit at a battlefield. Its controller draws 2."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "kill",
+          "target": {
+            "kind": "unit",
+            "side": "any",
+            "where": "battlefield",
+            "chosen": true,
+            "count": 1
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "Its controller draws 2."
+  ]
+}

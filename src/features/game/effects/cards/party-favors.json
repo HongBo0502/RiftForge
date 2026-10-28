@@ -1,0 +1,13 @@
+{
+  "name": "Party Favors",
+  "texts": [
+    "Each other player chooses Cards or Runes. For each player that chooses Cards, you and that player each draw 1. For each player that chooses Runes, you and that player each channel 1 rune exhausted."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Each other player chooses Cards or Runes.",
+    "For each player that chooses Cards, you and that player each draw 1.",
+    "For each player that chooses Runes, you and that player each channel 1 rune exhausted."
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "name": "Leona - Determined",
+  "texts": [
+    "[Shield] When I attack, stun an enemy unit here."
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "on": "attack"
+      },
+      "instructions": [
+        {
+          "verb": "stun",
+          "target": {
+            "kind": "unit",
+            "side": "enemy",
+            "where": "here",
+            "chosen": true,
+            "count": 1
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": []
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Sett - Kingpin",
+  "texts": [
+    "[Tank] I get +1 :rb_might: for each buffed friendly unit at my battlefield."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "I get +1 :rb_might: for each buffed friendly unit at my battlefield."
+  ]
+}

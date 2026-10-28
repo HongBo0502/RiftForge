@@ -1,0 +1,28 @@
+{
+  "name": "Pit Rookie",
+  "texts": [
+    "When you play me, buff another friendly unit."
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "on": "play"
+      },
+      "instructions": [
+        {
+          "verb": "buff",
+          "target": {
+            "kind": "unit",
+            "side": "friendly",
+            "where": "anywhere",
+            "chosen": true,
+            "count": 1
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": []
+}

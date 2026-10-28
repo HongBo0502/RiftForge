@@ -1,0 +1,13 @@
+{
+  "name": "Atakhan",
+  "texts": [
+    "You may kill a friendly unit as an additional cost to play me. If you do, I cost :rb_energy_1: less for each Energy it costs and :rb_rune_order: less for each Power it costs. [Ganking] When I attack, the defender must kill one of their units here."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "You may kill a friendly unit as an additional cost to play me.",
+    "If you do, I cost :rb_energy_1: less for each Energy it costs and :rb_rune_order: less for each Power it costs.",
+    "When I attack, the defender must kill one of their units here."
+  ]
+}

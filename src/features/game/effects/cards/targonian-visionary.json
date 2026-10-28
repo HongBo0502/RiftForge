@@ -1,0 +1,23 @@
+{
+  "name": "Targonian Visionary",
+  "texts": [
+    "[Level 11][>] I have +4 :rb_might:."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "staticMight",
+          "amount": 4
+        }
+      ],
+      "condition": {
+        "keyword": "Level",
+        "value": 11
+      }
+    }
+  ],
+  "activated": [],
+  "manual": []
+}

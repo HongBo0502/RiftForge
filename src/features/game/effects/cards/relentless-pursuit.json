@@ -1,0 +1,13 @@
+{
+  "name": "Relentless Pursuit",
+  "texts": [
+    "[Action] Move a friendly unit. You may attach an Equipment with the same controller to it. This turn, that unit has \"When I conquer, you may move me to my base.\""
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Move a friendly unit.",
+    "You may attach an Equipment with the same controller to it.",
+    "This turn, that unit has \"When I conquer, you may move me to my base.\""
+  ]
+}

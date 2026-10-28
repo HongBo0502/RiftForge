@@ -1,0 +1,11 @@
+{
+  "name": "Janna - Savior",
+  "texts": [
+    "[Reaction] When you play me, heal your units here, then move an enemy unit from here to its base."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me, heal your units here, then move an enemy unit from here to its base."
+  ]
+}

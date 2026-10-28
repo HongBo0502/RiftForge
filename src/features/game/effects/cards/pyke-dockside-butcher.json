@@ -1,0 +1,12 @@
+{
+  "name": "Pyke - Dockside Butcher",
+  "texts": [
+    "[Hidden] [Ganking] You may pay :rb_rune_fury: as an additional cost to play me. When you play me, if you paid the additional cost, ready me and give me +2 :rb_might: this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "You may pay :rb_rune_fury: as an additional cost to play me.",
+    "When you play me, if you paid the additional cost, ready me and give me +2 :rb_might: this turn."
+  ]
+}

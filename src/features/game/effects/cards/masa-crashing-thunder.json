@@ -1,0 +1,12 @@
+{
+  "name": "Masa, Crashing Thunder",
+  "texts": [
+    "You may pay :rb_rune_order: as an additional cost to play me. When you play me, if you paid the additional cost, [Stun] an enemy unit at a battlefield."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "You may pay :rb_rune_order: as an additional cost to play me.",
+    "When you play me, if you paid the additional cost, [Stun] an enemy unit at a battlefield."
+  ]
+}

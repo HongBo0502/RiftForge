@@ -1,0 +1,14 @@
+{
+  "name": "Glowstone",
+  "texts": [
+    "[Empower] :rb_rune_rainbow::rb_rune_rainbow: Disempower this, :rb_exhaust:: Choose a player. They gain control of this and recall it. At the end of your turn, kill this and deal 5 to all units you control."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Empower] :rb_rune_rainbow::rb_rune_rainbow:",
+    "Disempower this, :rb_exhaust:: Choose a player.",
+    "They gain control of this and recall it.",
+    "At the end of your turn, kill this and deal 5 to all units you control."
+  ]
+}

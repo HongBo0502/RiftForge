@@ -1,0 +1,12 @@
+{
+  "name": "Arachnoid Horror",
+  "texts": [
+    "[Hunt 2] I can be played to an occupied battlefield if an enemy unit is alone there. Friendly units can be played to an occupied battlefield if an enemy unit is alone there."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "I can be played to an occupied battlefield if an enemy unit is alone there.",
+    "Friendly units can be played to an occupied battlefield if an enemy unit is alone there."
+  ]
+}

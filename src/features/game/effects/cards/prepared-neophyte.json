@@ -1,0 +1,11 @@
+{
+  "name": "Prepared Neophyte",
+  "texts": [
+    "If you've spent :rb_energy_4: or more to play a spell this turn, I have +4 :rb_might:."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "If you've spent :rb_energy_4: or more to play a spell this turn, I have +4 :rb_might:."
+  ]
+}

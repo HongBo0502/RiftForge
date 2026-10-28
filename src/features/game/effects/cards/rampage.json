@@ -1,0 +1,14 @@
+{
+  "name": "Rampage",
+  "texts": [
+    "As you play this, you may pay :rb_rune_body: as an additional cost. Choose a friendly unit and an enemy unit. If you paid the additional cost, give the friendly unit +2 :rb_might: this turn. They deal damage equal to their Mights to each other."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "As you play this, you may pay :rb_rune_body: as an additional cost.",
+    "Choose a friendly unit and an enemy unit.",
+    "If you paid the additional cost, give the friendly unit +2 :rb_might: this turn.",
+    "They deal damage equal to their Mights to each other."
+  ]
+}

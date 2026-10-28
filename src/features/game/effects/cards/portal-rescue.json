@@ -1,0 +1,11 @@
+{
+  "name": "Portal Rescue",
+  "texts": [
+    "[Action] Banish a friendly unit, then play it to base, ignoring its cost."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Banish a friendly unit, then play it to base, ignoring its cost."
+  ]
+}

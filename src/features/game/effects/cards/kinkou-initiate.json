@@ -1,0 +1,11 @@
+{
+  "name": "Kinkou Initiate",
+  "texts": [
+    "When you play me, draw 1 if your other units have total Might 5 or more."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me, draw 1 if your other units have total Might 5 or more."
+  ]
+}

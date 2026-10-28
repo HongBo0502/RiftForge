@@ -1,0 +1,31 @@
+{
+  "name": "Sacrifice",
+  "texts": [
+    "[Reaction] As an additional cost to play this, kill a friendly [Mighty] unit. Draw 2 and channel 1 rune exhausted."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "draw",
+          "amount": 2,
+          "who": {
+            "kind": "player",
+            "side": "you"
+          }
+        },
+        {
+          "verb": "channel",
+          "amount": 1,
+          "ready": false
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "As an additional cost to play this, kill a friendly [Mighty] unit."
+  ]
+}

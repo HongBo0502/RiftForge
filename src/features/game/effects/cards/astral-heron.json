@@ -1,0 +1,11 @@
+{
+  "name": "Astral Heron",
+  "texts": [
+    "When you play your first card each turn, if I'm at a battlefield, your next card costs :rb_energy_2::rb_rune_rainbow::rb_rune_rainbow: less."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play your first card each turn, if I'm at a battlefield, your next card costs :rb_energy_2::rb_rune_rainbow::rb_rune_rainbow: less."
+  ]
+}

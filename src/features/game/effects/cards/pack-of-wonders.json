@@ -1,0 +1,11 @@
+{
+  "name": "Pack of Wonders",
+  "texts": [
+    ":rb_exhaust:: Return another friendly gear, unit, or [Hidden] card to its owner's hand."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    ":rb_exhaust:: Return another friendly gear, unit, or [Hidden] card to its owner's hand."
+  ]
+}

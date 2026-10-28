@@ -1,0 +1,27 @@
+{
+  "name": "Sett - Brawler",
+  "texts": [
+    "When I'm played and when I conquer, buff me. Spend my buff: Give me +4 :rb_might: this turn.",
+    "When you play me or when I conquer, buff me. Spend my buff: Give me +4 :rb_might: this turn."
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "on": "play"
+      },
+      "instructions": [
+        {
+          "verb": "buff",
+          "target": {
+            "kind": "self"
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "Spend my buff: Give me +4 :rb_might: this turn."
+  ]
+}

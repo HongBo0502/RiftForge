@@ -1,0 +1,12 @@
+{
+  "name": "Breakneck Mech",
+  "texts": [
+    "Your Mechs have [Deflect] and [Ganking]. I enter ready if you control another Mech."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Your Mechs have [Deflect] and [Ganking].",
+    "I enter ready if you control another Mech."
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Public Execution",
+  "texts": [
+    "Choose a friendly unit. Kill an enemy unit with less Might than it. [Flow] :rb_energy_5::rb_rune_rainbow::rb_rune_rainbow:"
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Choose a friendly unit.",
+    "Kill an enemy unit with less Might than it.",
+    "[Flow] :rb_energy_5::rb_rune_rainbow::rb_rune_rainbow:"
+  ]
+}

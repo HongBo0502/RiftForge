@@ -1,0 +1,11 @@
+{
+  "name": "Keeper of Law",
+  "texts": [
+    "I cost :rb_energy_2::rb_rune_order: less if you control a battlefield with exactly two units there."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "I cost :rb_energy_2::rb_rune_order: less if you control a battlefield with exactly two units there."
+  ]
+}

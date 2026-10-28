@@ -1,0 +1,27 @@
+{
+  "name": "Firestorm",
+  "texts": [
+    "Deal 3 to all enemy units at a battlefield."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "deal",
+          "amount": 3,
+          "target": {
+            "kind": "unit",
+            "side": "enemy",
+            "where": "battlefield",
+            "chosen": false,
+            "count": null
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": []
+}

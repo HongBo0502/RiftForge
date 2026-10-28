@@ -1,0 +1,12 @@
+{
+  "name": "Lilting Lullaby",
+  "texts": [
+    "[Reaction] Counter a spell. Its controller can't play spells this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Counter a spell.",
+    "Its controller can't play spells this turn."
+  ]
+}

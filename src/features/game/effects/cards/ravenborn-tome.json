@@ -1,0 +1,11 @@
+{
+  "name": "Ravenborn Tome",
+  "texts": [
+    ":rb_exhaust:: The next spell you play this turn deals 1 Bonus Damage."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    ":rb_exhaust:: The next spell you play this turn deals 1 Bonus Damage."
+  ]
+}

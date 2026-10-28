@@ -1,0 +1,11 @@
+{
+  "name": "Vex - Mocking",
+  "texts": [
+    "[Shield] [Tank] When you [Stun] an enemy unit at a battlefield, you may move me to that battlefield."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you [Stun] an enemy unit at a battlefield, you may move me to that battlefield."
+  ]
+}

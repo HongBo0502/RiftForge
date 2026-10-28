@@ -1,0 +1,12 @@
+{
+  "name": "Keeper's Verdict",
+  "texts": [
+    "[Action] Choose an enemy unit at a battlefield. Its owner places it on the top or bottom of their Main Deck."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Choose an enemy unit at a battlefield.",
+    "Its owner places it on the top or bottom of their Main Deck."
+  ]
+}

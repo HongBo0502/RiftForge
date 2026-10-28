@@ -1,0 +1,13 @@
+{
+  "name": "Nami - Headstrong",
+  "texts": [
+    "You may pay :rb_rune_calm: as an additional cost to play me. When you play me, if you paid the additional cost, [Stun] an enemy unit. When I hold, the next time you play a unit this turn, ready it and [Buff] it."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "You may pay :rb_rune_calm: as an additional cost to play me.",
+    "When you play me, if you paid the additional cost, [Stun] an enemy unit.",
+    "When I hold, the next time you play a unit this turn, ready it and [Buff] it."
+  ]
+}

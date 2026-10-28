@@ -1,0 +1,12 @@
+{
+  "name": "Dunebreaker",
+  "texts": [
+    "If you have two or fewer cards in your hand, I enter ready. When I hold, draw 2."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "If you have two or fewer cards in your hand, I enter ready.",
+    "When I hold, draw 2."
+  ]
+}

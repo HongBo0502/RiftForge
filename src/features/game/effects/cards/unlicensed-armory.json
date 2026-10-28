@@ -1,0 +1,12 @@
+{
+  "name": "Unlicensed Armory",
+  "texts": [
+    "Discard 1, :rb_exhaust:: Choose a friendly unit. The next time it dies this turn, you may pay :rb_rune_fury: to recall it exhausted instead."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Discard 1, :rb_exhaust:: Choose a friendly unit.",
+    "The next time it dies this turn, you may pay :rb_rune_fury: to recall it exhausted instead."
+  ]
+}

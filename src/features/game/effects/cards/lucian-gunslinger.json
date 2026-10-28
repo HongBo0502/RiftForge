@@ -1,0 +1,11 @@
+{
+  "name": "Lucian - Gunslinger",
+  "texts": [
+    "[Assault] When I attack, deal damage equal to my [Assault] to an enemy unit here."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I attack, deal damage equal to my [Assault] to an enemy unit here."
+  ]
+}

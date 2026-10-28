@@ -1,0 +1,26 @@
+{
+  "name": "Jinx - Demolitionist",
+  "texts": [
+    "[Accelerate] [Assault 2] When you play me, discard 2."
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "on": "play"
+      },
+      "instructions": [
+        {
+          "verb": "discard",
+          "amount": 2,
+          "who": {
+            "kind": "player",
+            "side": "you"
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": []
+}

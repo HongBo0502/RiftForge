@@ -1,0 +1,11 @@
+{
+  "name": "Dominus",
+  "texts": [
+    "[Action] This turn, double a unit's Might and give it \":rb_rune_rainbow::rb_rune_rainbow:: Ready me.\""
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "This turn, double a unit's Might and give it \":rb_rune_rainbow::rb_rune_rainbow:: Ready me.\""
+  ]
+}

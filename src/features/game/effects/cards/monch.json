@@ -1,0 +1,11 @@
+{
+  "name": "Monch",
+  "texts": [
+    "If an opponent controls a stunned unit, I cost :rb_energy_2: less and enter ready."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "If an opponent controls a stunned unit, I cost :rb_energy_2: less and enter ready."
+  ]
+}

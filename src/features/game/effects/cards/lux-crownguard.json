@@ -1,0 +1,12 @@
+{
+  "name": "Lux - Crownguard",
+  "texts": [
+    ":rb_exhaust:: [Reaction] — [Add] :rb_energy_2:. Spend this Energy only to play spells."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    ":rb_exhaust:: [Reaction] — [Add] :rb_energy_2:.",
+    "Spend this Energy only to play spells."
+  ]
+}

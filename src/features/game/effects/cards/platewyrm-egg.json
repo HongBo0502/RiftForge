@@ -1,0 +1,23 @@
+{
+  "name": "Platewyrm Egg",
+  "texts": [
+    "This enters exhausted. [Empower] — :rb_energy_1:, :rb_exhaust: [Reaction][>] :rb_exhaust:: [Add] :rb_energy_1:. If this is [Empowered], [Add] :rb_energy_2: instead."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "entersExhausted"
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "[Empower] — :rb_energy_1:, :rb_exhaust:",
+    "[Reaction][>] :rb_exhaust:: [Add] :rb_energy_1:.",
+    "If this is [Empowered], [Add] :rb_energy_2: instead."
+  ]
+}

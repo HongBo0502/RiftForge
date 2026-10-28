@@ -1,0 +1,30 @@
+{
+  "name": "Onslaught",
+  "texts": [
+    "Give a unit +6 :rb_might: this turn. [Flow] :rb_energy_4:"
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "might",
+          "amount": 6,
+          "target": {
+            "kind": "unit",
+            "side": "any",
+            "where": "anywhere",
+            "chosen": true,
+            "count": 1
+          },
+          "duration": "thisTurn"
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "[Flow] :rb_energy_4:"
+  ]
+}

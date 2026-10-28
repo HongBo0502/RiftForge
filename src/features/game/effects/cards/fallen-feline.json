@@ -1,0 +1,12 @@
+{
+  "name": "Fallen Feline",
+  "texts": [
+    "When you play me, name a spell. While I'm at a battlefield, opponents can't play spells with that name."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me, name a spell.",
+    "While I'm at a battlefield, opponents can't play spells with that name."
+  ]
+}

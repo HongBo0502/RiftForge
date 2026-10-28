@@ -1,0 +1,12 @@
+{
+  "name": "LeBlanc - Fragmented",
+  "texts": [
+    "[Assault] [Deathknell][>] Draw 1. If it's your Beginning Phase, draw 2 instead."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Deathknell][>] Draw 1.",
+    "If it's your Beginning Phase, draw 2 instead."
+  ]
+}

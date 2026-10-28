@@ -1,0 +1,11 @@
+{
+  "name": "Eclipse Herald",
+  "texts": [
+    "When you stun an enemy unit, ready me and give me +1 :rb_might: this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you stun an enemy unit, ready me and give me +1 :rb_might: this turn."
+  ]
+}

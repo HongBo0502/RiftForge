@@ -1,0 +1,13 @@
+{
+  "name": "Safety Inspector",
+  "texts": [
+    "You may spend 3 XP as an additional cost to play me. When you play me, each player must kill one of their units. If you paid my additional cost, you don't kill a unit this way."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "You may spend 3 XP as an additional cost to play me.",
+    "When you play me, each player must kill one of their units.",
+    "If you paid my additional cost, you don't kill a unit this way."
+  ]
+}

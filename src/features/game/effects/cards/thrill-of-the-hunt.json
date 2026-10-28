@@ -1,0 +1,11 @@
+{
+  "name": "Thrill of the Hunt",
+  "texts": [
+    "[Reaction] Banish a friendly unit, then its owner plays it to any battlefield, ignoring its cost."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Banish a friendly unit, then its owner plays it to any battlefield, ignoring its cost."
+  ]
+}

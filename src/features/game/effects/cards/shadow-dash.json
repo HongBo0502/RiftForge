@@ -1,0 +1,13 @@
+{
+  "name": "Shadow Dash",
+  "texts": [
+    "Move an enemy unit to a battlefield where you have units. If you have exactly two units there, they each get +1 :rb_might: this turn. [Flow] :rb_energy_5::rb_rune_rainbow::rb_rune_rainbow:"
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Move an enemy unit to a battlefield where you have units.",
+    "If you have exactly two units there, they each get +1 :rb_might: this turn.",
+    "[Flow] :rb_energy_5::rb_rune_rainbow::rb_rune_rainbow:"
+  ]
+}

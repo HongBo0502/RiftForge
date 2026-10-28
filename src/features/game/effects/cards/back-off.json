@@ -1,0 +1,12 @@
+{
+  "name": "Back Off",
+  "texts": [
+    "[Hidden] [Action] [Stun] a unit. If you played this from your hand, draw 1."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Stun] a unit.",
+    "If you played this from your hand, draw 1."
+  ]
+}

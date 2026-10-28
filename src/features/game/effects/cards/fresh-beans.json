@@ -1,0 +1,11 @@
+{
+  "name": "Fresh Beans",
+  "texts": [
+    "When you play a unit during a showdown, you may exhaust this to draw 1."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play a unit during a showdown, you may exhaust this to draw 1."
+  ]
+}

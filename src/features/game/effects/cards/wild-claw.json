@@ -1,0 +1,14 @@
+{
+  "name": "Wild Claw",
+  "texts": [
+    "Look at the top 5 cards of your Main Deck. You may banish a unit or gear from among them and play it, reducing its Energy cost by :rb_energy_5:. Recycle the rest. Then you may do this: Empower it."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Look at the top 5 cards of your Main Deck.",
+    "You may banish a unit or gear from among them and play it, reducing its Energy cost by :rb_energy_5:.",
+    "Recycle the rest.",
+    "Then you may do this: Empower it."
+  ]
+}

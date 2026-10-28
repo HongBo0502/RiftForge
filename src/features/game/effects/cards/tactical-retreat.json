@@ -1,0 +1,12 @@
+{
+  "name": "Tactical Retreat",
+  "texts": [
+    "[Reaction] Choose a friendly unit. The next time it would die this turn, heal it, exhaust it, and recall it instead."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Choose a friendly unit.",
+    "The next time it would die this turn, heal it, exhaust it, and recall it instead."
+  ]
+}

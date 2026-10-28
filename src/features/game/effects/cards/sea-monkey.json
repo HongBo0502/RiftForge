@@ -1,0 +1,12 @@
+{
+  "name": "Sea Monkey",
+  "texts": [
+    "You may pay :rb_energy_1: as an additional cost to play me. When you play me, if you paid the additional cost, buff me."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "You may pay :rb_energy_1: as an additional cost to play me.",
+    "When you play me, if you paid the additional cost, buff me."
+  ]
+}

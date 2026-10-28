@@ -1,0 +1,28 @@
+{
+  "name": "Thwonk!",
+  "texts": [
+    "[Action] [Repeat] :rb_energy_2: Stun an attacking unit."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "stun",
+          "target": {
+            "kind": "unit",
+            "side": "any",
+            "where": "anywhere",
+            "chosen": true,
+            "count": 1
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "[Repeat] :rb_energy_2:"
+  ]
+}

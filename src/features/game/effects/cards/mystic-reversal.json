@@ -1,0 +1,12 @@
+{
+  "name": "Mystic Reversal",
+  "texts": [
+    "[Reaction] Gain control of a spell. You may make new choices for it."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Gain control of a spell.",
+    "You may make new choices for it."
+  ]
+}

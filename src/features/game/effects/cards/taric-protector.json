@@ -1,0 +1,11 @@
+{
+  "name": "Taric - Protector",
+  "texts": [
+    "[Shield] [Tank] Other friendly units here have [Shield]."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Other friendly units here have [Shield]."
+  ]
+}

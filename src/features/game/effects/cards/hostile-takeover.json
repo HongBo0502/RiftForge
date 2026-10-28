@@ -1,0 +1,13 @@
+{
+  "name": "Hostile Takeover",
+  "texts": [
+    "[Hidden] Take control of an enemy unit at a battlefield. Ready it. Lose control of that unit and recall it at end of turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Take control of an enemy unit at a battlefield.",
+    "Ready it.",
+    "Lose control of that unit and recall it at end of turn."
+  ]
+}

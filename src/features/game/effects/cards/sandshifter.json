@@ -1,0 +1,11 @@
+{
+  "name": "Sandshifter",
+  "texts": [
+    "When you play me, kill an enemy unit with 3 :rb_might: or less."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me, kill an enemy unit with 3 :rb_might: or less."
+  ]
+}

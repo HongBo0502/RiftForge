@@ -1,0 +1,29 @@
+{
+  "name": "Deadly Flourish",
+  "texts": [
+    "Deal 3 to an enemy unit. When it dies this turn, play a Gold gear token exhausted."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "deal",
+          "amount": 3,
+          "target": {
+            "kind": "unit",
+            "side": "enemy",
+            "where": "anywhere",
+            "chosen": true,
+            "count": 1
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "When it dies this turn, play a Gold gear token exhausted."
+  ]
+}

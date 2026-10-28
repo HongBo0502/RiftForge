@@ -1,0 +1,12 @@
+{
+  "name": "Nasus, Ascended",
+  "texts": [
+    "[Deflect 2] [Empower] :rb_energy_8: [Empowered][>] When I conquer, you score 1 point."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Empower] :rb_energy_8:",
+    "[Empowered][>] When I conquer, you score 1 point."
+  ]
+}

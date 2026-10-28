@@ -1,0 +1,12 @@
+{
+  "name": "Guerilla Warfare",
+  "texts": [
+    "Return up to two cards with [Hidden] from your trash to your hand. You can hide cards ignoring costs this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Return up to two cards with [Hidden] from your trash to your hand.",
+    "You can hide cards ignoring costs this turn."
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Zed, From the Shadows",
+  "texts": [
+    "You may discard 1 as an additional cost to play me. When you play me, if you paid the additional cost, play a 0 :rb_might: Shadow Clone unit token."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "You may discard 1 as an additional cost to play me.",
+    "When you play me, if you paid the additional cost, play a 0 :rb_might: Shadow Clone unit token."
+  ]
+}

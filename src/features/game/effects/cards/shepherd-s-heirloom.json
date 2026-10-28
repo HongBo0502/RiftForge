@@ -1,0 +1,12 @@
+{
+  "name": "Shepherd's Heirloom",
+  "texts": [
+    "When you play this, gain 1 XP. [Equip] — Spend 1 XP"
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play this, gain 1 XP.",
+    "[Equip] — Spend 1 XP"
+  ]
+}

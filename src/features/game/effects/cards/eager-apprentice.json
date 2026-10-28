@@ -1,0 +1,11 @@
+{
+  "name": "Eager Apprentice",
+  "texts": [
+    "While I'm at a battlefield, the Energy costs for spells you play is reduced by :rb_energy_1:, to a minimum of :rb_energy_1:."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "While I'm at a battlefield, the Energy costs for spells you play is reduced by :rb_energy_1:, to a minimum of :rb_energy_1:."
+  ]
+}

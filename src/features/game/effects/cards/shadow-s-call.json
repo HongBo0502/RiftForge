@@ -1,0 +1,27 @@
+{
+  "name": "Shadow's Call",
+  "texts": [
+    "Choose a friendly unit without [Temporary]. Give it [Temporary]. Draw 2."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "draw",
+          "amount": 2,
+          "who": {
+            "kind": "player",
+            "side": "you"
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "Choose a friendly unit without [Temporary].",
+    "Give it [Temporary]."
+  ]
+}

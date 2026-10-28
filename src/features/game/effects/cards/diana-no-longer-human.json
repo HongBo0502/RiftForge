@@ -1,0 +1,11 @@
+{
+  "name": "Diana - No Longer Human",
+  "texts": [
+    "[Ambush] When you play a spell, give me +2 :rb_might: this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play a spell, give me +2 :rb_might: this turn."
+  ]
+}

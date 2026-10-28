@@ -1,0 +1,11 @@
+{
+  "name": "Vault Breaker",
+  "texts": [
+    "[Action] Give a unit [Assault 2] and [Ganking] this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Give a unit [Assault 2] and [Ganking] this turn."
+  ]
+}

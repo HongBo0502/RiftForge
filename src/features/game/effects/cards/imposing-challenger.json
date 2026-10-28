@@ -1,0 +1,11 @@
+{
+  "name": "Imposing Challenger",
+  "texts": [
+    "When I move, you may move an enemy unit here with less Might than me to a different battlefield."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I move, you may move an enemy unit here with less Might than me to a different battlefield."
+  ]
+}

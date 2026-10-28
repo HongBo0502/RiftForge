@@ -1,0 +1,11 @@
+{
+  "name": "Tryndamere - Barbarian",
+  "texts": [
+    "When I conquer after an attack, if you assigned 5 or more excess damage to enemy units, you score 1 point."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I conquer after an attack, if you assigned 5 or more excess damage to enemy units, you score 1 point."
+  ]
+}

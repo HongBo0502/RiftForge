@@ -1,0 +1,12 @@
+{
+  "name": "Cursed Sarcophagus",
+  "texts": [
+    "When you play this, banish all units from your trash. :rb_exhaust:: Play a unit banished with this."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play this, banish all units from your trash.",
+    ":rb_exhaust:: Play a unit banished with this."
+  ]
+}

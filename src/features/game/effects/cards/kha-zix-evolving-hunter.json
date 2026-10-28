@@ -1,0 +1,11 @@
+{
+  "name": "Kha'Zix - Evolving Hunter",
+  "texts": [
+    "[Hunt] When I attack, you may spend 3 XP to deal damage equal to my Might to an enemy unit here."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I attack, you may spend 3 XP to deal damage equal to my Might to an enemy unit here."
+  ]
+}

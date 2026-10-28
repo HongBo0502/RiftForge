@@ -1,0 +1,13 @@
+{
+  "name": "Existential Dread",
+  "texts": [
+    "[Action] [Repeat] :rb_energy_2: [Stun] an attacking enemy unit. If it's already stunned, return it to its owner's hand instead."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Repeat] :rb_energy_2:",
+    "[Stun] an attacking enemy unit.",
+    "If it's already stunned, return it to its owner's hand instead."
+  ]
+}

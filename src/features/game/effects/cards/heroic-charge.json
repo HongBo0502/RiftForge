@@ -1,0 +1,28 @@
+{
+  "name": "Heroic Charge",
+  "texts": [
+    "[Action] Give a friendly unit +1 :rb_might: this turn and [Stun] an enemy unit at its location."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "might",
+          "amount": 1,
+          "target": {
+            "kind": "unit",
+            "side": "friendly",
+            "where": "anywhere",
+            "chosen": true,
+            "count": 1
+          },
+          "duration": "thisTurn"
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": []
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Stargazer",
+  "texts": [
+    "Spells with [Flow] you play from your trash cost :rb_energy_2: less, to a minimum of :rb_energy_1:."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Spells with [Flow] you play from your trash cost :rb_energy_2: less, to a minimum of :rb_energy_1:."
+  ]
+}

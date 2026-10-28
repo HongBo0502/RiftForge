@@ -1,0 +1,14 @@
+{
+  "name": "Master Yi - Unstoppable",
+  "texts": [
+    "[Level 3][>] I cost :rb_energy_2::rb_rune_calm: less. [Level 6][>] I cost :rb_energy_4::rb_rune_calm::rb_rune_calm: less instead. [Level 11][>] I cost :rb_energy_6::rb_rune_calm::rb_rune_calm::rb_rune_calm: less instead. [Level 16][>] I can't be chosen by enemy spells and abilities."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Level 3][>] I cost :rb_energy_2::rb_rune_calm: less.",
+    "[Level 6][>] I cost :rb_energy_4::rb_rune_calm::rb_rune_calm: less instead.",
+    "[Level 11][>] I cost :rb_energy_6::rb_rune_calm::rb_rune_calm::rb_rune_calm: less instead.",
+    "[Level 16][>] I can't be chosen by enemy spells and abilities."
+  ]
+}

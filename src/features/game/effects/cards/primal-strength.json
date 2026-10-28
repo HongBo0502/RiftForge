@@ -1,0 +1,28 @@
+{
+  "name": "Primal Strength",
+  "texts": [
+    "[Action] Give a unit +7 :rb_might: this turn."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "might",
+          "amount": 7,
+          "target": {
+            "kind": "unit",
+            "side": "any",
+            "where": "anywhere",
+            "chosen": true,
+            "count": 1
+          },
+          "duration": "thisTurn"
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": []
+}

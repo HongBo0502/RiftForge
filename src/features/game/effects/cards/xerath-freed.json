@@ -1,0 +1,12 @@
+{
+  "name": "Xerath - Freed",
+  "texts": [
+    ":rb_rune_fury:, :rb_exhaust:: Deal 3 to a unit. Use this ability only while I'm at a battlefield."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    ":rb_rune_fury:, :rb_exhaust:: Deal 3 to a unit.",
+    "Use this ability only while I'm at a battlefield."
+  ]
+}

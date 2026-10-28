@@ -1,0 +1,11 @@
+{
+  "name": "Sky Cruiser",
+  "texts": [
+    "Discard a gear, :rb_energy_1:, :rb_exhaust:: Deal 4 to a unit at a battlefield."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Discard a gear, :rb_energy_1:, :rb_exhaust:: Deal 4 to a unit at a battlefield."
+  ]
+}

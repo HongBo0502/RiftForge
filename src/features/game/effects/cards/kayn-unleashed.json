@@ -1,0 +1,11 @@
+{
+  "name": "Kayn - Unleashed",
+  "texts": [
+    "[Ganking] If I have moved twice this turn, I don't take damage."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "If I have moved twice this turn, I don't take damage."
+  ]
+}

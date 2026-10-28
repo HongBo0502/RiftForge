@@ -1,0 +1,12 @@
+{
+  "name": "Teemo - Strategist",
+  "texts": [
+    "[Hidden] When I defend or I'm played from [Hidden], reveal the top 5 cards of your Main Deck. Deal 1 to an enemy unit here for each card with [Hidden], then recycle them."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I defend or I'm played from [Hidden], reveal the top 5 cards of your Main Deck.",
+    "Deal 1 to an enemy unit here for each card with [Hidden], then recycle them."
+  ]
+}

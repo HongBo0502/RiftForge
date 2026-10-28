@@ -116,11 +116,13 @@ src/
       cleanup.ts           cleanups, zone changes, Temporary
       redact.ts            hidden-information enforcement
       rng.ts               seeded RNG
-    game/effects/        card text -> instructions -> execution
-      types.ts             the effect vocabulary (verbs, selectors, triggers)
-      parse.ts             printed card text -> Instruction[]  (strict; refuses rather than guesses)
+    game/effects/        per-card scripts -> instructions -> execution
+      cards/*.json         ONE SCRIPT PER CARD NAME — the only source of card effects at runtime
+      scripts.ts           loads cards/*.json; scriptFor(card), manualText(card)
+      types.ts             the effect vocabulary (verbs, selectors, triggers, CardScript)
+      parse.ts             AUTHORING AID: printed text -> draft script (strict; refuses rather than guesses)
       execute.ts           runs instructions through the engine primitives
-      run.ts               bridge used by chain resolution, memoised per card
+      run.ts               bridge used by chain resolution
     game/online/         transport, Supabase adapter, match hook
     game/ui/             playmat board, card preview, deck select, handoff
 DESIGN.md                board design contract — read before UI work
@@ -252,7 +254,34 @@ remove it while coverage is partial.
 
 Pick up here. Ordered by what unblocks the most.
 
-### A. Card effects registry — the main long-term axis
+### A. Card effects — per-card scripts (built)
+
+**Every card name has its own file in `src/features/game/effects/cards/`.**
+The engine reads only these; it never parses card text at runtime. A file:
+
+```json
+{ "name": "Apprentice Mage",
+  "texts": ["[Empower] :rb_energy_2: When I become [Empowered], [Predict 2]. [Empowered][>] I have +1 :rb_might:."],
+  "abilities": [{ "trigger": null, "condition": { "keyword": "Empowered", "value": null },
+                  "instructions": [{ "verb": "staticMight", "amount": 1 }] }],
+  "activated": [],
+  "manual": ["[Empower] :rb_energy_2:", "When I become [Empowered], [Predict 2]."] }
+```
+
+- `texts` — the printed wordings the script was written for. A printing whose
+  wording is not listed (an erratum, a new set) gets no script and is fully
+  manual, so a script never applies to text it was not checked against.
+- `manual` — what the script does not cover; exactly what the "apply by hand"
+  panel shows for that card. It is the card's to-do list.
+- To script a card: edit its file — move a sentence out of `manual` into
+  `abilities`/`activated` using verbs `execute.ts` knows. `scripts.test.ts`
+  rejects unknown verbs and wordings no card prints.
+- `npm run gen-scripts` drafts files with the parser; it never overwrites an
+  existing file without `--force`, because files are hand-edited from here on.
+- Coverage: 174 printings play with nothing manual (`scripts.test.ts` floor);
+  802 card files, 584 still entirely manual.
+
+### A (old). Card effects registry — the main long-term axis
 
 Create `src/features/game/engine/effects/` keyed by `riftboundId` (stable, e.g.
 `ogn-194-298`). Each entry hooks named lifecycle points the reducer already has

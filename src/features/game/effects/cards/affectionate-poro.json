@@ -1,0 +1,11 @@
+{
+  "name": "Affectionate Poro",
+  "texts": [
+    "When a combat that I was in ends, if I haven't been dealt damage this turn, draw 1."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When a combat that I was in ends, if I haven't been dealt damage this turn, draw 1."
+  ]
+}

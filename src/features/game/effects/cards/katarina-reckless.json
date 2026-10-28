@@ -1,0 +1,12 @@
+{
+  "name": "Katarina - Reckless",
+  "texts": [
+    "When you hide a card, ready me. When you play a card from face down, deal 2 to an enemy unit."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you hide a card, ready me.",
+    "When you play a card from face down, deal 2 to an enemy unit."
+  ]
+}

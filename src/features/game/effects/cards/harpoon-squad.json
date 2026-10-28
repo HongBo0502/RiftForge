@@ -1,0 +1,11 @@
+{
+  "name": "Harpoon Squad",
+  "texts": [
+    "When I move from a battlefield, give me +2 :rb_might: this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I move from a battlefield, give me +2 :rb_might: this turn."
+  ]
+}

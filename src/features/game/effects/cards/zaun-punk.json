@@ -1,0 +1,12 @@
+{
+  "name": "Zaun Punk",
+  "texts": [
+    "You may kill a friendly gear as an additional cost to play me. When you play me, if you paid the additional cost, kill a gear."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "You may kill a friendly gear as an additional cost to play me.",
+    "When you play me, if you paid the additional cost, kill a gear."
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Piercing Light",
+  "texts": [
+    "[Repeat] :rb_energy_2::rb_rune_fury: Deal 2 to a unit at a battlefield, then deal 2 to up to one other unit."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "deal",
+          "amount": 2,
+          "target": {
+            "kind": "unit",
+            "side": "any",
+            "where": "battlefield",
+            "chosen": true,
+            "count": 1
+          }
+        },
+        {
+          "verb": "deal",
+          "amount": 2,
+          "target": {
+            "kind": "unit",
+            "side": "any",
+            "where": "anywhere",
+            "chosen": false,
+            "count": null
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "[Repeat] :rb_energy_2::rb_rune_fury:"
+  ]
+}

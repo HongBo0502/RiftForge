@@ -1,0 +1,26 @@
+{
+  "name": "Clairvoyance",
+  "texts": [
+    "[Reaction] [Predict 5]. Draw 2."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "draw",
+          "amount": 2,
+          "who": {
+            "kind": "player",
+            "side": "you"
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "[Predict 5]."
+  ]
+}

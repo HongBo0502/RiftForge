@@ -1,0 +1,31 @@
+{
+  "name": "Twilight Shroud",
+  "texts": [
+    "Give a friendly unit +1 :rb_might: this turn. It can't be chosen by enemy spells and abilities this turn. [Flow] :rb_energy_2:"
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "might",
+          "amount": 1,
+          "target": {
+            "kind": "unit",
+            "side": "friendly",
+            "where": "anywhere",
+            "chosen": true,
+            "count": 1
+          },
+          "duration": "thisTurn"
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "It can't be chosen by enemy spells and abilities this turn.",
+    "[Flow] :rb_energy_2:"
+  ]
+}

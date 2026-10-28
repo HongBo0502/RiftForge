@@ -1,0 +1,13 @@
+{
+  "name": "Death Mark",
+  "texts": [
+    "[Burn 3]. Play a 0 :rb_might: Shadow Clone unit token. [Flow] :rb_energy_1::rb_rune_rainbow::rb_rune_rainbow:"
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Burn 3].",
+    "Play a 0 :rb_might: Shadow Clone unit token.",
+    "[Flow] :rb_energy_1::rb_rune_rainbow::rb_rune_rainbow:"
+  ]
+}

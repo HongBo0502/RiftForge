@@ -1,0 +1,11 @@
+{
+  "name": "Legion Quartermaster",
+  "texts": [
+    "As an additional cost to play me, return a friendly gear to its owner's hand."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "As an additional cost to play me, return a friendly gear to its owner's hand."
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Dragon Form",
+  "texts": [
+    "Choose a unit. Its base Might becomes 5 this turn. [Flow] :rb_energy_3:"
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Choose a unit.",
+    "Its base Might becomes 5 this turn.",
+    "[Flow] :rb_energy_3:"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "name": "Escaped Grayback",
+  "texts": [
+    "[Empower] — Kill a friendly unit [Empowered][>] I have +2 :rb_might:."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "staticMight",
+          "amount": 2
+        }
+      ],
+      "condition": {
+        "keyword": "Empowered",
+        "value": null
+      }
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "[Empower] — Kill a friendly unit"
+  ]
+}

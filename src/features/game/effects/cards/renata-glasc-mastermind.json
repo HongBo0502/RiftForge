@@ -1,0 +1,13 @@
+{
+  "name": "Renata Glasc - Mastermind",
+  "texts": [
+    ":rb_energy_1::rb_rune_mind:: Draw 1. :rb_energy_4::rb_rune_mind::rb_rune_mind::rb_rune_mind::rb_rune_mind:, :rb_exhaust:: Score 1 point. Use my abilities only while I'm at a battlefield."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    ":rb_energy_4::rb_rune_mind::rb_rune_mind::rb_rune_mind::rb_rune_mind:, :rb_exhaust:: Score 1 point.",
+    "Use my abilities only while I'm at a battlefield.",
+    ":rb_energy_1::rb_rune_mind:: Draw 1."
+  ]
+}

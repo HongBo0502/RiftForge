@@ -1,0 +1,11 @@
+{
+  "name": "Glasc Mixologist",
+  "texts": [
+    "[Deathknell] — You may play a unit with cost no more than :rb_energy_3: and no more than :rb_rune_rainbow: from your trash, ignoring its cost."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Deathknell] — You may play a unit with cost no more than :rb_energy_3: and no more than :rb_rune_rainbow: from your trash, ignoring its cost."
+  ]
+}

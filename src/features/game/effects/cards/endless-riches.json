@@ -1,0 +1,14 @@
+{
+  "name": "Endless Riches",
+  "texts": [
+    "When you play this, banish your hand and trash, then [Burn 7]. Skip your Draw Phase. You may play cards from your trash. If a card would go to your trash from anywhere other than your Main Deck, banish it instead."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play this, banish your hand and trash, then [Burn 7].",
+    "Skip your Draw Phase.",
+    "You may play cards from your trash.",
+    "If a card would go to your trash from anywhere other than your Main Deck, banish it instead."
+  ]
+}

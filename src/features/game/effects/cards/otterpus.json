@@ -1,0 +1,11 @@
+{
+  "name": "Otterpus",
+  "texts": [
+    "If a player would score 1 point from conquering or holding during their first or second turn, they draw 1 instead."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "If a player would score 1 point from conquering or holding during their first or second turn, they draw 1 instead."
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Spirit's Refuge",
+  "texts": [
+    "When you play this, buff a friendly unit. Friendly buffed units have [Deflect] if they didn't already."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play this, buff a friendly unit.",
+    "Friendly buffed units have [Deflect] if they didn't already."
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Dazzling Aurora",
+  "texts": [
+    "At the end of your turn, reveal cards from the top of your Main Deck until you reveal a unit. Play it, ignoring its cost, and recycle the rest."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "At the end of your turn, reveal cards from the top of your Main Deck until you reveal a unit.",
+    "Play it, ignoring its cost, and recycle the rest."
+  ]
+}

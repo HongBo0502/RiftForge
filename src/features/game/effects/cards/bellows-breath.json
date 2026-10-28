@@ -1,0 +1,29 @@
+{
+  "name": "Bellows Breath",
+  "texts": [
+    "[Action] [Repeat] :rb_energy_1::rb_rune_mind: Deal 1 to up to three units at the same location."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "deal",
+          "amount": 1,
+          "target": {
+            "kind": "unit",
+            "side": "any",
+            "where": "anywhere",
+            "chosen": true,
+            "count": 3
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "[Repeat] :rb_energy_1::rb_rune_mind:"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Walking Roost",
+  "texts": [
+    "[Deflect] When you play me, choose an opponent. They play a 1 :rb_might: Bird unit token with [Deflect]."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me, choose an opponent.",
+    "They play a 1 :rb_might: Bird unit token with [Deflect]."
+  ]
+}

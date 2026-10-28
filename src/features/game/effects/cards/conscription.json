@@ -1,0 +1,14 @@
+{
+  "name": "Conscription",
+  "texts": [
+    "You may spend 5 XP as an additional cost to play this. Choose an enemy unit at a battlefield with 3 :rb_might: or less. If you paid the additional cost, choose any enemy unit at a battlefield instead. Take control of it, exhaust it, and recall it."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "You may spend 5 XP as an additional cost to play this.",
+    "Choose an enemy unit at a battlefield with 3 :rb_might: or less.",
+    "If you paid the additional cost, choose any enemy unit at a battlefield instead.",
+    "Take control of it, exhaust it, and recall it."
+  ]
+}

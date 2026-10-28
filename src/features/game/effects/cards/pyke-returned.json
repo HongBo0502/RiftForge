@@ -1,0 +1,11 @@
+{
+  "name": "Pyke - Returned",
+  "texts": [
+    "[Hidden] [Backline] Once each turn, when an enemy unit dies while I'm at a battlefield, play a Gold gear token exhausted."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Once each turn, when an enemy unit dies while I'm at a battlefield, play a Gold gear token exhausted."
+  ]
+}

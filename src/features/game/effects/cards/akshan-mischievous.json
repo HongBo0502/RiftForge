@@ -1,0 +1,15 @@
+{
+  "name": "Akshan - Mischievous",
+  "texts": [
+    "[Weaponmaster] You may pay :rb_rune_body::rb_rune_body: as an additional cost to play me. When you play me, if you paid the additional cost, move an enemy gear to your base. You control it until I leave the board. If it's an Equipment, attach it to me."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Weaponmaster]",
+    "You may pay :rb_rune_body::rb_rune_body: as an additional cost to play me.",
+    "When you play me, if you paid the additional cost, move an enemy gear to your base.",
+    "You control it until I leave the board.",
+    "If it's an Equipment, attach it to me."
+  ]
+}

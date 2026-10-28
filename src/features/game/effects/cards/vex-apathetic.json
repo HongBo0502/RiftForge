@@ -1,0 +1,12 @@
+{
+  "name": "Vex - Apathetic",
+  "texts": [
+    "[Deflect] When an opponent plays a unit while I'm at a battlefield, [Stun] it. They can't move it this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When an opponent plays a unit while I'm at a battlefield, [Stun] it.",
+    "They can't move it this turn."
+  ]
+}

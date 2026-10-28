@@ -1,0 +1,12 @@
+{
+  "name": "Convergent Mutation",
+  "texts": [
+    "[Reaction] Choose a friendly unit. This turn, increase its Might to the Might of another friendly unit."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Choose a friendly unit.",
+    "This turn, increase its Might to the Might of another friendly unit."
+  ]
+}

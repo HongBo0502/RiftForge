@@ -21,6 +21,9 @@ export const AUTOMATED_KEYWORDS = [
   'Backline', // I must be assigned combat damage last. 465.2.c.6
   'Ganking', // I can move from battlefield to battlefield. 144.4.c
   'Ambush', // playable to a battlefield where you have units, at Reaction speed. 822
+  'Accelerate', // optional extra cost to enter ready. 805 — reducer.ts PLAY_CARD
+  'Temporary', // killed at the start of its controller's next turn. cleanup.ts
+  'Hidden', // hide facedown, play later from hidden. 811 — reducer.ts HIDE_CARD
   'Deflect', // enemy spells choosing me cost N more Power. 809
   'Hunt', // my controller gains N XP when I Conquer or Hold. 823
   'Quick-Draw', // this gear has Reaction inherently. 819.1.b

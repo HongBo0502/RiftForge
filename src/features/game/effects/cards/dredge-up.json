@@ -1,0 +1,26 @@
+{
+  "name": "Dredge Up",
+  "texts": [
+    "Draw 1. [Flow] :rb_energy_2:"
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "draw",
+          "amount": 1,
+          "who": {
+            "kind": "player",
+            "side": "you"
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "[Flow] :rb_energy_2:"
+  ]
+}

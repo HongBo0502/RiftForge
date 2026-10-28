@@ -1,0 +1,11 @@
+{
+  "name": "Unyielding Spirit",
+  "texts": [
+    "[Reaction] Prevent all spell and ability damage this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Prevent all spell and ability damage this turn."
+  ]
+}

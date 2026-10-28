@@ -1,0 +1,14 @@
+{
+  "name": "Ashe - Focused",
+  "texts": [
+    "When you play me, choose an opponent. They reveal their hand. Choose a card revealed this way and banish it. When they hold, return it to their hand ."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me, choose an opponent.",
+    "They reveal their hand.",
+    "Choose a card revealed this way and banish it.",
+    "When they hold, return it to their hand ."
+  ]
+}

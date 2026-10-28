@@ -1,0 +1,12 @@
+{
+  "name": "Solari Sunhawk",
+  "texts": [
+    "[Empower] :rb_energy_2: [Empowered][>] I have +1 :rb_might: and [Deflect 2]."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Empower] :rb_energy_2:",
+    "[Empowered][>] I have +1 :rb_might: and [Deflect 2]."
+  ]
+}

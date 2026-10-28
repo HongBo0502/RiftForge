@@ -1,0 +1,14 @@
+{
+  "name": "Twisted Fate - Gambler",
+  "texts": [
+    "When I attack, reveal the top rune of your rune deck, then recycle it. Do one of the following based on its domain::rb_rune_fury: — Deal 2 to an enemy unit here and 1 to all other enemy units here. :rb_rune_mind: — Draw 1. :rb_rune_order: — Stun an enemy unit."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I attack, reveal the top rune of your rune deck, then recycle it.",
+    "Do one of the following based on its domain::rb_rune_fury: — Deal 2 to an enemy unit here and 1 to all other enemy units here.",
+    ":rb_rune_mind: — Draw 1.",
+    ":rb_rune_order: — Stun an enemy unit."
+  ]
+}

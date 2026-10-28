@@ -1,0 +1,34 @@
+{
+  "name": "Evershade Stalker",
+  "texts": [
+    "When you play me, discard 1, then draw 1."
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "on": "play"
+      },
+      "instructions": [
+        {
+          "verb": "discard",
+          "amount": 1,
+          "who": {
+            "kind": "player",
+            "side": "you"
+          }
+        },
+        {
+          "verb": "draw",
+          "amount": 1,
+          "who": {
+            "kind": "player",
+            "side": "you"
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": []
+}

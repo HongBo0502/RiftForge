@@ -1,0 +1,11 @@
+{
+  "name": "Pirate's Haven",
+  "texts": [
+    "When you ready a friendly unit, give it +1 :rb_might: this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you ready a friendly unit, give it +1 :rb_might: this turn."
+  ]
+}

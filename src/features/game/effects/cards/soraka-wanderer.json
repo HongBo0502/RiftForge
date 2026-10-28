@@ -1,0 +1,12 @@
+{
+  "name": "Soraka - Wanderer",
+  "texts": [
+    "I must be assigned combat damage last. If another unit you control here would die, if it has less Might than me, instead heal it, exhaust it, and recall it."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "I must be assigned combat damage last.",
+    "If another unit you control here would die, if it has less Might than me, instead heal it, exhaust it, and recall it."
+  ]
+}

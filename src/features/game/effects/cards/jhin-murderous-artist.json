@@ -1,0 +1,11 @@
+{
+  "name": "Jhin - Murderous Artist",
+  "texts": [
+    "[Deflect] [Ganking] When I move, [Add] :rb_energy_1::rb_rune_rainbow:."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I move, [Add] :rb_energy_1::rb_rune_rainbow:."
+  ]
+}

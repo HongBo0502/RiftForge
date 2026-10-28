@@ -1,0 +1,11 @@
+{
+  "name": "Whirlwind",
+  "texts": [
+    "Starting with the next player, each player may return a unit to its owner's hand."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Starting with the next player, each player may return a unit to its owner's hand."
+  ]
+}

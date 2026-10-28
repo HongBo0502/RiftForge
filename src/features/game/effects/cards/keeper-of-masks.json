@@ -1,0 +1,12 @@
+{
+  "name": "Keeper of Masks",
+  "texts": [
+    "[Hidden] [Temporary] When you play me, play two Reflection unit tokens here. They become copies of me."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me, play two Reflection unit tokens here.",
+    "They become copies of me."
+  ]
+}

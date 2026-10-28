@@ -1,0 +1,11 @@
+{
+  "name": "Yasuo - Windrider",
+  "texts": [
+    "[Ganking] The third time I move in a turn, you score 1 point."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "The third time I move in a turn, you score 1 point."
+  ]
+}

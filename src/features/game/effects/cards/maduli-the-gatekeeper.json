@@ -1,0 +1,12 @@
+{
+  "name": "Maduli the Gatekeeper",
+  "texts": [
+    "I can't be readied. :rb_rune_chaos:: Move me to an occupied enemy battlefield if my Might is greater than the total Might of enemy units there."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "I can't be readied.",
+    ":rb_rune_chaos:: Move me to an occupied enemy battlefield if my Might is greater than the total Might of enemy units there."
+  ]
+}

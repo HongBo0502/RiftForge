@@ -1,0 +1,11 @@
+{
+  "name": "Irelia - Graceful",
+  "texts": [
+    "Your spells that choose me cost :rb_energy_1: or :rb_rune_rainbow: less."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Your spells that choose me cost :rb_energy_1: or :rb_rune_rainbow: less."
+  ]
+}

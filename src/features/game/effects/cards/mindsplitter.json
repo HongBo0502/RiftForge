@@ -1,0 +1,13 @@
+{
+  "name": "Mindsplitter",
+  "texts": [
+    "When you play me, choose an opponent. They reveal their hand. Choose a card from it, and they discard that card."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me, choose an opponent.",
+    "They reveal their hand.",
+    "Choose a card from it, and they discard that card."
+  ]
+}

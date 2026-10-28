@@ -1,0 +1,14 @@
+{
+  "name": "Double Trouble",
+  "texts": [
+    "[Repeat] :rb_energy_2: Look at the top 3 cards of your Main Deck. You may reveal a unit from among them and draw it. Recycle the rest."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Repeat] :rb_energy_2:",
+    "Look at the top 3 cards of your Main Deck.",
+    "You may reveal a unit from among them and draw it.",
+    "Recycle the rest."
+  ]
+}

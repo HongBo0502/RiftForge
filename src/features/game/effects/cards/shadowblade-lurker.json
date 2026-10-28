@@ -1,0 +1,11 @@
+{
+  "name": "Shadowblade Lurker",
+  "texts": [
+    "I cost :rb_energy_2: less for each card with my name in your trash."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "I cost :rb_energy_2: less for each card with my name in your trash."
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Garbage Grabber",
+  "texts": [
+    "Recycle 3 from your trash, :rb_energy_1:, :rb_exhaust:: Draw 1."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Recycle 3 from your trash, :rb_energy_1:, :rb_exhaust:: Draw 1."
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Ravenbloom Student",
+  "texts": [
+    "When you play a spell, give me +1 :rb_might: this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play a spell, give me +1 :rb_might: this turn."
+  ]
+}

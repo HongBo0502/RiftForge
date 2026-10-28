@@ -1,0 +1,11 @@
+{
+  "name": "Gust",
+  "texts": [
+    "[Reaction] Return a unit at a battlefield with 3 :rb_might: or less to its owner's hand."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Return a unit at a battlefield with 3 :rb_might: or less to its owner's hand."
+  ]
+}

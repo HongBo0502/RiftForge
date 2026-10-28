@@ -1,0 +1,11 @@
+{
+  "name": "Evelynn - Entrancing",
+  "texts": [
+    "[Hidden] [Backline] When you play me from face down on your turn, you may move an enemy unit at a different location to my battlefield."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me from face down on your turn, you may move an enemy unit at a different location to my battlefield."
+  ]
+}

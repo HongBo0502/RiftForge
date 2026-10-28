@@ -1,0 +1,12 @@
+{
+  "name": "Resonating Strike",
+  "texts": [
+    "[Hidden] [Reaction] Choose a battlefield you control and a unit you control at a different location. Move that unit to that battlefield and give it +2 :rb_might: this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Choose a battlefield you control and a unit you control at a different location.",
+    "Move that unit to that battlefield and give it +2 :rb_might: this turn."
+  ]
+}

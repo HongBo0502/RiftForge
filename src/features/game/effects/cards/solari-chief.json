@@ -1,0 +1,13 @@
+{
+  "name": "Solari Chief",
+  "texts": [
+    "When you play me, choose an enemy unit. If it is stunned, kill it. Otherwise, stun it."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me, choose an enemy unit.",
+    "If it is stunned, kill it.",
+    "Otherwise, stun it."
+  ]
+}

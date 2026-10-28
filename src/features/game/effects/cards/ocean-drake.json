@@ -1,0 +1,12 @@
+{
+  "name": "Ocean Drake",
+  "texts": [
+    "You may play me to an open battlefield. When you play me, you may return a non-Dragon unit to its owner's hand."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "You may play me to an open battlefield.",
+    "When you play me, you may return a non-Dragon unit to its owner's hand."
+  ]
+}

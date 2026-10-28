@@ -1,0 +1,13 @@
+{
+  "name": "Dame the Despoiler",
+  "texts": [
+    "[Empower] :rb_energy_5::rb_rune_body: [Empowered][>] When I attack or defend, choose a unit here. Increase my Might to its Might this turn, then give me +1 :rb_might: this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Empower] :rb_energy_5::rb_rune_body:",
+    "[Empowered][>] When I attack or defend, choose a unit here.",
+    "Increase my Might to its Might this turn, then give me +1 :rb_might: this turn."
+  ]
+}

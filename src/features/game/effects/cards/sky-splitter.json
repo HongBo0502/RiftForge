@@ -1,0 +1,29 @@
+{
+  "name": "Sky Splitter",
+  "texts": [
+    "[Action] This spell's Energy cost is reduced by the highest Might among units you control. Deal 5 to a unit at a battlefield."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "deal",
+          "amount": 5,
+          "target": {
+            "kind": "unit",
+            "side": "any",
+            "where": "battlefield",
+            "chosen": true,
+            "count": 1
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "This spell's Energy cost is reduced by the highest Might among units you control."
+  ]
+}

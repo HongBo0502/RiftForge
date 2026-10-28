@@ -1,0 +1,11 @@
+{
+  "name": "Herald of Scales",
+  "texts": [
+    "Your Dragons' Energy costs are reduced by :rb_energy_2:, to a minimum of :rb_energy_1:."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Your Dragons' Energy costs are reduced by :rb_energy_2:, to a minimum of :rb_energy_1:."
+  ]
+}

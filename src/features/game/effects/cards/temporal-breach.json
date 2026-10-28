@@ -1,0 +1,11 @@
+{
+  "name": "Temporal Breach",
+  "texts": [
+    "[Hidden] Banish a unit, then its owner plays it to the same location, ignoring its cost."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Banish a unit, then its owner plays it to the same location, ignoring its cost."
+  ]
+}

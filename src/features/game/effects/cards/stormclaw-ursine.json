@@ -1,0 +1,23 @@
+{
+  "name": "Stormclaw Ursine",
+  "texts": [
+    "[Tank] When you play me, channel 1 rune exhausted."
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "on": "play"
+      },
+      "instructions": [
+        {
+          "verb": "channel",
+          "amount": 1,
+          "ready": false
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": []
+}

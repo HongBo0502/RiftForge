@@ -1,0 +1,12 @@
+{
+  "name": "Kinkou Lifeblade",
+  "texts": [
+    "[Empower] :rb_energy_2: [Empowered][>] I have +1 :rb_might: and [Ganking]."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Empower] :rb_energy_2:",
+    "[Empowered][>] I have +1 :rb_might: and [Ganking]."
+  ]
+}

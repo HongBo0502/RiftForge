@@ -1,0 +1,11 @@
+{
+  "name": "Hextech Gauntlets",
+  "texts": [
+    "[Equip] :rb_energy_3::rb_rune_rainbow:. This ability's Energy cost is reduced by the Might of the unit you choose."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "This ability's Energy cost is reduced by the Might of the unit you choose."
+  ]
+}

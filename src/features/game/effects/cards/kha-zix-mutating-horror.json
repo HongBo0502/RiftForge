@@ -1,0 +1,11 @@
+{
+  "name": "Kha'Zix - Mutating Horror",
+  "texts": [
+    "[Ambush] When I attack or defend, if an enemy unit is alone here, give me +2 :rb_might: this turn and gain 2 XP."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I attack or defend, if an enemy unit is alone here, give me +2 :rb_might: this turn and gain 2 XP."
+  ]
+}

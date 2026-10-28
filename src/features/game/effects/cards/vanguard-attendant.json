@@ -1,0 +1,19 @@
+{
+  "name": "Vanguard Attendant",
+  "texts": [
+    "I enter ready."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "entersReady"
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": []
+}

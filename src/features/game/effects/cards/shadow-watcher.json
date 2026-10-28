@@ -1,0 +1,11 @@
+{
+  "name": "Shadow Watcher",
+  "texts": [
+    "If a friendly unit died during your Beginning Phase this turn, I enter ready."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "If a friendly unit died during your Beginning Phase this turn, I enter ready."
+  ]
+}

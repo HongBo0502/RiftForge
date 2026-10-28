@@ -1,0 +1,28 @@
+{
+  "name": "Perfect Execution",
+  "texts": [
+    "Ready a unit and give it [Assault 3] this turn. [Flow] :rb_energy_3::rb_rune_fury:"
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "ready",
+          "target": {
+            "kind": "unit",
+            "side": "any",
+            "where": "anywhere",
+            "chosen": true,
+            "count": 1
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "[Flow] :rb_energy_3::rb_rune_fury:"
+  ]
+}

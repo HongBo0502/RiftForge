@@ -1,0 +1,14 @@
+{
+  "name": "Rek'Sai - Swarm Queen",
+  "texts": [
+    "When I attack, you may reveal the top 2 cards of your Main Deck. You may play one. Then recycle the rest. If the played card is a unit, you may play it here."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I attack, you may reveal the top 2 cards of your Main Deck.",
+    "You may play one.",
+    "Then recycle the rest.",
+    "If the played card is a unit, you may play it here."
+  ]
+}

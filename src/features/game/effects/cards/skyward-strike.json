@@ -1,0 +1,12 @@
+{
+  "name": "Skyward Strike",
+  "texts": [
+    "Move an enemy unit. [Level 6][>] [Stun] an enemy unit."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Move an enemy unit.",
+    "[Level 6][>] [Stun] an enemy unit."
+  ]
+}

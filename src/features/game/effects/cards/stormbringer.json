@@ -1,0 +1,12 @@
+{
+  "name": "Stormbringer",
+  "texts": [
+    "Choose a friendly unit in your base. Deal damage equal to its Might to all enemy units at a battlefield, then move your unit there."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Choose a friendly unit in your base.",
+    "Deal damage equal to its Might to all enemy units at a battlefield, then move your unit there."
+  ]
+}

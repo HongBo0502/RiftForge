@@ -1,0 +1,26 @@
+{
+  "name": "Salvage",
+  "texts": [
+    "[Action] You may kill a gear. Draw 1."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "draw",
+          "amount": 1,
+          "who": {
+            "kind": "player",
+            "side": "you"
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "You may kill a gear."
+  ]
+}

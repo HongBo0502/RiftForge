@@ -1,0 +1,11 @@
+{
+  "name": "Shen, Leader of the Kinkou Order",
+  "texts": [
+    "[Shield] When I hold, if there is exactly one other unit you control here, you score 1 point."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I hold, if there is exactly one other unit you control here, you score 1 point."
+  ]
+}

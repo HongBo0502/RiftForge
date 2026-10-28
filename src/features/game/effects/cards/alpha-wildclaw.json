@@ -1,0 +1,11 @@
+{
+  "name": "Alpha Wildclaw",
+  "texts": [
+    "[Tank] Your units here with less Might than me can't be chosen by enemy spells and abilities."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Your units here with less Might than me can't be chosen by enemy spells and abilities."
+  ]
+}

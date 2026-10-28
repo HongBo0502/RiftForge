@@ -1,0 +1,12 @@
+{
+  "name": "Jhin - Meticulous Killer",
+  "texts": [
+    "[Vision] If you've spent :rb_energy_4: or more to play a spell this turn, you may play me for :rb_rune_mind:."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Vision]",
+    "If you've spent :rb_energy_4: or more to play a spell this turn, you may play me for :rb_rune_mind:."
+  ]
+}

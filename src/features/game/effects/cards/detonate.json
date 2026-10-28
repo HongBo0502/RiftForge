@@ -1,0 +1,28 @@
+{
+  "name": "Detonate",
+  "texts": [
+    "Kill a gear. Its controller draws 2."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "kill",
+          "target": {
+            "kind": "gear",
+            "side": "any",
+            "where": "anywhere",
+            "chosen": true,
+            "count": 1
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "Its controller draws 2."
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Poppy - Paragon",
+  "texts": [
+    "[Deflect] When you play me, if an opponent's score is within 3 points of the Victory Score, ready me and gain 3 XP."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me, if an opponent's score is within 3 points of the Victory Score, ready me and gain 3 XP."
+  ]
+}

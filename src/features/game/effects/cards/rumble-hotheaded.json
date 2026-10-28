@@ -1,0 +1,13 @@
+{
+  "name": "Rumble - Hotheaded",
+  "texts": [
+    "Your Mechs each have [Assault]. When I conquer, you may recycle another friendly unit to play a Mech from your trash. Reduce its Energy cost by the Might of the unit you recycled."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Your Mechs each have [Assault].",
+    "When I conquer, you may recycle another friendly unit to play a Mech from your trash.",
+    "Reduce its Energy cost by the Might of the unit you recycled."
+  ]
+}

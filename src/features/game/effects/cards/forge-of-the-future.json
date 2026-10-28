@@ -1,0 +1,12 @@
+{
+  "name": "Forge of the Future",
+  "texts": [
+    "When you play this, play a 1 :rb_might: Recruit unit token at your base. Kill this: Recycle up to 4 cards from trashes."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play this, play a 1 :rb_might: Recruit unit token at your base.",
+    "Kill this: Recycle up to 4 cards from trashes."
+  ]
+}

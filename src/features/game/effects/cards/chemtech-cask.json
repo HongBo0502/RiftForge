@@ -1,0 +1,11 @@
+{
+  "name": "Chemtech Cask",
+  "texts": [
+    "When you play a spell on an opponent's turn, you may exhaust me to play a Gold gear token exhausted."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play a spell on an opponent's turn, you may exhaust me to play a Gold gear token exhausted."
+  ]
+}

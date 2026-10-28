@@ -1,0 +1,12 @@
+{
+  "name": "Tornado Warrior",
+  "texts": [
+    "[Hidden] When you play me from face down, you may empower something here. Disempower it at end of turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me from face down, you may empower something here.",
+    "Disempower it at end of turn."
+  ]
+}

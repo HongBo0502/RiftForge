@@ -1,0 +1,11 @@
+{
+  "name": "Temporal Portal",
+  "texts": [
+    ":rb_rune_rainbow:, :rb_exhaust:: Give the next spell you play this turn [Repeat] equal to its cost."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    ":rb_rune_rainbow:, :rb_exhaust:: Give the next spell you play this turn [Repeat] equal to its cost."
+  ]
+}

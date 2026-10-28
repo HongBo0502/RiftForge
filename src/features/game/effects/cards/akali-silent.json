@@ -1,0 +1,12 @@
+{
+  "name": "Akali, Silent",
+  "texts": [
+    "I can't be chosen by enemy spells and abilities unless I'm in combat. When I move to a battlefield, give me +2 :rb_might: this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "I can't be chosen by enemy spells and abilities unless I'm in combat.",
+    "When I move to a battlefield, give me +2 :rb_might: this turn."
+  ]
+}

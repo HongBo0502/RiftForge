@@ -1,0 +1,12 @@
+{
+  "name": "Vayne - Hunter",
+  "texts": [
+    "[Assault 3] If an opponent controls a battlefield, I enter ready. When I conquer, you may pay :rb_energy_1: to return me to my owner's hand."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "If an opponent controls a battlefield, I enter ready.",
+    "When I conquer, you may pay :rb_energy_1: to return me to my owner's hand."
+  ]
+}

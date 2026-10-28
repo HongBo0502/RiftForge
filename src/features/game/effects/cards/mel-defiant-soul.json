@@ -1,0 +1,12 @@
+{
+  "name": "Mel, Defiant Soul",
+  "texts": [
+    "[Empower] — Discard a spell When I become [Empowered], banish an enemy unit at a battlefield with 3 :rb_might: or less."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Empower] — Discard a spell",
+    "When I become [Empowered], banish an enemy unit at a battlefield with 3 :rb_might: or less."
+  ]
+}

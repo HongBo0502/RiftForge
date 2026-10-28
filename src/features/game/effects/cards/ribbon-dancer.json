@@ -1,0 +1,11 @@
+{
+  "name": "Ribbon Dancer",
+  "texts": [
+    "When I move to a battlefield, give another friendly unit +1 :rb_might: this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I move to a battlefield, give another friendly unit +1 :rb_might: this turn."
+  ]
+}

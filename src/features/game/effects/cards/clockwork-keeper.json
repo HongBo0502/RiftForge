@@ -1,0 +1,12 @@
+{
+  "name": "Clockwork Keeper",
+  "texts": [
+    "As you play me, you may pay :rb_rune_calm: as an additional cost. If you do, draw 1."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "As you play me, you may pay :rb_rune_calm: as an additional cost.",
+    "If you do, draw 1."
+  ]
+}

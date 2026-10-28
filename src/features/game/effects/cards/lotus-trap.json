@@ -1,0 +1,12 @@
+{
+  "name": "Lotus Trap",
+  "texts": [
+    "[Hidden] [Reaction] Choose a unit. Double all damage that would be dealt to it this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Choose a unit.",
+    "Double all damage that would be dealt to it this turn."
+  ]
+}

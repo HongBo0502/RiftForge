@@ -1,0 +1,31 @@
+{
+  "name": "Arena Bar",
+  "texts": [
+    ":rb_exhaust:: Buff an exhausted friendly unit."
+  ],
+  "abilities": [],
+  "activated": [
+    {
+      "cost": {
+        "energy": 0,
+        "power": {},
+        "anyPower": 0,
+        "exhaustSelf": true
+      },
+      "instructions": [
+        {
+          "verb": "buff",
+          "target": {
+            "kind": "unit",
+            "side": "friendly",
+            "where": "anywhere",
+            "chosen": true,
+            "count": 1
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "manual": []
+}

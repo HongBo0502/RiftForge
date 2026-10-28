@@ -1,0 +1,28 @@
+{
+  "name": "Drag Under",
+  "texts": [
+    "[Action] I cost :rb_energy_2: less to play from anywhere other than your hand. Kill a unit at a battlefield."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "kill",
+          "target": {
+            "kind": "unit",
+            "side": "any",
+            "where": "battlefield",
+            "chosen": true,
+            "count": 1
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "I cost :rb_energy_2: less to play from anywhere other than your hand."
+  ]
+}

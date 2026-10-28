@@ -1,0 +1,12 @@
+{
+  "name": "Divine Judgment",
+  "texts": [
+    "Each player chooses 2 units, 2 gear, 2 runes, and 2 cards in their hands. Recycle the rest."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Each player chooses 2 units, 2 gear, 2 runes, and 2 cards in their hands.",
+    "Recycle the rest."
+  ]
+}

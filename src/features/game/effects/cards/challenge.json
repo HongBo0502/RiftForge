@@ -1,0 +1,12 @@
+{
+  "name": "Challenge",
+  "texts": [
+    "[Action] Choose a friendly unit and an enemy unit. They deal damage equal to their Mights to each other."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Choose a friendly unit and an enemy unit.",
+    "They deal damage equal to their Mights to each other."
+  ]
+}

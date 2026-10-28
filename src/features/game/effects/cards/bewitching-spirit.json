@@ -1,0 +1,12 @@
+{
+  "name": "Bewitching Spirit",
+  "texts": [
+    "When you play me, choose a player. They discard 1."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me, choose a player.",
+    "They discard 1."
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "name": "Steel Paws",
+  "texts": [
+    "[Deflect] [Empower] :rb_energy_7: [Empowered][>] I have +7 :rb_might:."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "staticMight",
+          "amount": 7
+        }
+      ],
+      "condition": {
+        "keyword": "Empowered",
+        "value": null
+      }
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "[Empower] :rb_energy_7:"
+  ]
+}

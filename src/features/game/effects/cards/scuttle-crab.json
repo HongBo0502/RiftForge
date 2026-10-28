@@ -1,0 +1,44 @@
+{
+  "name": "Scuttle Crab",
+  "texts": [
+    "When you play me, draw 1. [Deathknell][>] Choose an opponent. They reveal their hand. You can look at their facedown cards this turn. Gain 1 XP."
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "on": "play"
+      },
+      "instructions": [
+        {
+          "verb": "draw",
+          "amount": 1,
+          "who": {
+            "kind": "player",
+            "side": "you"
+          }
+        }
+      ],
+      "condition": null
+    },
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "gainXp",
+          "amount": 1,
+          "who": {
+            "kind": "player",
+            "side": "you"
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "[Deathknell][>] Choose an opponent.",
+    "They reveal their hand.",
+    "You can look at their facedown cards this turn."
+  ]
+}

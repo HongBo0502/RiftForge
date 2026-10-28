@@ -1,0 +1,12 @@
+{
+  "name": "Blue Sentinel",
+  "texts": [
+    "[Shield 2] Your hold effects for holding here trigger an additional time. When I hold, [Add] :rb_rune_rainbow: at the start of your next Main Phase."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Your hold effects for holding here trigger an additional time.",
+    "When I hold, [Add] :rb_rune_rainbow: at the start of your next Main Phase."
+  ]
+}

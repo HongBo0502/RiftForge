@@ -1,0 +1,11 @@
+{
+  "name": "Fox-Fire",
+  "texts": [
+    "[Hidden] [Action] Kill any number of units at a battlefield with total Might 4 or less."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Kill any number of units at a battlefield with total Might 4 or less."
+  ]
+}

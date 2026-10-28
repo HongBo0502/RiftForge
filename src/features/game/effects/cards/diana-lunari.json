@@ -1,0 +1,13 @@
+{
+  "name": "Diana - Lunari",
+  "texts": [
+    "When a showdown begins here, you may pay :rb_energy_1:. If you do, [Predict], then reveal the top card of your Main Deck. If it's a spell, draw it."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When a showdown begins here, you may pay :rb_energy_1:.",
+    "If you do, [Predict], then reveal the top card of your Main Deck.",
+    "If it's a spell, draw it."
+  ]
+}

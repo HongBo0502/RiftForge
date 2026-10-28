@@ -1,0 +1,12 @@
+{
+  "name": "Card Sharp",
+  "texts": [
+    "When you play me, you and each opponent may play a Gold gear token exhausted. For each opponent who did, you play a Gold gear token exhausted."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me, you and each opponent may play a Gold gear token exhausted.",
+    "For each opponent who did, you play a Gold gear token exhausted."
+  ]
+}

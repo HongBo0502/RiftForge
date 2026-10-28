@@ -1,0 +1,12 @@
+{
+  "name": "Undying Loyalty",
+  "texts": [
+    "This costs :rb_energy_2: less if you choose a Bird, Cat, Dog, or Poro. Play a unit with cost no more than :rb_energy_2: and no more than :rb_rune_rainbow: from your trash, ignoring its cost."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "This costs :rb_energy_2: less if you choose a Bird, Cat, Dog, or Poro.",
+    "Play a unit with cost no more than :rb_energy_2: and no more than :rb_rune_rainbow: from your trash, ignoring its cost."
+  ]
+}

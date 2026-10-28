@@ -1,0 +1,13 @@
+{
+  "name": "Wind and Ghosts",
+  "texts": [
+    "[Action] Choose a unit at a battlefield. If it has 3 :rb_might: or less, banish it. Otherwise, return it to its owner's hand."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Choose a unit at a battlefield.",
+    "If it has 3 :rb_might: or less, banish it.",
+    "Otherwise, return it to its owner's hand."
+  ]
+}

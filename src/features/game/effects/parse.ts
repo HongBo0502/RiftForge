@@ -1,5 +1,5 @@
 import type { Card } from '@/types';
-import { readResourceSymbols } from '../engine/keywords';
+import { AUTOMATED_KEYWORDS, readResourceSymbols } from '../engine/keywords';
 import type {
   ActivatedAbility,
   Condition,
@@ -15,11 +15,14 @@ import type {
 } from './types';
 
 /**
- * Card text to instructions.
+ * Card text to instructions — an AUTHORING aid, not a runtime component.
+ *
+ * `npm run gen-scripts` runs this over the dataset to draft each card's
+ * script (`effects/cards/*.json`); the engine reads only those scripts.
  *
  * A strict reader, on purpose. Anything it is not certain of is left unparsed
- * and reaches the player as text to apply by hand — a parser that guesses would
- * be worse than no parser, because the player would never know it guessed.
+ * and lands in the draft's `manual` list — a parser that guesses would be
+ * worse than no parser, because nobody reviewing the draft would know it guessed.
  */
 
 /** Strips reminder text (135.2.d.3) and the symbol soup, leaving words. */
@@ -294,15 +297,9 @@ const MATCHERS: Matcher[] = [
   (s) => (ENTERS_EXHAUSTED_RE.test(s) ? { verb: 'entersExhausted' } : null),
 ];
 
-/**
- * These three shapes are read here, and also matched again — verbatim — by
- * `stripAutomatedLines` below, which keeps the "apply by hand" panel
- * from telling a player to do by hand what `combat.ts`/`reducer.ts` already
- * did for them. Keep the two in step.
- */
-export const STATIC_MIGHT_RE = /^i have ([+-]\d+) (?::rb_might:|might)\.?$/i;
-export const ENTERS_READY_RE = /^i enter ready\.?$/i;
-export const ENTERS_EXHAUSTED_RE = /^this enters exhausted\.?$/i;
+const STATIC_MIGHT_RE = /^i have ([+-]\d+) (?::rb_might:|might)\.?$/i;
+const ENTERS_READY_RE = /^i enter ready\.?$/i;
+const ENTERS_EXHAUSTED_RE = /^this enters exhausted\.?$/i;
 
 /** Verbs read directly by the engine rather than run through `execute()`. */
 export const BOARD_STATE_VERBS = ['staticMight', 'entersReady', 'entersExhausted'] as const;
@@ -396,6 +393,26 @@ export function parseActivatedAbilityLine(sentence: string): ActivatedAbility | 
   return { cost: { energy, power, anyPower, exhaustSelf }, instructions, condition };
 }
 
+const AUTOMATED = new Set<string>(AUTOMATED_KEYWORDS.map((k) => k.toLowerCase()));
+
+/**
+ * Whether a keyword-only fragment ("[Tank]", "[Empower] :rb_energy_2:") is
+ * entirely run by the keyword engine, so leaving it out of a card's manual
+ * text is honest. `[Equip] <cost>` counts when its cost is one EQUIP_GEAR
+ * can pay (`readResourceSymbols`); any other unlisted keyword — Vision,
+ * Deathknell, Empower — is not automated and must stay visible.
+ */
+function handledByKeywords(fragment: string): boolean {
+  const equip = /^\[Equip\]\s*(.*)$/i.exec(fragment.trim());
+  if (equip) return readResourceSymbols(equip[1].replace(/[.\s]+$/, '')) !== null;
+  for (const m of fragment.matchAll(/\[([^\]]+)\]/g)) {
+    const label = m[1].replace(/\s+\d+$/, '').toLowerCase();
+    if (label === '>' || label === '>>') continue;
+    if (!AUTOMATED.has(label)) return false;
+  }
+  return true;
+}
+
 /**
  * Reads a whole card.
  *
@@ -422,8 +439,11 @@ export function parseCard(card: Card): ParsedCard {
   for (const rawLine of (card.text ?? '').split('\n')) {
     const line = normalise(rawLine);
     if (line === '') continue;
-    if (/^(\[[^\]]*\]\s*)+$/.test(line)) continue;
     if (line === '[NO TEXT]') continue;
+    if (/^(\[[^\]]*\]\s*)+$/.test(line)) {
+      if (!handledByKeywords(line)) unparsed.push(line);
+      continue;
+    }
 
     const activated = parseActivatedAbilityLine(line);
     if (activated) {
@@ -433,11 +453,24 @@ export function parseCard(card: Card): ParsedCard {
     }
 
     for (const sentence of sentences(rawLine)) {
-      // Lines that are only keyword markers are handled elsewhere entirely.
-      if (/^(\[[^\]]*\]\s*)+$/.test(sentence)) continue;
       if (sentence === '[NO TEXT]') continue;
+      // Keyword-only sentences are the keyword engine's job — if it has them.
+      if (/^(\[[^\]]*\]\s*)+$/.test(sentence)) {
+        if (!handledByKeywords(sentence)) unparsed.push(sentence);
+        continue;
+      }
 
       const { condition, rest } = leadingCondition(sentence);
+      /*
+       * A `[>]` left after the Dependent Keyword is stripped belongs to a
+       * keyword this reader does not model — "[Deathknell][>] Draw 1." means
+       * "when I die", and stripping the marker would read it as "Draw 1." on
+       * the spot. 135.2.e.7.b: what follows `[>]` is modified by the keyword.
+       */
+      if (/\[>{1,2}\]/.test(rest)) {
+        unparsed.push(sentence);
+        continue;
+      }
       const withoutMarkers = rest.replace(/\[[^\]]*\]/g, '').trim();
       /*
        * What is left may be nothing but cost symbols — "[Empower] :rb_energy_3:"
@@ -445,8 +478,16 @@ export function parseCard(card: Card): ParsedCard {
        * the markers come off, or the leading keyword hides the fact. Counting
        * these as missed effects overstates what the parser cannot read.
        */
-      if (/^[\s.:,—-]*(?::rb_[a-z_0-9]+:[\s.:,—-]*)+$/i.test(withoutMarkers)) continue;
-      if (withoutMarkers === '' || /^[\s.,:—-]+$/.test(withoutMarkers)) continue;
+      if (
+        /^[\s.:,—-]*(?::rb_[a-z_0-9]+:[\s.:,—-]*)+$/i.test(withoutMarkers) ||
+        withoutMarkers === '' ||
+        /^[\s.,:—-]+$/.test(withoutMarkers)
+      ) {
+        // "[Empower] :rb_energy_2:" is a keyword and its cost — fine to skip
+        // only when the keyword engine actually runs that keyword.
+        if (!handledByKeywords(rest)) unparsed.push(sentence);
+        continue;
+      }
 
       const { trigger, body } = splitTrigger(withoutMarkers);
       const text = body.trim();
@@ -476,60 +517,4 @@ export function parseCard(card: Card): ParsedCard {
   }
 
   return { abilities, activatedAbilities, unparsed };
-}
-
-/**
- * Parses once per card, then reuses the answer.
- *
- * Card text never changes at runtime, and this is called from combat math
- * (`unitMight`, on every Might read) as well as from resolution, so the cache
- * matters, not just the parse itself.
- */
-const parseCache = new Map<string, ParsedCard>();
-
-export function parseCardCached(card: Card): ParsedCard {
-  const hit = parseCache.get(card.id);
-  if (hit) return hit;
-  const parsed = parseCard(card);
-  parseCache.set(card.id, parsed);
-  return parsed;
-}
-
-/** Test seam: clears the memoised parses. */
-export function clearParseCache(): void {
-  parseCache.clear();
-}
-
-/**
- * Drops lines from an already-computed "apply by hand" text that the engine
- * now handles itself — `combat.ts` for `staticMight`, `reducer.ts` for
- * `entersReady`/`entersExhausted`/Equip/Activated Abilities — so the panel
- * does not ask a player to do by hand what already happened, or what a real
- * board action already offers. `unautomatedText` (engine/keywords.ts) has
- * already dropped an *inactive* Dependent Keyword's line and stripped the
- * keyword markers off an active one, which is what lets the plain-text
- * regexes below still match here.
- *
- * A line drops only when it is *entirely* covered — an Equip or Activated
- * Ability line with a trailing restriction clause this reader does not model
- * ("Use this ability only while I'm at a battlefield") fails
- * `parseActivatedAbilityLine`'s whole-line parse and is correctly left
- * visible, because the engine genuinely does not enforce that part.
- */
-export function stripAutomatedLines(text: string): string {
-  return text
-    .split('\n')
-    .filter((line) => {
-      const trimmed = line.trim();
-      if (STATIC_MIGHT_RE.test(trimmed)) return false;
-      if (ENTERS_READY_RE.test(trimmed)) return false;
-      if (ENTERS_EXHAUSTED_RE.test(trimmed)) return false;
-      if (/^\[Equip\]/i.test(trimmed) && readResourceSymbols(trimmed.replace(/^\[Equip\]/i, ''))) {
-        return false;
-      }
-      if (parseActivatedAbilityLine(trimmed)) return false;
-      return true;
-    })
-    .join('\n')
-    .trim();
 }

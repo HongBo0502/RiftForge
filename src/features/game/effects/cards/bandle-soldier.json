@@ -1,0 +1,22 @@
+{
+  "name": "Bandle Soldier",
+  "texts": [
+    "[Level 3][>] I enter ready."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "entersReady"
+        }
+      ],
+      "condition": {
+        "keyword": "Level",
+        "value": 3
+      }
+    }
+  ],
+  "activated": [],
+  "manual": []
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Morgana, Vindictive",
+  "texts": [
+    "[Ambush] When you play me, deal damage to a unit equal to the damage marked on it."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me, deal damage to a unit equal to the damage marked on it."
+  ]
+}

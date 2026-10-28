@@ -1,0 +1,12 @@
+{
+  "name": "Sprite Fountain",
+  "texts": [
+    "[Temporary] When you play this, play a ready 3 :rb_might: Sprite unit token with [Temporary] to your base. [Deathknell][>] Repeat this gear's play effect."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play this, play a ready 3 :rb_might: Sprite unit token with [Temporary] to your base.",
+    "[Deathknell][>] Repeat this gear's play effect."
+  ]
+}

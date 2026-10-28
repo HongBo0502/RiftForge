@@ -1,0 +1,12 @@
+{
+  "name": "Fizz - Trickster",
+  "texts": [
+    "When you play me, you may play a spell from your trash with Energy cost no more than :rb_energy_3:, ignoring its Energy cost. Recycle that spell after you play it."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me, you may play a spell from your trash with Energy cost no more than :rb_energy_3:, ignoring its Energy cost.",
+    "Recycle that spell after you play it."
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Wraith of Echoes",
+  "texts": [
+    "The first time a friendly unit dies each turn, draw 1."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "The first time a friendly unit dies each turn, draw 1."
+  ]
+}

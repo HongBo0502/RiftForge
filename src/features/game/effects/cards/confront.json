@@ -1,0 +1,26 @@
+{
+  "name": "Confront",
+  "texts": [
+    "[Action] Units you play this turn enter ready. Draw 1."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "draw",
+          "amount": 1,
+          "who": {
+            "kind": "player",
+            "side": "you"
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "Units you play this turn enter ready."
+  ]
+}

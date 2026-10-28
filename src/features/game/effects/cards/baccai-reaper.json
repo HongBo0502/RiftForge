@@ -1,0 +1,11 @@
+{
+  "name": "Baccai Reaper",
+  "texts": [
+    "When I attack, you may pay :rb_rune_fury: to give me [Assault 2] this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I attack, you may pay :rb_rune_fury: to give me [Assault 2] this turn."
+  ]
+}

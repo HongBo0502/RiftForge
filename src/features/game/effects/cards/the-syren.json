@@ -1,0 +1,11 @@
+{
+  "name": "The Syren",
+  "texts": [
+    ":rb_energy_1:, :rb_exhaust:: Move a friendly unit at a battlefield to your base."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    ":rb_energy_1:, :rb_exhaust:: Move a friendly unit at a battlefield to your base."
+  ]
+}

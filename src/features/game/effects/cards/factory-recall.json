@@ -1,0 +1,11 @@
+{
+  "name": "Factory Recall",
+  "texts": [
+    "[Action] Return a gear to its owner's hand."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Return a gear to its owner's hand."
+  ]
+}

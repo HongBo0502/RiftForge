@@ -1,0 +1,12 @@
+{
+  "name": "Decree of Focus",
+  "texts": [
+    "[Reaction] Choose a friendly unit that's in combat with an enemy Fury unit or that's being chosen by an enemy Fury spell. Give it +4 :rb_might: this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Choose a friendly unit that's in combat with an enemy Fury unit or that's being chosen by an enemy Fury spell.",
+    "Give it +4 :rb_might: this turn."
+  ]
+}

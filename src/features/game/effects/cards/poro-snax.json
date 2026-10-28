@@ -1,0 +1,12 @@
+{
+  "name": "Poro Snax",
+  "texts": [
+    "When you play this, draw 1. :rb_energy_1::rb_rune_calm:, :rb_exhaust:, Kill this: Draw 1."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play this, draw 1.",
+    ":rb_energy_1::rb_rune_calm:, :rb_exhaust:, Kill this: Draw 1."
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Noxus Saboteur",
+  "texts": [
+    "Your opponents' [Hidden] cards can't be revealed here."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Your opponents' [Hidden] cards can't be revealed here."
+  ]
+}

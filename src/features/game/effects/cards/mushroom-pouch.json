@@ -1,0 +1,11 @@
+{
+  "name": "Mushroom Pouch",
+  "texts": [
+    "At the start of your Beginning Phase, if you control a facedown card at a battlefield, draw 1."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "At the start of your Beginning Phase, if you control a facedown card at a battlefield, draw 1."
+  ]
+}

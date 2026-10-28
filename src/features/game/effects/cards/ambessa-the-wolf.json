@@ -1,0 +1,12 @@
+{
+  "name": "Ambessa, The Wolf",
+  "texts": [
+    "[Empower] :rb_energy_3::rb_rune_body: [Empowered][>] I have +3 :rb_might: and can't be dealt damage unless I'm in combat."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Empower] :rb_energy_3::rb_rune_body:",
+    "[Empowered][>] I have +3 :rb_might: and can't be dealt damage unless I'm in combat."
+  ]
+}

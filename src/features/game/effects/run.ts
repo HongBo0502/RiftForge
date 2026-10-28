@@ -1,13 +1,14 @@
 import type { Card } from '@/types';
 import { unitMight } from '../engine/combat';
-import { conditionActive, dependencyContext, unautomatedText } from '../engine/keywords';
+import { conditionActive, dependencyContext } from '../engine/keywords';
 import type { GameState, PlayerId } from '../engine/types';
 import { execute, needsNoChoices } from './execute';
-import { BOARD_STATE_VERBS, clearParseCache, parseCardCached } from './parse';
+import { BOARD_STATE_VERBS } from './parse';
+import { manualText, scriptFor } from './scripts';
 import type { ActivatedAbility } from './types';
 
-/** The bridge between a resolving card and its printed text. Cached by card id. */
-const parsedFor = parseCardCached;
+/** A card's effects come from its script, never from its printed text. */
+const parsedFor = scriptFor;
 
 /** Whether every instruction in an ability is one `execute()` never runs. */
 const isBoardState = (instructions: { verb: string }[]): boolean =>
@@ -71,22 +72,14 @@ export function runCardEffects(
   }
 
   /*
-   * What the player is told. Sentences the parser could not read are quoted
-   * verbatim; abilities it read but chose not to run are summarised, because
-   * quoting them would suggest the engine did not understand them when it did.
+   * What the player is told: the text the card's script leaves to them (all
+   * of it, for an unscripted card), plus a summary of scripted abilities that
+   * were not run — quoting those would suggest the engine did not know them.
    */
-  const unread = parsed.unparsed.join(' ');
+  const manual = manualText(card, dependencyContext(state, controller, source));
   const held = deferred.length > 0 ? `Not applied automatically: ${deferred.join(', ')}.` : '';
-  const leftover = [unread, held].filter(Boolean).join(' ').trim();
-
-  if (leftover) return { ran, leftover };
-
-  /*
-   * Nothing left over from the parser. Fall back to the keyword reader, which
-   * still catches text made of keywords the parser has no verb for.
-   */
-  const manual = unautomatedText(card, dependencyContext(state, controller, source));
-  return { ran, leftover: parsed.abilities.length > 0 ? null : manual };
+  const leftover = [manual?.replace(/\n/g, ' '), held].filter(Boolean).join(' ').trim();
+  return { ran, leftover: leftover || null };
 }
 
 /**
@@ -141,5 +134,3 @@ export function runActivatedAbility(
   return { ran: report.done.length, leftover: null };
 }
 
-/** Test seam: clears the memoised parses. */
-export const clearEffectCache = clearParseCache;

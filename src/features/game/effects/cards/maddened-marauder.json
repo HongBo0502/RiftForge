@@ -1,0 +1,11 @@
+{
+  "name": "Maddened Marauder",
+  "texts": [
+    "[Tank] When you play me, move a unit from a battlefield to its base."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me, move a unit from a battlefield to its base."
+  ]
+}

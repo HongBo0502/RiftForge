@@ -1,0 +1,30 @@
+{
+  "name": "Combat Experience",
+  "texts": [
+    "[Reaction] Give a unit +1 :rb_might: this turn. [Level 6][>] Give it +3 :rb_might: this turn instead."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "might",
+          "amount": 1,
+          "target": {
+            "kind": "unit",
+            "side": "any",
+            "where": "anywhere",
+            "chosen": true,
+            "count": 1
+          },
+          "duration": "thisTurn"
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "[Level 6][>] Give it +3 :rb_might: this turn instead."
+  ]
+}

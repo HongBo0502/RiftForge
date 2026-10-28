@@ -1,0 +1,28 @@
+{
+  "name": "Last Breath",
+  "texts": [
+    "[Action] Ready a friendly unit. It deals damage equal to its Might to an enemy unit at a battlefield."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "ready",
+          "target": {
+            "kind": "unit",
+            "side": "friendly",
+            "where": "anywhere",
+            "chosen": true,
+            "count": 1
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "It deals damage equal to its Might to an enemy unit at a battlefield."
+  ]
+}

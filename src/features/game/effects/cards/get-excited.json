@@ -1,0 +1,26 @@
+{
+  "name": "Get Excited!",
+  "texts": [
+    "[Action] Discard 1. Deal its Energy cost as damage to a unit at a battlefield."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "discard",
+          "amount": 1,
+          "who": {
+            "kind": "player",
+            "side": "you"
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "Deal its Energy cost as damage to a unit at a battlefield."
+  ]
+}

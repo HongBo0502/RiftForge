@@ -1,0 +1,30 @@
+{
+  "name": "Dancing Grenade",
+  "texts": [
+    "Deal 2 to a unit. Its controller may play this spell again for :rb_rune_rainbow:. If they do, this deals 1 additional Bonus Damage for each time this spell has dealt damage this turn."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "deal",
+          "amount": 2,
+          "target": {
+            "kind": "unit",
+            "side": "any",
+            "where": "anywhere",
+            "chosen": true,
+            "count": 1
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "Its controller may play this spell again for :rb_rune_rainbow:.",
+    "If they do, this deals 1 additional Bonus Damage for each time this spell has dealt damage this turn."
+  ]
+}

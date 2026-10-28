@@ -1,0 +1,14 @@
+{
+  "name": "Kayle, Justified",
+  "texts": [
+    "[Empower] :rb_energy_3: I can be [Empowered] up to three times. I have +2 :rb_might: for each time I'm [Empowered]. While I'm [Empowered] three times, I have [Deflect 3] and [Ganking]."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Empower] :rb_energy_3:",
+    "I can be [Empowered] up to three times.",
+    "I have +2 :rb_might: for each time I'm [Empowered].",
+    "While I'm [Empowered] three times, I have [Deflect 3] and [Ganking]."
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "name": "Grim Resolve",
+  "texts": [
+    "[Action] Give a friendly unit +3 :rb_might: this turn. When it wins a combat this turn, gain 2 XP."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "might",
+          "amount": 3,
+          "target": {
+            "kind": "unit",
+            "side": "friendly",
+            "where": "anywhere",
+            "chosen": true,
+            "count": 1
+          },
+          "duration": "thisTurn"
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "When it wins a combat this turn, gain 2 XP."
+  ]
+}

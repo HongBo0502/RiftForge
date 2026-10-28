@@ -1,0 +1,13 @@
+{
+  "name": "Abandon",
+  "texts": [
+    "[Reaction] Counter a spell. Return it to its owner's hand instead of putting it in their trash. [Predict]."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Counter a spell.",
+    "Return it to its owner's hand instead of putting it in their trash.",
+    "[Predict]."
+  ]
+}

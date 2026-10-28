@@ -1,0 +1,12 @@
+{
+  "name": "Ultrasoft Poro",
+  "texts": [
+    ":rb_exhaust:: Play two :rb_energy_1: :rb_might: Bird unit tokens with [Deflect]. Use this ability only while I'm at a battlefield."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    ":rb_exhaust:: Play two :rb_energy_1: :rb_might: Bird unit tokens with [Deflect].",
+    "Use this ability only while I'm at a battlefield."
+  ]
+}

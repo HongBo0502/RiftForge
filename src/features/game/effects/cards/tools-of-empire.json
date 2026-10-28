@@ -1,0 +1,13 @@
+{
+  "name": "Tools of Empire",
+  "texts": [
+    "[Empower] :rb_energy_2: :rb_exhaust:: Give a unit +2 :rb_might: this turn. If this is [Empowered], give that unit +4 :rb_might: this turn instead."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Empower] :rb_energy_2:",
+    ":rb_exhaust:: Give a unit +2 :rb_might: this turn.",
+    "If this is [Empowered], give that unit +4 :rb_might: this turn instead."
+  ]
+}

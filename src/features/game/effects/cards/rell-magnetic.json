@@ -1,0 +1,11 @@
+{
+  "name": "Rell - Magnetic",
+  "texts": [
+    "[Tank] When I attack, you may play an Equipment with Energy cost no more than :rb_energy_2:, ignoring its cost, and attach it to me."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I attack, you may play an Equipment with Energy cost no more than :rb_energy_2:, ignoring its cost, and attach it to me."
+  ]
+}

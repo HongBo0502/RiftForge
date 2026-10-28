@@ -1,0 +1,12 @@
+{
+  "name": "Shadow",
+  "texts": [
+    "If you play me to a battlefield, I enter ready. [Action][>] :rb_energy_1::rb_rune_rainbow:, :rb_exhaust:: [Stun] an enemy unit attacking here."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "If you play me to a battlefield, I enter ready.",
+    "[Action][>] :rb_energy_1::rb_rune_rainbow:, :rb_exhaust:: [Stun] an enemy unit attacking here."
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Highlander",
+  "texts": [
+    "[Reaction] Choose a friendly unit. The next time it dies this turn, recall it exhausted instead."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Choose a friendly unit.",
+    "The next time it dies this turn, recall it exhausted instead."
+  ]
+}

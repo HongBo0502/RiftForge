@@ -1,0 +1,12 @@
+{
+  "name": "Blast Corps Cadet",
+  "texts": [
+    "You may pay :rb_energy_1::rb_rune_fury: as an additional cost to play me. When you play me, if you paid the additional cost, deal 2 to a unit at a battlefield."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "You may pay :rb_energy_1::rb_rune_fury: as an additional cost to play me.",
+    "When you play me, if you paid the additional cost, deal 2 to a unit at a battlefield."
+  ]
+}

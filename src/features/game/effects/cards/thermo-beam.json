@@ -1,0 +1,26 @@
+{
+  "name": "Thermo Beam",
+  "texts": [
+    "[Action] Kill all gear."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "kill",
+          "target": {
+            "kind": "gear",
+            "side": "any",
+            "where": "anywhere",
+            "chosen": false,
+            "count": null
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": []
+}

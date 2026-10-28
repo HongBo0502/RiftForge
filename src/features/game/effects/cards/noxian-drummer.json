@@ -1,0 +1,11 @@
+{
+  "name": "Noxian Drummer",
+  "texts": [
+    "When I move to a battlefield, play a 1 :rb_might: Recruit unit token here."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I move to a battlefield, play a 1 :rb_might: Recruit unit token here."
+  ]
+}

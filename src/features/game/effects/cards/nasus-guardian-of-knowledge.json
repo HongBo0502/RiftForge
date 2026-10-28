@@ -1,0 +1,11 @@
+{
+  "name": "Nasus, Guardian of Knowledge",
+  "texts": [
+    "Once each turn, when an enemy unit here dies, channel 1 rune exhausted."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Once each turn, when an enemy unit here dies, channel 1 rune exhausted."
+  ]
+}

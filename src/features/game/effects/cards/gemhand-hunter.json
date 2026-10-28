@@ -1,0 +1,25 @@
+{
+  "name": "Gemhand Hunter",
+  "texts": [
+    "[Hunt] [Level 6][>] I have +1 :rb_might:. ambush"
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "staticMight",
+          "amount": 1
+        }
+      ],
+      "condition": {
+        "keyword": "Level",
+        "value": 6
+      }
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "ambush"
+  ]
+}

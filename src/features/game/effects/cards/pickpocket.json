@@ -1,0 +1,12 @@
+{
+  "name": "Pickpocket",
+  "texts": [
+    "When you play me, you may kill a gear with Energy cost no more than :rb_energy_1:. If you do, play a Gold gear token exhausted."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me, you may kill a gear with Energy cost no more than :rb_energy_1:.",
+    "If you do, play a Gold gear token exhausted."
+  ]
+}

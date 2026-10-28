@@ -1,0 +1,11 @@
+{
+  "name": "Fiora - Worthy",
+  "texts": [
+    "When a unit you control becomes [Mighty], you may pay :rb_rune_order: to ready it."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When a unit you control becomes [Mighty], you may pay :rb_rune_order: to ready it."
+  ]
+}

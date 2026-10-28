@@ -1,0 +1,12 @@
+{
+  "name": "Blood Rose",
+  "texts": [
+    "When you play a unit, you may pay :rb_energy_1: to gain 1 XP. Spend 3 XP, :rb_exhaust:: Ready a unit."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play a unit, you may pay :rb_energy_1: to gain 1 XP.",
+    "Spend 3 XP, :rb_exhaust:: Ready a unit."
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Crumbling Sands",
+  "texts": [
+    "[Reaction] Counter a spell if an opponent has played another spell this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Counter a spell if an opponent has played another spell this turn."
+  ]
+}

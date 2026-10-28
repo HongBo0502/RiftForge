@@ -1,0 +1,30 @@
+{
+  "name": "Fae Dragon",
+  "texts": [
+    "When you play me, buff up to four friendly units. When you spend a buff, play a Gold gear token exhausted."
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "on": "play"
+      },
+      "instructions": [
+        {
+          "verb": "buff",
+          "target": {
+            "kind": "unit",
+            "side": "friendly",
+            "where": "anywhere",
+            "chosen": true,
+            "count": 4
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "When you spend a buff, play a Gold gear token exhausted."
+  ]
+}

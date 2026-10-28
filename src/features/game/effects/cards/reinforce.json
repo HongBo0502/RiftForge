@@ -1,0 +1,13 @@
+{
+  "name": "Reinforce",
+  "texts": [
+    "Look at the top 5 cards of your Main Deck. You may banish a unit from among them, then play it, reducing its cost by :rb_energy_5:. Recycle the remaining cards."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Look at the top 5 cards of your Main Deck.",
+    "You may banish a unit from among them, then play it, reducing its cost by :rb_energy_5:.",
+    "Recycle the remaining cards."
+  ]
+}

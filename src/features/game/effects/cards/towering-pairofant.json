@@ -1,0 +1,11 @@
+{
+  "name": "Towering Pairofant",
+  "texts": [
+    "[Assault] If a unit died this turn, I enter ready."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "If a unit died this turn, I enter ready."
+  ]
+}

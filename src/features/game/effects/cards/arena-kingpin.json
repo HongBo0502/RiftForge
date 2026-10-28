@@ -1,0 +1,43 @@
+{
+  "name": "Arena Kingpin",
+  "texts": [
+    "I enter ready. :rb_exhaust:: Give a unit +3 :rb_might: this turn."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "entersReady"
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [
+    {
+      "cost": {
+        "energy": 0,
+        "power": {},
+        "anyPower": 0,
+        "exhaustSelf": true
+      },
+      "instructions": [
+        {
+          "verb": "might",
+          "amount": 3,
+          "target": {
+            "kind": "unit",
+            "side": "any",
+            "where": "anywhere",
+            "chosen": true,
+            "count": 1
+          },
+          "duration": "thisTurn"
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "manual": []
+}

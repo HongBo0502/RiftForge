@@ -1,0 +1,11 @@
+{
+  "name": "Undying Legion",
+  "texts": [
+    "[Legion][>] You may play me from your trash for :rb_energy_3::rb_rune_fury:."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Legion][>] You may play me from your trash for :rb_energy_3::rb_rune_fury:."
+  ]
+}

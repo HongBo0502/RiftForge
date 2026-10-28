@@ -1,0 +1,11 @@
+{
+  "name": "Chakram Dancer",
+  "texts": [
+    "[Ambush] When you play me, give your other units here [Shield] this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me, give your other units here [Shield] this turn."
+  ]
+}

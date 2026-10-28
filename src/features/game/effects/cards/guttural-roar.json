@@ -1,0 +1,30 @@
+{
+  "name": "Guttural Roar",
+  "texts": [
+    "[Action] Give a unit +2 :rb_might: this turn. If it's [Empowered], give it +4 :rb_might: this turn instead."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "might",
+          "amount": 2,
+          "target": {
+            "kind": "unit",
+            "side": "any",
+            "where": "anywhere",
+            "chosen": true,
+            "count": 1
+          },
+          "duration": "thisTurn"
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "If it's [Empowered], give it +4 :rb_might: this turn instead."
+  ]
+}

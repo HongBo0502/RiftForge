@@ -1,0 +1,11 @@
+{
+  "name": "Charm",
+  "texts": [
+    "Move an enemy unit."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Move an enemy unit."
+  ]
+}

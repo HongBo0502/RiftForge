@@ -1,0 +1,12 @@
+{
+  "name": "Ornn - Forge God",
+  "texts": [
+    "[Deflect 2] [Weaponmaster] I have +1 :rb_might: for each friendly gear."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Weaponmaster]",
+    "I have +1 :rb_might: for each friendly gear."
+  ]
+}

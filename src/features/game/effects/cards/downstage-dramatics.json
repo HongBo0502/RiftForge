@@ -1,0 +1,26 @@
+{
+  "name": "Downstage Dramatics",
+  "texts": [
+    "[Reaction] [Repeat] :rb_energy_2: Draw 1."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "draw",
+          "amount": 1,
+          "who": {
+            "kind": "player",
+            "side": "you"
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "[Repeat] :rb_energy_2:"
+  ]
+}

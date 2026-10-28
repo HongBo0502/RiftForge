@@ -1,0 +1,11 @@
+{
+  "name": "Plaza Guardian",
+  "texts": [
+    "I cost :rb_energy_1: less for each gear you control. [Deflect]"
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "I cost :rb_energy_1: less for each gear you control."
+  ]
+}

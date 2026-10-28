@@ -1,0 +1,11 @@
+{
+  "name": "Recruit the Vanguard",
+  "texts": [
+    "[Action] Play four 1 :rb_might: Recruit unit tokens."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Play four 1 :rb_might: Recruit unit tokens."
+  ]
+}

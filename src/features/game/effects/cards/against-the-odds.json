@@ -1,0 +1,28 @@
+{
+  "name": "Against the Odds",
+  "texts": [
+    "[Reaction] Give a friendly unit at a battlefield +2 :rb_might: this turn for each enemy unit there."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "might",
+          "amount": 2,
+          "target": {
+            "kind": "unit",
+            "side": "friendly",
+            "where": "battlefield",
+            "chosen": true,
+            "count": 1
+          },
+          "duration": "thisTurn"
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": []
+}

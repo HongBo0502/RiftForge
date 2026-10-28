@@ -1,0 +1,11 @@
+{
+  "name": "Show of Strength",
+  "texts": [
+    "[Reaction] Draw 1 for each of your [Mighty] units."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Draw 1 for each of your [Mighty] units."
+  ]
+}

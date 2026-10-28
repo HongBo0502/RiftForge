@@ -1,0 +1,11 @@
+{
+  "name": "Dragonsoul Sage",
+  "texts": [
+    "[Reaction][>] :rb_exhaust:: [Add] :rb_energy_1:."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Reaction][>] :rb_exhaust:: [Add] :rb_energy_1:."
+  ]
+}

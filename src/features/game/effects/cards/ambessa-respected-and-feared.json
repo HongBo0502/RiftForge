@@ -1,0 +1,13 @@
+{
+  "name": "Ambessa, Respected and Feared",
+  "texts": [
+    "[Empower] :rb_energy_1::rb_rune_order::rb_rune_order: [Empowered][>] I have [Assault 2]. [Empowered][>] When I attack, kill an enemy unit here with less Might than me."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Empower] :rb_energy_1::rb_rune_order::rb_rune_order:",
+    "[Empowered][>] I have [Assault 2].",
+    "[Empowered][>] When I attack, kill an enemy unit here with less Might than me."
+  ]
+}

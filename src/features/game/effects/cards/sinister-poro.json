@@ -1,0 +1,11 @@
+{
+  "name": "Sinister Poro",
+  "texts": [
+    "When I attack, you may pay :rb_energy_1: to move an enemy unit here to its base."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I attack, you may pay :rb_energy_1: to move an enemy unit here to its base."
+  ]
+}

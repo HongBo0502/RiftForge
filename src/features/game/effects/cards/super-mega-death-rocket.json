@@ -1,0 +1,29 @@
+{
+  "name": "Super Mega Death Rocket!",
+  "texts": [
+    "Deal 5 to a unit. When you conquer, you may discard 1 to return this from your trash to your hand."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "deal",
+          "amount": 5,
+          "target": {
+            "kind": "unit",
+            "side": "any",
+            "where": "anywhere",
+            "chosen": true,
+            "count": 1
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "When you conquer, you may discard 1 to return this from your trash to your hand."
+  ]
+}

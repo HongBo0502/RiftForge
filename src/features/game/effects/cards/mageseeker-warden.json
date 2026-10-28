@@ -1,0 +1,12 @@
+{
+  "name": "Mageseeker Warden",
+  "texts": [
+    "While I'm at a battlefield, opponents can only play units to their base. While I'm at a battlefield, spells and abilities can't ready enemy units and gear."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "While I'm at a battlefield, opponents can only play units to their base.",
+    "While I'm at a battlefield, spells and abilities can't ready enemy units and gear."
+  ]
+}

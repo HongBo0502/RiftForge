@@ -1,0 +1,26 @@
+{
+  "name": "Herald of Spring",
+  "texts": [
+    "[Hunt] When you play me, gain 2 XP."
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "on": "play"
+      },
+      "instructions": [
+        {
+          "verb": "gainXp",
+          "amount": 2,
+          "who": {
+            "kind": "player",
+            "side": "you"
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": []
+}

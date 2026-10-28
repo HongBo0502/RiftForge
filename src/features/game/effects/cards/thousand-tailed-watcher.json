@@ -1,0 +1,11 @@
+{
+  "name": "Thousand-Tailed Watcher",
+  "texts": [
+    "[Accelerate] When you play me, give enemy units -3 :rb_might: this turn, to a minimum of 1 :rb_might:."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me, give enemy units -3 :rb_might: this turn, to a minimum of 1 :rb_might:."
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Gangplank, Naval",
+  "texts": [
+    "[Empower] :rb_rune_body::rb_rune_body: [Empowered][>] If a spell or ability that chooses me would stun me, give me -:rb_might:, or return me to hand, give me +3 :rb_might: instead."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Empower] :rb_rune_body::rb_rune_body:",
+    "[Empowered][>] If a spell or ability that chooses me would stun me, give me -:rb_might:, or return me to hand, give me +3 :rb_might: instead."
+  ]
+}

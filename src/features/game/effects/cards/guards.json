@@ -1,0 +1,12 @@
+{
+  "name": "Guards!",
+  "texts": [
+    "[Hidden] Play a 2 :rb_might: Sand Soldier unit token. You may pay :rb_rune_order: to ready it."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Play a 2 :rb_might: Sand Soldier unit token.",
+    "You may pay :rb_rune_order: to ready it."
+  ]
+}

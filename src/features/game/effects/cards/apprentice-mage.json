@@ -1,0 +1,26 @@
+{
+  "name": "Apprentice Mage",
+  "texts": [
+    "[Empower] :rb_energy_2: When I become [Empowered], [Predict 2]. [Empowered][>] I have +1 :rb_might:."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "staticMight",
+          "amount": 1
+        }
+      ],
+      "condition": {
+        "keyword": "Empowered",
+        "value": null
+      }
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "[Empower] :rb_energy_2:",
+    "When I become [Empowered], [Predict 2]."
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Mask of Foresight",
+  "texts": [
+    "When a friendly unit attacks or defends alone, give it +1 :rb_might: this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When a friendly unit attacks or defends alone, give it +1 :rb_might: this turn."
+  ]
+}

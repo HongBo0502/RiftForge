@@ -1,0 +1,11 @@
+{
+  "name": "Spirit Wheel",
+  "texts": [
+    "When you choose a friendly unit, you may pay :rb_energy_1: and exhaust this to draw 1."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you choose a friendly unit, you may pay :rb_energy_1: and exhaust this to draw 1."
+  ]
+}

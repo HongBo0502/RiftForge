@@ -1,0 +1,11 @@
+{
+  "name": "Hextech Anomaly",
+  "texts": [
+    ":rb_exhaust:: [Reaction] — Pay any amount of :rb_rune_rainbow: to [Add] that much Energy."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    ":rb_exhaust:: [Reaction] — Pay any amount of :rb_rune_rainbow: to [Add] that much Energy."
+  ]
+}

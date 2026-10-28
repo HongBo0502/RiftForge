@@ -1,0 +1,28 @@
+{
+  "name": "Zenith Blade",
+  "texts": [
+    "[Action] Stun an enemy unit at a battlefield. You may move a friendly unit to that enemy unit's battlefield."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "stun",
+          "target": {
+            "kind": "unit",
+            "side": "enemy",
+            "where": "battlefield",
+            "chosen": true,
+            "count": 1
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "You may move a friendly unit to that enemy unit's battlefield."
+  ]
+}

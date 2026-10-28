@@ -1,0 +1,12 @@
+{
+  "name": "Kraken Hunter",
+  "texts": [
+    "[Accelerate] [Assault] As you play me, you may spend any number of buffs as an additional cost. Reduce my cost by :rb_rune_body: for each buff you spend."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "As you play me, you may spend any number of buffs as an additional cost.",
+    "Reduce my cost by :rb_rune_body: for each buff you spend."
+  ]
+}

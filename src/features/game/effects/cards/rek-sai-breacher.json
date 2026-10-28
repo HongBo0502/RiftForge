@@ -1,0 +1,11 @@
+{
+  "name": "Rek'Sai - Breacher",
+  "texts": [
+    "[Accelerate] [Assault] Friendly units played from anywhere other than a player's hand have [Accelerate]."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Friendly units played from anywhere other than a player's hand have [Accelerate]."
+  ]
+}

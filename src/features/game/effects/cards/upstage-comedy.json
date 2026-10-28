@@ -1,0 +1,28 @@
+{
+  "name": "Upstage Comedy",
+  "texts": [
+    "[Repeat] :rb_energy_2: Ready a unit."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "ready",
+          "target": {
+            "kind": "unit",
+            "side": "any",
+            "where": "anywhere",
+            "chosen": true,
+            "count": 1
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "[Repeat] :rb_energy_2:"
+  ]
+}

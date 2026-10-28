@@ -1,0 +1,12 @@
+{
+  "name": "Corrupted Dragon",
+  "texts": [
+    "If your score is not within 3 points of the Victory Score, I enter ready. When I attack, you may move any number of enemy units here each with 5 :rb_might: or less to their base."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "If your score is not within 3 points of the Victory Score, I enter ready.",
+    "When I attack, you may move any number of enemy units here each with 5 :rb_might: or less to their base."
+  ]
+}

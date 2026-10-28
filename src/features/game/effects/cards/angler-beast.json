@@ -1,0 +1,11 @@
+{
+  "name": "Angler Beast",
+  "texts": [
+    "When you play me, return all units with 2 :rb_might: or less to their owners' hands."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me, return all units with 2 :rb_might: or less to their owners' hands."
+  ]
+}

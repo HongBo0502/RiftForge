@@ -1,0 +1,32 @@
+{
+  "name": "Renekton, Brute",
+  "texts": [
+    ":rb_energy_1:: Give me +1 :rb_might: this turn. When my Might becomes 10 or more, empower me. [Empowered][>] I have [Ganking] and [Deflect]."
+  ],
+  "abilities": [],
+  "activated": [
+    {
+      "cost": {
+        "energy": 1,
+        "power": {},
+        "anyPower": 0,
+        "exhaustSelf": false
+      },
+      "instructions": [
+        {
+          "verb": "might",
+          "amount": 1,
+          "target": {
+            "kind": "self"
+          },
+          "duration": "thisTurn"
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "manual": [
+    "When my Might becomes 10 or more, empower me.",
+    "[Empowered][>] I have [Ganking] and [Deflect]."
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "name": "Facebreaker",
+  "texts": [
+    "[Hidden] [Action] Stun a friendly unit and an enemy unit at the same battlefield."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "stun",
+          "target": {
+            "kind": "unit",
+            "side": "friendly",
+            "where": "anywhere",
+            "chosen": true,
+            "count": 1
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": []
+}

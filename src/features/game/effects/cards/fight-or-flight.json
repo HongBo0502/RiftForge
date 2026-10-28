@@ -1,0 +1,11 @@
+{
+  "name": "Fight or Flight",
+  "texts": [
+    "[Hidden] [Action] Move a unit from a battlefield to its base."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Move a unit from a battlefield to its base."
+  ]
+}

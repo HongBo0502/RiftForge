@@ -1,0 +1,12 @@
+{
+  "name": "Illaoi, Prophet of the Great Kraken",
+  "texts": [
+    "When you play me or when I score, play a :rb_energy_1: :rb_might: Tentacle unit token from Bilgewater. I have +1 :rb_might: for each token unit you control."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me or when I score, play a :rb_energy_1: :rb_might: Tentacle unit token from Bilgewater.",
+    "I have +1 :rb_might: for each token unit you control."
+  ]
+}

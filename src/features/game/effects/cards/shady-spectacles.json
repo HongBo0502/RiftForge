@@ -1,0 +1,12 @@
+{
+  "name": "Shady Spectacles",
+  "texts": [
+    "[Equip] :rb_energy_1::rb_rune_order: As this is attached to a unit, choose another friendly unit. The equipped unit becomes a copy of that unit for as long as this is attached to it."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "As this is attached to a unit, choose another friendly unit.",
+    "The equipped unit becomes a copy of that unit for as long as this is attached to it."
+  ]
+}

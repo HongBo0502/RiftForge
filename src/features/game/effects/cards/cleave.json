@@ -1,0 +1,11 @@
+{
+  "name": "Cleave",
+  "texts": [
+    "[Action] Give a unit [Assault 3] this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Give a unit [Assault 3] this turn."
+  ]
+}

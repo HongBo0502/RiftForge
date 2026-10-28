@@ -1,0 +1,11 @@
+{
+  "name": "Mister Root",
+  "texts": [
+    "[Accelerate] When I move to a battlefield, gain 2 XP."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I move to a battlefield, gain 2 XP."
+  ]
+}

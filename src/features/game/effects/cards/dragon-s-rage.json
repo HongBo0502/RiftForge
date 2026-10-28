@@ -1,0 +1,13 @@
+{
+  "name": "Dragon's Rage",
+  "texts": [
+    "Move an enemy unit. Then choose another enemy unit at its destination. They deal damage equal to their Mights to each other."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Move an enemy unit.",
+    "Then choose another enemy unit at its destination.",
+    "They deal damage equal to their Mights to each other."
+  ]
+}

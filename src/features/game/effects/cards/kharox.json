@@ -1,0 +1,14 @@
+{
+  "name": "Kharox",
+  "texts": [
+    "[Empower] :rb_energy_6::rb_rune_chaos::rb_rune_chaos: When I become [Empowered], choose an opponent. They [Burn 3]. Then you may do this: Choose a unit in their trash and play it, ignoring its cost."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Empower] :rb_energy_6::rb_rune_chaos::rb_rune_chaos:",
+    "When I become [Empowered], choose an opponent.",
+    "They [Burn 3].",
+    "Then you may do this: Choose a unit in their trash and play it, ignoring its cost."
+  ]
+}

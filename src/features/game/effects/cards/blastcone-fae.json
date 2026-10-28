@@ -1,0 +1,11 @@
+{
+  "name": "Blastcone Fae",
+  "texts": [
+    "[Hidden] When you play me, give a unit -2 :rb_might: this turn, to a minimum of 1 :rb_might:."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me, give a unit -2 :rb_might: this turn, to a minimum of 1 :rb_might:."
+  ]
+}

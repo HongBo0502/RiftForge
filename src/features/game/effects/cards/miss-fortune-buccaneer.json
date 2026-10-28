@@ -1,0 +1,12 @@
+{
+  "name": "Miss Fortune - Buccaneer",
+  "texts": [
+    "You may play me to an open battlefield. Friendly units may be played to open battlefields."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "You may play me to an open battlefield.",
+    "Friendly units may be played to open battlefields."
+  ]
+}

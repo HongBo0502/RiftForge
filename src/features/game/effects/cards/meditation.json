@@ -1,0 +1,13 @@
+{
+  "name": "Meditation",
+  "texts": [
+    "[Reaction] As an additional cost to play this, you may exhaust a friendly unit. If you do, draw 2. Otherwise, draw 1."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "As an additional cost to play this, you may exhaust a friendly unit.",
+    "If you do, draw 2.",
+    "Otherwise, draw 1."
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "name": "Aphelios - Exalted",
+  "texts": [
+    "When you attach an Equipment to me, choose one that hasn't been chosen this turn —Ready 2 runes. Channel 1 rune exhausted. Buff a friendly unit."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "channel",
+          "amount": 1,
+          "ready": false
+        }
+      ],
+      "condition": null
+    },
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "buff",
+          "target": {
+            "kind": "unit",
+            "side": "friendly",
+            "where": "anywhere",
+            "chosen": true,
+            "count": 1
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "When you attach an Equipment to me, choose one that hasn't been chosen this turn —Ready 2 runes."
+  ]
+}

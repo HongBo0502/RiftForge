@@ -1,0 +1,29 @@
+{
+  "name": "Mischievous Marai",
+  "texts": [
+    "[Hidden] When you play me to a battlefield, deal 2 to an enemy unit here."
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "on": "play"
+      },
+      "instructions": [
+        {
+          "verb": "deal",
+          "amount": 2,
+          "target": {
+            "kind": "unit",
+            "side": "enemy",
+            "where": "here",
+            "chosen": true,
+            "count": 1
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": []
+}

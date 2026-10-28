@@ -1,0 +1,13 @@
+{
+  "name": "Ivern - Friend to All",
+  "texts": [
+    "As you play me, choose Bird, Cat, Dog, or Poro. I gain that tag. When I conquer or hold, score 1 point if your units have all of the following tags among them — Bird, Cat, Dog, and Poro."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "As you play me, choose Bird, Cat, Dog, or Poro.",
+    "I gain that tag.",
+    "When I conquer or hold, score 1 point if your units have all of the following tags among them — Bird, Cat, Dog, and Poro."
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "name": "Stare Down",
+  "texts": [
+    "Choose a friendly unit and a battlefield. Move all enemy units at that battlefield with less Might than the chosen unit to their base. Gain 1 XP."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "gainXp",
+          "amount": 1,
+          "who": {
+            "kind": "player",
+            "side": "you"
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "Choose a friendly unit and a battlefield.",
+    "Move all enemy units at that battlefield with less Might than the chosen unit to their base."
+  ]
+}

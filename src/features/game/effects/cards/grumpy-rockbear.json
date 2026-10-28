@@ -1,0 +1,13 @@
+{
+  "name": "Grumpy Rockbear",
+  "texts": [
+    "[Empower] :rb_energy_12:. This ability costs :rb_energy_1: less for each rune you control. [Empowered][>] I have [Deflect] and [Shield 3]."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Empower] :rb_energy_12:.",
+    "This ability costs :rb_energy_1: less for each rune you control.",
+    "[Empowered][>] I have [Deflect] and [Shield 3]."
+  ]
+}

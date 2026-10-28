@@ -1,0 +1,26 @@
+{
+  "name": "Peak Guardian",
+  "texts": [
+    "When you play me, buff me. Then, if I am at a battlefield, buff all other friendly units there."
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "on": "play"
+      },
+      "instructions": [
+        {
+          "verb": "buff",
+          "target": {
+            "kind": "self"
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "Then, if I am at a battlefield, buff all other friendly units there."
+  ]
+}

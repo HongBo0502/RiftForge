@@ -1,0 +1,12 @@
+{
+  "name": "Blast Cone",
+  "texts": [
+    "When you play this, you may move an enemy unit. When you move an enemy unit, you may exhaust this to [Stun] it."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play this, you may move an enemy unit.",
+    "When you move an enemy unit, you may exhaust this to [Stun] it."
+  ]
+}

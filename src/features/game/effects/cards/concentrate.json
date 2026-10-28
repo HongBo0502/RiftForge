@@ -1,0 +1,27 @@
+{
+  "name": "Concentrate",
+  "texts": [
+    "Draw 2. [Level 6][>] This costs :rb_energy_2: less. [Level 11][>] This costs :rb_energy_4: less instead."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "draw",
+          "amount": 2,
+          "who": {
+            "kind": "player",
+            "side": "you"
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "[Level 6][>] This costs :rb_energy_2: less.",
+    "[Level 11][>] This costs :rb_energy_4: less instead."
+  ]
+}

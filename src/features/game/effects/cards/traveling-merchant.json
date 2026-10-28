@@ -1,0 +1,11 @@
+{
+  "name": "Traveling Merchant",
+  "texts": [
+    "When I move, discard 1, then draw 1."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I move, discard 1, then draw 1."
+  ]
+}

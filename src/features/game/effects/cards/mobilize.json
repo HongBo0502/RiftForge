@@ -1,0 +1,23 @@
+{
+  "name": "Mobilize",
+  "texts": [
+    "Channel 1 rune exhausted. If you can't, draw 1."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "channel",
+          "amount": 1,
+          "ready": false
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "If you can't, draw 1."
+  ]
+}

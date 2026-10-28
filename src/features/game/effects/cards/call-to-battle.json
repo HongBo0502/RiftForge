@@ -1,0 +1,13 @@
+{
+  "name": "Call to Battle",
+  "texts": [
+    "Move a unit you control to a battlefield you control. Then, choose an opponent. They move a unit they control to the same battlefield."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Move a unit you control to a battlefield you control.",
+    "Then, choose an opponent.",
+    "They move a unit they control to the same battlefield."
+  ]
+}

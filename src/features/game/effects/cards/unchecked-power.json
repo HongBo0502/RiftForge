@@ -1,0 +1,37 @@
+{
+  "name": "Unchecked Power",
+  "texts": [
+    "Exhaust all friendly units, then deal 12 to ALL units at battlefields."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "exhaust",
+          "target": {
+            "kind": "unit",
+            "side": "friendly",
+            "where": "anywhere",
+            "chosen": false,
+            "count": null
+          }
+        },
+        {
+          "verb": "deal",
+          "amount": 12,
+          "target": {
+            "kind": "unit",
+            "side": "any",
+            "where": "anywhere",
+            "chosen": false,
+            "count": null
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": []
+}

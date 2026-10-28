@@ -1,0 +1,11 @@
+{
+  "name": "Orb of Regret",
+  "texts": [
+    ":rb_exhaust:: Give a unit -1 :rb_might: this turn, to a minimum of 1 :rb_might:."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    ":rb_exhaust:: Give a unit -1 :rb_might: this turn, to a minimum of 1 :rb_might:."
+  ]
+}

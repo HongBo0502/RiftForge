@@ -1,0 +1,12 @@
+{
+  "name": "Shuriken Flip",
+  "texts": [
+    "Deal 2 to up to one enemy unit at a battlefield, then move a friendly unit. [Flow] :rb_energy_3::rb_rune_rainbow:"
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Deal 2 to up to one enemy unit at a battlefield, then move a friendly unit.",
+    "[Flow] :rb_energy_3::rb_rune_rainbow:"
+  ]
+}

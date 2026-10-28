@@ -1,0 +1,11 @@
+{
+  "name": "Block",
+  "texts": [
+    "[Hidden] [Action] Give a unit [Shield 3] and [Tank] this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Give a unit [Shield 3] and [Tank] this turn."
+  ]
+}

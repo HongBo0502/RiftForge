@@ -1,0 +1,11 @@
+{
+  "name": "Lillia - Fae Fawn",
+  "texts": [
+    "[Accelerate] When I move from a location, play a 3 :rb_might: Sprite unit token with [Temporary] there."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I move from a location, play a 3 :rb_might: Sprite unit token with [Temporary] there."
+  ]
+}

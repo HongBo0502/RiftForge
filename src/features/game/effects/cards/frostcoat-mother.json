@@ -1,0 +1,26 @@
+{
+  "name": "Frostcoat Mother",
+  "texts": [
+    "[Empower] :rb_energy_12:. This ability costs :rb_energy_1: less for each rune you control. [Empowered][>] I have +3 :rb_might:."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "staticMight",
+          "amount": 3
+        }
+      ],
+      "condition": {
+        "keyword": "Empowered",
+        "value": null
+      }
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "[Empower] :rb_energy_12:.",
+    "This ability costs :rb_energy_1: less for each rune you control."
+  ]
+}

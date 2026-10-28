@@ -1,0 +1,13 @@
+{
+  "name": "Blood Money",
+  "texts": [
+    "[Action] Kill a unit at a battlefield with 2 :rb_might: or less. If it was an enemy unit, play a Gold gear token exhausted. If it was a friendly unit, play two Gold gear tokens exhausted."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Kill a unit at a battlefield with 2 :rb_might: or less.",
+    "If it was an enemy unit, play a Gold gear token exhausted.",
+    "If it was a friendly unit, play two Gold gear tokens exhausted."
+  ]
+}

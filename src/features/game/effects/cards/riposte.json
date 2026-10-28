@@ -1,0 +1,12 @@
+{
+  "name": "Riposte",
+  "texts": [
+    "[Reaction] Choose a friendly unit and a spell. Counter that spell and give that unit +:rb_might: equal to that spell's Energy cost this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Choose a friendly unit and a spell.",
+    "Counter that spell and give that unit +:rb_might: equal to that spell's Energy cost this turn."
+  ]
+}

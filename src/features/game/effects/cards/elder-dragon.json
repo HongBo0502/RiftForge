@@ -1,0 +1,13 @@
+{
+  "name": "Elder Dragon",
+  "texts": [
+    "Any amount of your damage is enough to kill enemy units. When you play me, choose up to one enemy unit at each location. Deal 1 to them."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Any amount of your damage is enough to kill enemy units.",
+    "When you play me, choose up to one enemy unit at each location.",
+    "Deal 1 to them."
+  ]
+}

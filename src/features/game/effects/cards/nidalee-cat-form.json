@@ -1,0 +1,11 @@
+{
+  "name": "Nidalee - Cat Form",
+  "texts": [
+    "[Ambush] When I win a combat, draw 1."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I win a combat, draw 1."
+  ]
+}

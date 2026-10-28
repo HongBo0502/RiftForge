@@ -1,0 +1,13 @@
+{
+  "name": "Apprentice Smith",
+  "texts": [
+    "When I move, reveal the top card of your Main Deck. If it's a gear, draw it. Otherwise, recycle it."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I move, reveal the top card of your Main Deck.",
+    "If it's a gear, draw it.",
+    "Otherwise, recycle it."
+  ]
+}

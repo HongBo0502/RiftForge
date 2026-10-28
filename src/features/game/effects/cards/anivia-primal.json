@@ -1,0 +1,29 @@
+{
+  "name": "Anivia - Primal",
+  "texts": [
+    "When I attack, deal 3 to all enemy units here."
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "on": "attack"
+      },
+      "instructions": [
+        {
+          "verb": "deal",
+          "amount": 3,
+          "target": {
+            "kind": "unit",
+            "side": "enemy",
+            "where": "here",
+            "chosen": false,
+            "count": null
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": []
+}

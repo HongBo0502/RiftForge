@@ -1,0 +1,37 @@
+{
+  "name": "Warwick - Hunter",
+  "texts": [
+    "I enter ready. When I attack, kill all damaged enemy units here."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "entersReady"
+        }
+      ],
+      "condition": null
+    },
+    {
+      "trigger": {
+        "on": "attack"
+      },
+      "instructions": [
+        {
+          "verb": "kill",
+          "target": {
+            "kind": "unit",
+            "side": "enemy",
+            "where": "here",
+            "chosen": false,
+            "count": null
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": []
+}

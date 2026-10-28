@@ -1,0 +1,12 @@
+{
+  "name": "Questionable Tome",
+  "texts": [
+    "[Empower] — :rb_exhaust: Disempower this, :rb_energy_1:, :rb_exhaust:: Draw 1."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Empower] — :rb_exhaust:",
+    "Disempower this, :rb_energy_1:, :rb_exhaust:: Draw 1."
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "name": "Crackshot Corsair",
+  "texts": [
+    "When I attack, deal 1 to an enemy unit here."
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "on": "attack"
+      },
+      "instructions": [
+        {
+          "verb": "deal",
+          "amount": 1,
+          "target": {
+            "kind": "unit",
+            "side": "enemy",
+            "where": "here",
+            "chosen": true,
+            "count": 1
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": []
+}

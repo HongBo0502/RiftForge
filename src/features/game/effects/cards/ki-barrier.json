@@ -1,0 +1,12 @@
+{
+  "name": "Ki Barrier",
+  "texts": [
+    "[Reaction] Choose a unit. Prevent the next 7 damage that would be dealt to it this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Choose a unit.",
+    "Prevent the next 7 damage that would be dealt to it this turn."
+  ]
+}

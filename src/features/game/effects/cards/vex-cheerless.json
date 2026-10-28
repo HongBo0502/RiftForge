@@ -1,0 +1,11 @@
+{
+  "name": "Vex - Cheerless",
+  "texts": [
+    "While I'm in combat, friendly spells cost :rb_energy_1::rb_rune_rainbow: less to a minimum of :rb_energy_1:, and enemy spells cost :rb_energy_1::rb_rune_rainbow: more."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "While I'm in combat, friendly spells cost :rb_energy_1::rb_rune_rainbow: less to a minimum of :rb_energy_1:, and enemy spells cost :rb_energy_1::rb_rune_rainbow: more."
+  ]
+}

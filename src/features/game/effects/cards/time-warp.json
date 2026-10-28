@@ -1,0 +1,12 @@
+{
+  "name": "Time Warp",
+  "texts": [
+    "Take a turn after this one. Banish this."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Take a turn after this one.",
+    "Banish this."
+  ]
+}

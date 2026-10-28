@@ -1,0 +1,41 @@
+{
+  "name": "Hextech Formula",
+  "texts": [
+    "This enters exhausted. :rb_exhaust:: Empower another gear."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "entersExhausted"
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [
+    {
+      "cost": {
+        "energy": 0,
+        "power": {},
+        "anyPower": 0,
+        "exhaustSelf": true
+      },
+      "instructions": [
+        {
+          "verb": "empower",
+          "target": {
+            "kind": "gear",
+            "side": "any",
+            "where": "anywhere",
+            "chosen": true,
+            "count": 1
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "manual": []
+}

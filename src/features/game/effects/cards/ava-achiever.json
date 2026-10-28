@@ -1,0 +1,11 @@
+{
+  "name": "Ava Achiever",
+  "texts": [
+    "When I attack, you may pay :rb_rune_mind: to play a card with [Hidden] from your hand here, ignoring its cost."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I attack, you may pay :rb_rune_mind: to play a card with [Hidden] from your hand here, ignoring its cost."
+  ]
+}

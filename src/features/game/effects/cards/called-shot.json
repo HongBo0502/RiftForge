@@ -1,0 +1,13 @@
+{
+  "name": "Called Shot",
+  "texts": [
+    "[Action] [Repeat] :rb_rune_chaos: Look at the top 2 cards of your Main Deck. Draw one and recycle the other."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Repeat] :rb_rune_chaos:",
+    "Look at the top 2 cards of your Main Deck.",
+    "Draw one and recycle the other."
+  ]
+}

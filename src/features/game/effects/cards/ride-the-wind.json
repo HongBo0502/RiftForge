@@ -1,0 +1,11 @@
+{
+  "name": "Ride The Wind",
+  "texts": [
+    "[Action] Move a friendly unit and ready it."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Move a friendly unit and ready it."
+  ]
+}

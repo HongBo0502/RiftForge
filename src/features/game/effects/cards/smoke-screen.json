@@ -1,0 +1,11 @@
+{
+  "name": "Smoke Screen",
+  "texts": [
+    "[Reaction] Give a unit -4 :rb_might: this turn, to a minimum of 1 :rb_might:."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Give a unit -4 :rb_might: this turn, to a minimum of 1 :rb_might:."
+  ]
+}

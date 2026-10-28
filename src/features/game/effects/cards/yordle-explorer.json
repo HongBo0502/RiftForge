@@ -1,0 +1,11 @@
+{
+  "name": "Yordle Explorer",
+  "texts": [
+    "When you play a card with Power cost :rb_rune_rainbow::rb_rune_rainbow: or more, draw 1."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play a card with Power cost :rb_rune_rainbow::rb_rune_rainbow: or more, draw 1."
+  ]
+}

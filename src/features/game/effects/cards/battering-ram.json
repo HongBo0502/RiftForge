@@ -1,0 +1,11 @@
+{
+  "name": "Battering Ram",
+  "texts": [
+    "I cost :rb_energy_1: less for each card you've played this turn, to a minimum of :rb_energy_1:."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "I cost :rb_energy_1: less for each card you've played this turn, to a minimum of :rb_energy_1:."
+  ]
+}

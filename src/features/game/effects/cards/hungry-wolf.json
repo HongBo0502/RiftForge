@@ -1,0 +1,12 @@
+{
+  "name": "Hungry Wolf",
+  "texts": [
+    ":rb_rune_order:: Ready me and give me +1 :rb_might: this turn. Use only if you've chosen an enemy unit this turn and only once each turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    ":rb_rune_order:: Ready me and give me +1 :rb_might: this turn.",
+    "Use only if you've chosen an enemy unit this turn and only once each turn."
+  ]
+}

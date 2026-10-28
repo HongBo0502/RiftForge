@@ -1,0 +1,12 @@
+{
+  "name": "Gutter Palace",
+  "texts": [
+    "At the start of your Beginning Phase, if you have exactly 4 cards in hand and exactly 4 units at battlefields, you win the game. Discard 1, :rb_exhaust:: Play a 1 :rb_might: Bird unit token with [Deflect]."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "At the start of your Beginning Phase, if you have exactly 4 cards in hand and exactly 4 units at battlefields, you win the game.",
+    "Discard 1, :rb_exhaust:: Play a 1 :rb_might: Bird unit token with [Deflect]."
+  ]
+}

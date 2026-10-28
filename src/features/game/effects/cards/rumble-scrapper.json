@@ -1,0 +1,12 @@
+{
+  "name": "Rumble - Scrapper",
+  "texts": [
+    "Your Mechs have +1 :rb_might: . When I hold, play a 3 :rb_might: Mech unit token to your base."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Your Mechs have +1 :rb_might: .",
+    "When I hold, play a 3 :rb_might: Mech unit token to your base."
+  ]
+}

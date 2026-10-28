@@ -1,0 +1,11 @@
+{
+  "name": "Blade of the Ruined King",
+  "texts": [
+    "[Equip] — :rb_rune_order:, Kill a friendly unit"
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Equip] — :rb_rune_order:, Kill a friendly unit"
+  ]
+}

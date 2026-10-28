@@ -1,0 +1,11 @@
+{
+  "name": "Cull the Weak",
+  "texts": [
+    "Each player kills one of their units."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Each player kills one of their units."
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Zed, Without a Sound",
+  "texts": [
+    "When I conquer, play a 0 :rb_might: Shadow Clone unit token to your base. [Action][>] :rb_energy_1::rb_rune_chaos:: Move me and a Shadow Clone you control to each other's locations."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I conquer, play a 0 :rb_might: Shadow Clone unit token to your base.",
+    "[Action][>] :rb_energy_1::rb_rune_chaos:: Move me and a Shadow Clone you control to each other's locations."
+  ]
+}

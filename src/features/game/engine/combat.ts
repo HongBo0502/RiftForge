@@ -1,5 +1,5 @@
 import type { Card } from '@/types';
-import { parseCardCached } from '../effects/parse';
+import { scriptFor } from '../effects/scripts';
 import { conditionActive, dependencyContext, keywordValue } from './keywords';
 import { checkVictory, score } from './scoring';
 import type { GameState, PlayerId, UnitState } from './types';
@@ -52,7 +52,7 @@ export function unitMight(state: GameState, uid: string, lookup: CardLookup): nu
  * and off with the condition instead of being baked in at play.
  */
 function staticMightBonus(state: GameState, unit: UnitState, card: Card): number {
-  const parsed = parseCardCached(card);
+  const parsed = scriptFor(card);
   if (parsed.abilities.length === 0) return 0;
   const context = dependencyContext(state, unit.controller, unit.uid);
 

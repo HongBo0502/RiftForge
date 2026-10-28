@@ -1,0 +1,11 @@
+{
+  "name": "Here to Help",
+  "texts": [
+    "[Hidden] [Action] You may play a unit from hand to a battlefield you control, reducing its cost by :rb_energy_3:."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "You may play a unit from hand to a battlefield you control, reducing its cost by :rb_energy_3:."
+  ]
+}

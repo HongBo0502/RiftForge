@@ -1,0 +1,12 @@
+{
+  "name": "Carnivorous Snapvine",
+  "texts": [
+    "When you play me, choose an enemy unit at a battlefield. We deal damage equal to our Mights to each other."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me, choose an enemy unit at a battlefield.",
+    "We deal damage equal to our Mights to each other."
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Jayce - Man of Progress",
+  "texts": [
+    "When you play me, you may kill a friendly gear. If you do, you may play a gear with Energy cost no more than :rb_energy_7: from hand this turn, ignoring its Energy cost."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me, you may kill a friendly gear.",
+    "If you do, you may play a gear with Energy cost no more than :rb_energy_7: from hand this turn, ignoring its Energy cost."
+  ]
+}

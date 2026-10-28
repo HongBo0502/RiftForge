@@ -1,0 +1,12 @@
+{
+  "name": "Blitzcrank - Impassive",
+  "texts": [
+    "[Tank] When you play me to a battlefield, you may move an enemy unit to here. When I hold, return me to my owner's hand."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me to a battlefield, you may move an enemy unit to here.",
+    "When I hold, return me to my owner's hand."
+  ]
+}

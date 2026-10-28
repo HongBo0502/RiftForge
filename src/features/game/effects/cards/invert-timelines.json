@@ -1,0 +1,11 @@
+{
+  "name": "Invert Timelines",
+  "texts": [
+    "Each player discards their hand, then draws 4."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Each player discards their hand, then draws 4."
+  ]
+}

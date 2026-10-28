@@ -1,0 +1,12 @@
+{
+  "name": "Hard Bargain",
+  "texts": [
+    "[Reaction] [Repeat] :rb_energy_2: Counter a spell unless its controller pays :rb_energy_2:."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Repeat] :rb_energy_2:",
+    "Counter a spell unless its controller pays :rb_energy_2:."
+  ]
+}

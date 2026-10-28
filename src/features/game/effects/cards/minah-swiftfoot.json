@@ -1,0 +1,12 @@
+{
+  "name": "Minah Swiftfoot",
+  "texts": [
+    "When I move to a battlefield, choose one —Each player discards 1. Each player draws 1."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I move to a battlefield, choose one —Each player discards 1.",
+    "Each player draws 1."
+  ]
+}

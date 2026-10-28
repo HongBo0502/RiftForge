@@ -1,0 +1,12 @@
+{
+  "name": "Aurok General",
+  "texts": [
+    "[Empower] :rb_energy_3::rb_rune_order: [Empowered][>] Your units that are [Empowered] have +2 :rb_might: ."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Empower] :rb_energy_3::rb_rune_order:",
+    "[Empowered][>] Your units that are [Empowered] have +2 :rb_might: ."
+  ]
+}

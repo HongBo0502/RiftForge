@@ -1,0 +1,12 @@
+{
+  "name": "Last Stand",
+  "texts": [
+    "[Action] Double a friendly unit's Might this turn. Give it [Temporary]."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Double a friendly unit's Might this turn.",
+    "Give it [Temporary]."
+  ]
+}

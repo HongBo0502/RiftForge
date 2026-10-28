@@ -1,0 +1,12 @@
+{
+  "name": "Poppy - Defender of the Meek",
+  "texts": [
+    "You may spend 3 XP as an additional cost to play me. If you do, I cost :rb_energy_3: less. [Ambush] [Tank]"
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "You may spend 3 XP as an additional cost to play me.",
+    "If you do, I cost :rb_energy_3: less."
+  ]
+}

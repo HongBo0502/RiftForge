@@ -1,0 +1,14 @@
+{
+  "name": "Lacerate",
+  "texts": [
+    "Choose a unit. If it's [Empowered], disempower it. Then kill it if it has 3 :rb_might: or less. [Flow] :rb_energy_4::rb_rune_order::rb_rune_order:"
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Choose a unit.",
+    "If it's [Empowered], disempower it.",
+    "Then kill it if it has 3 :rb_might: or less.",
+    "[Flow] :rb_energy_4::rb_rune_order::rb_rune_order:"
+  ]
+}

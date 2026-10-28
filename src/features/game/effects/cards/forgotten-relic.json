@@ -1,0 +1,12 @@
+{
+  "name": "Forgotten Relic",
+  "texts": [
+    "When you play this or at the start of your Beginning Phase, [Burn 1]. When you burn a unit this way, do this: Give a friendly unit +:rb_might: equal to the burned card's Might this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play this or at the start of your Beginning Phase, [Burn 1].",
+    "When you burn a unit this way, do this: Give a friendly unit +:rb_might: equal to the burned card's Might this turn."
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "name": "Lee Sin - Ascetic",
+  "texts": [
+    "[Shield] :rb_exhaust:: Buff me. I can have any number of buffs."
+  ],
+  "abilities": [],
+  "activated": [
+    {
+      "cost": {
+        "energy": 0,
+        "power": {},
+        "anyPower": 0,
+        "exhaustSelf": true
+      },
+      "instructions": [
+        {
+          "verb": "buff",
+          "target": {
+            "kind": "self"
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "manual": [
+    "I can have any number of buffs."
+  ]
+}

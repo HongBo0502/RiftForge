@@ -1,0 +1,12 @@
+{
+  "name": "Red Brambleback",
+  "texts": [
+    "[Accelerate] Your conquer effects for conquering here trigger an additional time. When I conquer, [Buff] a friendly unit."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Your conquer effects for conquering here trigger an additional time.",
+    "When I conquer, [Buff] a friendly unit."
+  ]
+}

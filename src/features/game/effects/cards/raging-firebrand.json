@@ -1,0 +1,11 @@
+{
+  "name": "Raging Firebrand",
+  "texts": [
+    "When you play me, the next spell you play this turn costs :rb_energy_5: less."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me, the next spell you play this turn costs :rb_energy_5: less."
+  ]
+}

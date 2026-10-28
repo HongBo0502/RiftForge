@@ -1,0 +1,11 @@
+{
+  "name": "Zilean - Time Mage",
+  "texts": [
+    "Once each turn, if you would play a token unit while I'm at a battlefield, you may play that token and an additional copy of it instead."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Once each turn, if you would play a token unit while I'm at a battlefield, you may play that token and an additional copy of it instead."
+  ]
+}

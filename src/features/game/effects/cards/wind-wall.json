@@ -1,0 +1,11 @@
+{
+  "name": "Wind Wall",
+  "texts": [
+    "[Reaction] Counter a spell."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Counter a spell."
+  ]
+}

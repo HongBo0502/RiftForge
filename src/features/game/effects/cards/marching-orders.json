@@ -1,0 +1,13 @@
+{
+  "name": "Marching Orders",
+  "texts": [
+    "[Action] [Repeat] :rb_energy_3: Choose a friendly unit anywhere and an enemy unit at a battlefield. They deal damage equal to their Mights to each other."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Repeat] :rb_energy_3:",
+    "Choose a friendly unit anywhere and an enemy unit at a battlefield.",
+    "They deal damage equal to their Mights to each other."
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Lightning Rush",
+  "texts": [
+    "Look at the top 3 cards of your Main Deck. You may choose a card from among them and draw it. Put the rest into your trash. [Flow] :rb_energy_2::rb_rune_rainbow:"
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Look at the top 3 cards of your Main Deck.",
+    "You may choose a card from among them and draw it.",
+    "Put the rest into your trash.",
+    "[Flow] :rb_energy_2::rb_rune_rainbow:"
+  ]
+}

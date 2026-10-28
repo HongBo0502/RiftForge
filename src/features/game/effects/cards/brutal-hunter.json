@@ -1,0 +1,12 @@
+{
+  "name": "Brutal Hunter",
+  "texts": [
+    "[Empower] :rb_energy_3: [Empowered][>] I have +2 :rb_might: and [Ganking]."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Empower] :rb_energy_3:",
+    "[Empowered][>] I have +2 :rb_might: and [Ganking]."
+  ]
+}

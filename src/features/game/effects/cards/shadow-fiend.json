@@ -1,0 +1,12 @@
+{
+  "name": "Shadow Fiend",
+  "texts": [
+    "[Empower] :rb_energy_2::rb_rune_fury: [Empowered][>] I have [Assault 3]."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Empower] :rb_energy_2::rb_rune_fury:",
+    "[Empowered][>] I have [Assault 3]."
+  ]
+}

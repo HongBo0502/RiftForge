@@ -1,0 +1,23 @@
+{
+  "name": "Catalyst of Aeons",
+  "texts": [
+    "Channel 2 runes exhausted. If you couldn't channel 2 runes this way, draw 1."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "channel",
+          "amount": 2,
+          "ready": false
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "If you couldn't channel 2 runes this way, draw 1."
+  ]
+}

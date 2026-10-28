@@ -1,0 +1,13 @@
+{
+  "name": "Tail-Cloaked Matriarch",
+  "texts": [
+    "[Empower] :rb_energy_2::rb_rune_chaos: When I become [Empowered], you may choose a unit in your trash with Energy cost no more than :rb_energy_3: and Power cost no more than :rb_rune_rainbow:. Play it to your base, ignoring its cost."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Empower] :rb_energy_2::rb_rune_chaos:",
+    "When I become [Empowered], you may choose a unit in your trash with Energy cost no more than :rb_energy_3: and Power cost no more than :rb_rune_rainbow:.",
+    "Play it to your base, ignoring its cost."
+  ]
+}

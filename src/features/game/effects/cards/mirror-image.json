@@ -1,0 +1,14 @@
+{
+  "name": "Mirror Image",
+  "texts": [
+    "Choose a unit. Play a ready Reflection unit token to your base. It becomes a copy of that unit. Give it [Temporary]."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Choose a unit.",
+    "Play a ready Reflection unit token to your base.",
+    "It becomes a copy of that unit.",
+    "Give it [Temporary]."
+  ]
+}

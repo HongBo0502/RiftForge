@@ -1,0 +1,11 @@
+{
+  "name": "Cruel Patron",
+  "texts": [
+    "As an additional cost to play me, kill a friendly unit."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "As an additional cost to play me, kill a friendly unit."
+  ]
+}

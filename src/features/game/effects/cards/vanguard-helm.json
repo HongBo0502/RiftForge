@@ -1,0 +1,11 @@
+{
+  "name": "Vanguard Helm",
+  "texts": [
+    "When a buffed friendly unit dies, buff another friendly unit."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When a buffed friendly unit dies, buff another friendly unit."
+  ]
+}

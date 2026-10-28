@@ -1,0 +1,13 @@
+{
+  "name": "Baccai Sandspinner",
+  "texts": [
+    "[Empower] :rb_energy_5:. This ability costs :rb_energy_3: less if you control 4 or fewer runes. [Empowered][>] I have [Deflect] and [Assault 2]."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Empower] :rb_energy_5:.",
+    "This ability costs :rb_energy_3: less if you control 4 or fewer runes.",
+    "[Empowered][>] I have [Deflect] and [Assault 2]."
+  ]
+}

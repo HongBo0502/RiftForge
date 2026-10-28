@@ -1,0 +1,11 @@
+{
+  "name": "Vi - Destructive",
+  "texts": [
+    "[Ganking] Recycle 1 from your trash: Give me +1 :rb_might: this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Recycle 1 from your trash: Give me +1 :rb_might: this turn."
+  ]
+}

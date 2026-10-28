@@ -1,0 +1,11 @@
+{
+  "name": "Switcheroo",
+  "texts": [
+    "[Hidden] [Action] Swap the Might of two units at the same battlefield this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Swap the Might of two units at the same battlefield this turn."
+  ]
+}

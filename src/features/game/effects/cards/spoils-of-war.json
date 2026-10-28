@@ -1,0 +1,26 @@
+{
+  "name": "Spoils of War",
+  "texts": [
+    "[Reaction] If an enemy unit has died this turn, this costs :rb_energy_2: less. Draw 2."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "draw",
+          "amount": 2,
+          "who": {
+            "kind": "player",
+            "side": "you"
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "If an enemy unit has died this turn, this costs :rb_energy_2: less."
+  ]
+}

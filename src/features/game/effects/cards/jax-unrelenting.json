@@ -1,0 +1,12 @@
+{
+  "name": "Jax - Unrelenting",
+  "texts": [
+    "[Weaponmaster] When you attach an Equipment to me, you may pay :rb_energy_1: to draw 1."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Weaponmaster]",
+    "When you attach an Equipment to me, you may pay :rb_energy_1: to draw 1."
+  ]
+}

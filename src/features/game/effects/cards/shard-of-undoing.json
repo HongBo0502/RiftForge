@@ -1,0 +1,11 @@
+{
+  "name": "Shard of Undoing",
+  "texts": [
+    "The first time a friendly unit dies during your Beginning Phase each turn, each opponent must kill one of their units."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "The first time a friendly unit dies during your Beginning Phase each turn, each opponent must kill one of their units."
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Vilemaw",
+  "texts": [
+    "[Ambush] Enemy units here with less Might than me don't deal combat damage. When I hold, draw 1."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Enemy units here with less Might than me don't deal combat damage.",
+    "When I hold, draw 1."
+  ]
+}

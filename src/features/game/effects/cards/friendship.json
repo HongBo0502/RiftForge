@@ -1,0 +1,12 @@
+{
+  "name": "Friendship",
+  "texts": [
+    "[Reaction] Choose a unit. Give it +1 :rb_might: this turn for each of the following tags among your units — Bird, Cat, Dog, and Poro."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Choose a unit.",
+    "Give it +1 :rb_might: this turn for each of the following tags among your units — Bird, Cat, Dog, and Poro."
+  ]
+}

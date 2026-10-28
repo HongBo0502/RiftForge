@@ -1,0 +1,30 @@
+{
+  "name": "Mel, Newly Awakened",
+  "texts": [
+    "When you play me, draw 1. [Empower] :rb_energy_3: [Empowered][>] Your spells and abilities can't be countered. If a spell or ability you control would give -:rb_might: to a unit it chooses, it gives an additional -1 :rb_might:."
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "on": "play"
+      },
+      "instructions": [
+        {
+          "verb": "draw",
+          "amount": 1,
+          "who": {
+            "kind": "player",
+            "side": "you"
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "[Empower] :rb_energy_3:",
+    "[Empowered][>] Your spells and abilities can't be countered.",
+    "If a spell or ability you control would give -:rb_might: to a unit it chooses, it gives an additional -1 :rb_might:."
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Pakaa Protector",
+  "texts": [
+    "When I move, reveal the top card of your Main Deck. If it's a unit, draw it. Otherwise, put it in your trash and give me +2 :rb_might: this turn."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I move, reveal the top card of your Main Deck.",
+    "If it's a unit, draw it.",
+    "Otherwise, put it in your trash and give me +2 :rb_might: this turn."
+  ]
+}

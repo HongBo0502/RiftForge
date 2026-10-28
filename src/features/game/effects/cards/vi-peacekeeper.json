@@ -1,0 +1,11 @@
+{
+  "name": "Vi - Peacekeeper",
+  "texts": [
+    "[Ambush] When I attack, [Stun] an enemy unit here."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When I attack, [Stun] an enemy unit here."
+  ]
+}

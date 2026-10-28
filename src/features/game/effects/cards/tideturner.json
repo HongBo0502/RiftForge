@@ -1,0 +1,12 @@
+{
+  "name": "Tideturner",
+  "texts": [
+    "[Hidden] When you play me, you may choose a friendly unit. Move me to its location and it to my original location."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play me, you may choose a friendly unit.",
+    "Move me to its location and it to my original location."
+  ]
+}

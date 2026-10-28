@@ -1,0 +1,13 @@
+{
+  "name": "Riven, Shattered",
+  "texts": [
+    "[Weaponmaster] When I attack, choose an enemy unit here. Deal 2 to it for each Equipment attached to me."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Weaponmaster]",
+    "When I attack, choose an enemy unit here.",
+    "Deal 2 to it for each Equipment attached to me."
+  ]
+}

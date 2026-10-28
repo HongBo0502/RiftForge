@@ -1,0 +1,12 @@
+{
+  "name": "Heedless Resurrection",
+  "texts": [
+    "[Reaction] As an additional cost to play this, kill a friendly unit. Play a unit from your trash that costs no more Energy and no more Power than the killed unit, ignoring its cost."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "As an additional cost to play this, kill a friendly unit.",
+    "Play a unit from your trash that costs no more Energy and no more Power than the killed unit, ignoring its cost."
+  ]
+}

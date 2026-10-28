@@ -1,0 +1,30 @@
+{
+  "name": "Frigid Touch",
+  "texts": [
+    "[Reaction] [Repeat] :rb_energy_2: Give a unit -2 :rb_might: this turn."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "might",
+          "amount": -2,
+          "target": {
+            "kind": "unit",
+            "side": "any",
+            "where": "anywhere",
+            "chosen": true,
+            "count": 1
+          },
+          "duration": "thisTurn"
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "[Repeat] :rb_energy_2:"
+  ]
+}

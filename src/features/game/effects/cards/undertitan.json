@@ -1,0 +1,32 @@
+{
+  "name": "Undertitan",
+  "texts": [
+    "When you play me, give your other units +2 :rb_might: this turn. As I'm revealed from your deck, [Add] :rb_energy_2:."
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "on": "play"
+      },
+      "instructions": [
+        {
+          "verb": "might",
+          "amount": 2,
+          "target": {
+            "kind": "unit",
+            "side": "friendly",
+            "where": "anywhere",
+            "chosen": false,
+            "count": null
+          },
+          "duration": "thisTurn"
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "As I'm revealed from your deck, [Add] :rb_energy_2:."
+  ]
+}

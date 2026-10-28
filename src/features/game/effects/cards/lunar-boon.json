@@ -1,0 +1,32 @@
+{
+  "name": "Lunar Boon",
+  "texts": [
+    "[Reaction] Discard 1, then draw 2."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "discard",
+          "amount": 1,
+          "who": {
+            "kind": "player",
+            "side": "you"
+          }
+        },
+        {
+          "verb": "draw",
+          "amount": 2,
+          "who": {
+            "kind": "player",
+            "side": "you"
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": []
+}

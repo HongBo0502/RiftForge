@@ -1,5 +1,6 @@
 import type { Card } from '@/types';
 import { activatableAbility, runActivatedAbility, runCardEffects } from '../effects/run';
+import { manualText } from '../effects/scripts';
 import { hasKeyword, unautomatedText } from './keywords';
 import type { ChainItem, ChainInstruction, GameState, PlayerId, Rejection } from './types';
 import { OPPONENT } from './types';
@@ -208,7 +209,7 @@ export function resolveTop(state: GameState, lookup: CardLookup): Resolution | n
             const ability = activatableAbility(state, item.controller, item.uid, card);
             return ability
               ? runActivatedAbility(state, ability, item.controller, item.uid, lookup)
-              : { ran: 0, leftover: unautomatedText(card) };
+              : { ran: 0, leftover: manualText(card) ?? unautomatedText(card) };
           })()
         : runCardEffects(state, card, item.controller, item.uid, lookup);
     const manual = ran.leftover ?? null;

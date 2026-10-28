@@ -1,0 +1,12 @@
+{
+  "name": "Bard - Mercurial",
+  "texts": [
+    "You may exhaust your legend as an additional cost to play me. When you play me, if you paid the additional cost, move any number of your units to an open battlefield."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "You may exhaust your legend as an additional cost to play me.",
+    "When you play me, if you paid the additional cost, move any number of your units to an open battlefield."
+  ]
+}

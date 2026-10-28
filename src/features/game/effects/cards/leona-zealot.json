@@ -1,0 +1,12 @@
+{
+  "name": "Leona - Zealot",
+  "texts": [
+    "If an opponent's score is within 3 points of the Victory Score, I enter ready. Stunned enemy units here have -8 :rb_might:, to a minimum of 1 :rb_might:."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "If an opponent's score is within 3 points of the Victory Score, I enter ready.",
+    "Stunned enemy units here have -8 :rb_might:, to a minimum of 1 :rb_might:."
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "name": "Stupefy",
+  "texts": [
+    "[Reaction] Give a unit -1 :rb_might: this turn, to a minimum of 1 :rb_might:. Draw 1."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "draw",
+          "amount": 1,
+          "who": {
+            "kind": "player",
+            "side": "you"
+          }
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "Give a unit -1 :rb_might: this turn, to a minimum of 1 :rb_might:."
+  ]
+}

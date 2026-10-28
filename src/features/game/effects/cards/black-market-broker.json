@@ -1,0 +1,11 @@
+{
+  "name": "Black Market Broker",
+  "texts": [
+    "When you play a card from face down, play a Gold gear token exhausted."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "When you play a card from face down, play a Gold gear token exhausted."
+  ]
+}

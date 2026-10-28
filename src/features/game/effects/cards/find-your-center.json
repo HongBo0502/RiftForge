@@ -1,0 +1,31 @@
+{
+  "name": "Find Your Center",
+  "texts": [
+    "[Action] If an opponent's score is within 3 points of the Victory Score, this costs :rb_energy_2: less. Draw 1 and channel 1 rune exhausted."
+  ],
+  "abilities": [
+    {
+      "trigger": null,
+      "instructions": [
+        {
+          "verb": "draw",
+          "amount": 1,
+          "who": {
+            "kind": "player",
+            "side": "you"
+          }
+        },
+        {
+          "verb": "channel",
+          "amount": 1,
+          "ready": false
+        }
+      ],
+      "condition": null
+    }
+  ],
+  "activated": [],
+  "manual": [
+    "If an opponent's score is within 3 points of the Victory Score, this costs :rb_energy_2: less."
+  ]
+}

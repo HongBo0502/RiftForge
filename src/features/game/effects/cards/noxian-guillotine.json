@@ -1,0 +1,13 @@
+{
+  "name": "Noxian Guillotine",
+  "texts": [
+    "[Action] Choose a unit. Kill it the next time it takes damage this turn. [Legion] — Kill it now instead."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Choose a unit.",
+    "Kill it the next time it takes damage this turn.",
+    "[Legion] — Kill it now instead."
+  ]
+}

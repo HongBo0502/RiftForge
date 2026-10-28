@@ -1,0 +1,29 @@
+{
+  "name": "Wuju Apprentice",
+  "texts": [
+    "[Hunt] [Level 6][>] When you play me, draw 1."
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "on": "play"
+      },
+      "instructions": [
+        {
+          "verb": "draw",
+          "amount": 1,
+          "who": {
+            "kind": "player",
+            "side": "you"
+          }
+        }
+      ],
+      "condition": {
+        "keyword": "Level",
+        "value": 6
+      }
+    }
+  ],
+  "activated": [],
+  "manual": []
+}

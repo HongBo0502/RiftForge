@@ -1,0 +1,12 @@
+{
+  "name": "Desert's Call",
+  "texts": [
+    "[Repeat] :rb_energy_2: Play a 2 :rb_might: Sand Soldier unit token."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Repeat] :rb_energy_2:",
+    "Play a 2 :rb_might: Sand Soldier unit token."
+  ]
+}

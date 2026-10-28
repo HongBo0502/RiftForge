@@ -1,0 +1,13 @@
+{
+  "name": "Decree of Strength",
+  "texts": [
+    "Choose an opponent. They reveal their hand and you choose a Mind card from it. They recycle that card."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Choose an opponent.",
+    "They reveal their hand and you choose a Mind card from it.",
+    "They recycle that card."
+  ]
+}

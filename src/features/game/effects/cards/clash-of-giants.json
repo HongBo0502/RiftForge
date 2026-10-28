@@ -1,0 +1,12 @@
+{
+  "name": "Clash of Giants",
+  "texts": [
+    "Choose two units. They deal damage equal to their Mights to each other."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "Choose two units.",
+    "They deal damage equal to their Mights to each other."
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Void Drone",
+  "texts": [
+    "I cost :rb_energy_2: less to play from anywhere other than your hand."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "I cost :rb_energy_2: less to play from anywhere other than your hand."
+  ]
+}

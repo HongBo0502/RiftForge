@@ -1,0 +1,12 @@
+{
+  "name": "Noxian Emissary",
+  "texts": [
+    "[Empower] :rb_energy_1::rb_rune_order: [Empowered][>][>>][Deathknell][>] Play two 1 :rb_might: Recruit unit tokens to your base."
+  ],
+  "abilities": [],
+  "activated": [],
+  "manual": [
+    "[Empower] :rb_energy_1::rb_rune_order:",
+    "[Empowered][>][>>][Deathknell][>] Play two 1 :rb_might: Recruit unit tokens to your base."
+  ]
+}
